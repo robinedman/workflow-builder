@@ -5,14 +5,10 @@ import "./App.css";
 
 function App() {
   const [count, setCount] = useState(0);
-  const url = browser.runtime.getURL("/workflow-builder.html");
 
   return (
     <>
       <div>
-        <a href={url} target="_blank">
-          Workflow Builder
-        </a>
         <a href="https://wxt.dev" target="_blank">
           <img src={wxtLogo} className="logo" alt="WXT logo" />
         </a>
@@ -20,7 +16,7 @@ function App() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <h1>WXT + React</h1>
+      <h1>WXT + React workflow builder</h1>
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
