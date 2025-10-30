@@ -1,7 +1,6 @@
 import { useState } from "react";
 import reactLogo from "@/assets/react.svg";
 import wxtLogo from "/wxt.svg";
-import "./App.css";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -17,7 +16,7 @@ function App() {
         </a>
       </div>
       <h1>WXT + React workflow builder</h1>
-      <div className="card">
+      <div className="card bg-pink-300">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
         </button>
