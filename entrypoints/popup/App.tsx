@@ -372,6 +372,16 @@ function App() {
                                 />
                                 <span>Running</span>
                               </>
+                            ) : isSuccess ? (
+                              <>
+                                <CheckCircle size={14} strokeWidth={2.5} />
+                                <span>Done!</span>
+                              </>
+                            ) : isError ? (
+                              <>
+                                <XCircle size={14} strokeWidth={2.5} />
+                                <span>Failed</span>
+                              </>
                             ) : (
                               <>
                                 <Play
@@ -386,23 +396,6 @@ function App() {
                         </div>
                       </div>
                     </div>
-
-                    {/* Status Message */}
-                    {state && state.status !== "running" && state.message && (
-                      <div
-                        className="flex items-center gap-2 mt-3 pt-3 sketch-text text-sm font-semibold opacity-90"
-                        style={{
-                          borderTop: `2px solid ${borderColor}`,
-                        }}
-                      >
-                        {state.status === "success" ? (
-                          <CheckCircle size={14} strokeWidth={2.5} />
-                        ) : (
-                          <XCircle size={14} strokeWidth={2.5} />
-                        )}
-                        <span>{state.message}</span>
-                      </div>
-                    )}
                   </div>
                 </div>
               </div>
