@@ -1,7 +1,21 @@
 import type { NodeExecutor } from '../types';
 
-export const executor: NodeExecutor = async (_node, _input, tabId) => {
+export const executor: NodeExecutor = async (_node, _input, tabId, pageContext) => {
   try {
+    // If running in content script context (headless mode), use pageContext
+    if (pageContext?.selectedText) {
+      const selectedText = pageContext.selectedText;
+      if (!selectedText || selectedText.trim() === '') {
+        throw new Error('No text is currently selected on the page');
+      }
+      return selectedText;
+    }
+    
+    // Otherwise, use chrome.scripting API (background context)
+    if (!chrome.scripting) {
+      throw new Error('Cannot access selected text in this context');
+    }
+    
     // Execute script in the tab to get selected text
     const results = await chrome.scripting.executeScript({
       target: { tabId },
