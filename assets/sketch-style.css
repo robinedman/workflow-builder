@@ -233,8 +233,12 @@
   transition: all 0.2s ease;
   cursor: pointer;
   padding: 9px 14px !important;
-  border: 2.5px solid currentColor !important;
   transform: none !important; /* NO TILTING */
+}
+
+/* Only add border to standalone buttons (not when using sketch-border) */
+.sketch-button:not(.sketch-border-content) {
+  border: 2.5px solid currentColor !important;
 }
 
 .sketch-button:hover {

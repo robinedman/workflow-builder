@@ -408,7 +408,6 @@ export const WorkflowBuilder = () => {
                   backgroundColor: "#FAFAFA",
                   color: "#666",
                   padding: "20px",
-                  borderRadius: "20px",
                 }}
               >
                 <div className="flex justify-between items-center mb-3">
@@ -418,18 +417,27 @@ export const WorkflowBuilder = () => {
                   >
                     Node {inspected.id} Output
                   </h2>
-                  <button
-                    onClick={() => setInspected(null)}
-                    className="sketch-button text-lg px-3 py-1 font-bold hover:scale-110 transition-transform"
-                    style={{
-                      backgroundColor: "#FFE5E5",
-                      color: "#E57373",
-                      border: "2.5px solid #E57373",
-                      borderRadius: "10px",
-                    }}
+                  <div
+                    className="sketch-border"
+                    style={
+                      {
+                        "--sketch-color": "#E57373",
+                      } as React.CSSProperties
+                    }
                   >
-                    ×
-                  </button>
+                    <div className="sketch-border-inner">
+                      <button
+                        onClick={() => setInspected(null)}
+                        className="sketch-border-content sketch-button text-lg px-3 py-1 font-bold hover:scale-110 transition-transform"
+                        style={{
+                          backgroundColor: "#FFE5E5",
+                          color: "#E57373",
+                        }}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  </div>
                 </div>
                 <div className="sketch-modal-content overflow-auto max-h-[calc(80vh-100px)]">
                   <pre
