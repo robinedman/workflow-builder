@@ -70,6 +70,23 @@ export const TranslateNode = ({ data }: NodeProps) => {
 
   const isRunning = data.status === "running";
 
+  const allLanguages = [
+    { value: "en", label: "English" },
+    { value: "fr", label: "French" },
+    { value: "es", label: "Spanish" },
+    { value: "de", label: "German" },
+  ];
+
+  // Mark the selected language as disabled in the other dropdown
+  const sourceOptions = allLanguages.map((lang) => ({
+    ...lang,
+    disabled: lang.value === targetLanguage,
+  }));
+  const targetOptions = allLanguages.map((lang) => ({
+    ...lang,
+    disabled: lang.value === sourceLanguage,
+  }));
+
   return (
     <div
       style={{ width: 250 }}
@@ -106,12 +123,7 @@ export const TranslateNode = ({ data }: NodeProps) => {
                   value={sourceLanguage}
                   onChange={setSourceLanguage}
                   disabled={isRunning}
-                  options={[
-                    { value: "en", label: "English" },
-                    { value: "fr", label: "French" },
-                    { value: "es", label: "Spanish" },
-                    { value: "de", label: "German" },
-                  ]}
+                  options={sourceOptions}
                 />
               </div>
 
@@ -121,12 +133,7 @@ export const TranslateNode = ({ data }: NodeProps) => {
                   value={targetLanguage}
                   onChange={setTargetLanguage}
                   disabled={isRunning}
-                  options={[
-                    { value: "fr", label: "French" },
-                    { value: "en", label: "English" },
-                    { value: "es", label: "Spanish" },
-                    { value: "de", label: "German" },
-                  ]}
+                  options={targetOptions}
                 />
               </div>
 

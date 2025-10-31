@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 type DropdownOption = {
   value: string;
   label: string;
+  disabled?: boolean;
 };
 
 type SketchDropdownProps = {
@@ -43,8 +44,9 @@ export const SketchDropdown = ({
     };
   }, [isOpen]);
 
-  const handleSelect = (optionValue: string) => {
-    onChange(optionValue);
+  const handleSelect = (option: DropdownOption) => {
+    if (option.disabled) return;
+    onChange(option.value);
     setIsOpen(false);
   };
 
@@ -80,10 +82,13 @@ export const SketchDropdown = ({
                   <button
                     key={option.value}
                     type="button"
-                    onClick={() => handleSelect(option.value)}
-                    className={`w-full text-left px-3 py-2 font-semibold text-base transition-colors hover:bg-gray-100 ${
-                      option.value === value ? "bg-gray-50" : ""
-                    }`}
+                    onClick={() => handleSelect(option)}
+                    disabled={option.disabled}
+                    className={`w-full text-left px-3 py-2 font-semibold text-base transition-colors ${
+                      option.disabled
+                        ? "opacity-40 cursor-not-allowed"
+                        : "hover:bg-gray-100 cursor-pointer"
+                    } ${option.value === value ? "bg-gray-50" : ""}`}
                   >
                     {option.label}
                   </button>
