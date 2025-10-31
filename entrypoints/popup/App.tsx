@@ -307,81 +307,91 @@ function App() {
                 }`}
                 style={
                   {
-                    backgroundColor: bgColor,
-                    color: borderColor,
                     "--sketch-color": borderColor,
-                    padding: "16px",
-                    borderRadius: "14px",
                   } as React.CSSProperties
                 }
               >
                 <div className="sketch-border-inner">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex-1 min-w-0">
-                      <h3
-                        className="font-bold mb-1 truncate sketch-text"
-                        style={{ fontSize: "16px" }}
+                  <div
+                    className="sketch-border-content"
+                    style={{
+                      backgroundColor: bgColor,
+                      color: borderColor,
+                      padding: "16px",
+                      borderRadius: "14px",
+                    }}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        <h3
+                          className="font-bold mb-1 truncate sketch-text"
+                          style={{ fontSize: "16px" }}
+                        >
+                          {workflow.name}
+                        </h3>
+                        <p
+                          className="sketch-text"
+                          style={{ fontSize: "14px", opacity: 0.7 }}
+                        >
+                          {workflow.nodes.length} node
+                          {workflow.nodes.length !== 1 ? "s" : ""}
+                        </p>
+                      </div>
+
+                      <button
+                        onClick={() => runWorkflow(workflow)}
+                        disabled={!currentTabId || isRunning}
+                        className="sketch-button flex items-center gap-1.5 disabled:cursor-not-allowed disabled:opacity-40"
+                        style={{
+                          backgroundColor: bgColor,
+                          color: borderColor,
+                          borderRadius: "10px",
+                          fontSize: "14px",
+                          whiteSpace: "nowrap",
+                        }}
                       >
-                        {workflow.name}
-                      </h3>
-                      <p
-                        className="sketch-text"
-                        style={{ fontSize: "14px", opacity: 0.7 }}
-                      >
-                        {workflow.nodes.length} node
-                        {workflow.nodes.length !== 1 ? "s" : ""}
-                      </p>
+                        {isRunning ? (
+                          <>
+                            <Loader2
+                              size={14}
+                              className="animate-spin"
+                              strokeWidth={2.5}
+                            />
+                            <span>Running</span>
+                          </>
+                        ) : (
+                          <>
+                            <Play
+                              size={14}
+                              fill="currentColor"
+                              strokeWidth={0}
+                            />
+                            <span>Run</span>
+                          </>
+                        )}
+                      </button>
                     </div>
 
-                    <button
-                      onClick={() => runWorkflow(workflow)}
-                      disabled={!currentTabId || isRunning}
-                      className="sketch-button flex items-center gap-1.5 disabled:cursor-not-allowed disabled:opacity-40"
-                      style={{
-                        backgroundColor: bgColor,
-                        color: borderColor,
-                        borderRadius: "10px",
-                        fontSize: "14px",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      {isRunning ? (
-                        <>
-                          <Loader2
-                            size={14}
-                            className="animate-spin"
-                            strokeWidth={2.5}
-                          />
-                          <span>Running</span>
-                        </>
-                      ) : (
-                        <>
-                          <Play size={14} fill="currentColor" strokeWidth={0} />
-                          <span>Run</span>
-                        </>
-                      )}
-                    </button>
+                    {/* Status Message */}
+                    {state && state.status !== "running" && state.message && (
+                      <div
+                        className="flex items-center gap-2 mt-3 pt-3 sketch-text"
+                        style={{
+                          borderTop: `2px solid ${borderColor}`,
+                          fontSize: "14px",
+                          fontWeight: 600,
+                          opacity: 0.9,
+                        }}
+                      >
+                        {state.status === "success" ? (
+                          <CheckCircle size={14} strokeWidth={2.5} />
+                        ) : (
+                          <XCircle size={14} strokeWidth={2.5} />
+                        )}
+                        <span>{state.message}</span>
+                      </div>
+                    )}
                   </div>
-
-                  {/* Status Message */}
-                  {state && state.status !== "running" && state.message && (
-                    <div
-                      className="flex items-center gap-2 mt-3 pt-3 sketch-text"
-                      style={{
-                        borderTop: `2px solid ${borderColor}`,
-                        fontSize: "14px",
-                        fontWeight: 600,
-                        opacity: 0.9,
-                      }}
-                    >
-                      {state.status === "success" ? (
-                        <CheckCircle size={14} strokeWidth={2.5} />
-                      ) : (
-                        <XCircle size={14} strokeWidth={2.5} />
-                      )}
-                      <span>{state.message}</span>
-                    </div>
-                  )}
                 </div>
               </div>
             );
