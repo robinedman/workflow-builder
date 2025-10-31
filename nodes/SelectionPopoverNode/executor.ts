@@ -1,8 +1,8 @@
-import type { NodeExecutor } from '../types';
+import type { NodeExecutor } from "../types";
 
 export const executor: NodeExecutor = async (_node, input, tabId) => {
   if (!input) {
-    throw new Error('No input to display in popover');
+    throw new Error("No input to display in popover");
   }
 
   try {
@@ -21,7 +21,7 @@ export const executor: NodeExecutor = async (_node, input, tabId) => {
           left: rect.left + window.scrollX,
           width: rect.width,
         };
-      }
+      },
     });
 
     const selectionRect = selectionData?.[0]?.result;
@@ -31,10 +31,12 @@ export const executor: NodeExecutor = async (_node, input, tabId) => {
       target: { tabId },
       func: (text: string, rect: any) => {
         // Remove any existing popovers
-        document.querySelectorAll('.workflow-popover').forEach(el => el.remove());
+        document
+          .querySelectorAll(".workflow-popover")
+          .forEach((el) => el.remove());
 
-        const popover = document.createElement('div');
-        popover.className = 'workflow-popover';
+        const popover = document.createElement("div");
+        popover.className = "workflow-popover";
         popover.style.cssText = `
           position: absolute;
           background: white;
@@ -53,18 +55,21 @@ export const executor: NodeExecutor = async (_node, input, tabId) => {
         // Position near selection or center if no selection
         if (rect) {
           popover.style.top = `${rect.top + 10}px`;
-          popover.style.left = `${Math.max(10, Math.min(window.innerWidth - 410, rect.left))}px`;
+          popover.style.left = `${Math.max(
+            10,
+            Math.min(window.innerWidth - 410, rect.left)
+          )}px`;
         } else {
-          popover.style.position = 'fixed';
-          popover.style.top = '50%';
-          popover.style.left = '50%';
-          popover.style.transform = 'translate(-50%, -50%)';
+          popover.style.position = "fixed";
+          popover.style.top = "50%";
+          popover.style.left = "50%";
+          popover.style.transform = "translate(-50%, -50%)";
         }
 
         // Content
-        const content = document.createElement('div');
+        const content = document.createElement("div");
         content.textContent = text;
-        content.style.whiteSpace = 'pre-wrap';
+        content.style.whiteSpace = "pre-wrap";
 
         popover.appendChild(content);
         document.body.appendChild(popover);
@@ -72,33 +77,32 @@ export const executor: NodeExecutor = async (_node, input, tabId) => {
         // Close if selection changes (user deselects)
         const checkSelection = () => {
           const selection = window.getSelection();
-          if (!selection || selection.toString() === '') {
+          if (!selection || selection.toString() === "") {
             popover.remove();
-            document.removeEventListener('selectionchange', checkSelection);
+            document.removeEventListener("selectionchange", checkSelection);
           }
         };
-        document.addEventListener('selectionchange', checkSelection);
+        document.addEventListener("selectionchange", checkSelection);
 
         // Also remove on click outside
         const handleClickOutside = (e: MouseEvent) => {
           if (!popover.contains(e.target as Node)) {
             popover.remove();
-            document.removeEventListener('click', handleClickOutside);
-            document.removeEventListener('selectionchange', checkSelection);
+            document.removeEventListener("click", handleClickOutside);
+            document.removeEventListener("selectionchange", checkSelection);
           }
         };
         // Use timeout to avoid immediate closure
         setTimeout(() => {
-          document.addEventListener('click', handleClickOutside);
+          document.addEventListener("click", handleClickOutside);
         }, 100);
       },
-      args: [input, selectionRect]
+      args: [input, selectionRect],
     });
 
-    return 'Popover displayed';
+    return "Popover displayed";
   } catch (error) {
-    console.error('Failed to display popover:', error);
-    throw new Error('Failed to display popover on page');
+    console.error("Failed to display popover:", error);
+    throw new Error("Failed to display popover on page");
   }
 };
-
