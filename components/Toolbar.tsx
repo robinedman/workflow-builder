@@ -53,6 +53,11 @@ export const Toolbar = ({
     (node) => node.category === "input" && existingNodeTypes.includes(node.type)
   );
 
+  // Check if there's a processing node
+  const hasProcessingNode = allNodes.some(
+    (node) => node.category === "processing" && existingNodeTypes.includes(node.type)
+  );
+
   // Check which input nodes exist
   const hasGetPageText = existingNodeTypes.includes("getPageText");
   const hasGetSelection = existingNodeTypes.includes("getSelection");
@@ -212,6 +217,8 @@ export const Toolbar = ({
               <div className="flex flex-wrap gap-2">
                 {categoryNodes.map((node) => {
                   const isInputNode = node.category === "input";
+                  const isProcessingNode = node.category === "processing";
+                  const isOutputNode = node.category === "output";
 
                   // Determine if this specific button should be disabled
                   let isDisabled = false;
@@ -229,12 +236,23 @@ export const Toolbar = ({
                       isDisabled = true;
                       disabledReason = "Remove 'Get Page Text' to use this";
                     }
-                  } else {
-                    // For non-input nodes: disable if no input node exists
+                  } else if (isProcessingNode) {
+                    // For processing nodes: disable if no input node exists
                     if (!hasInputNode) {
                       isDisabled = true;
                       disabledReason =
                         "Add an input node first (Get Page Text or Get Selected Text)";
+                    }
+                  } else if (isOutputNode) {
+                    // For output nodes: disable if no input node OR no processing node exists
+                    if (!hasInputNode) {
+                      isDisabled = true;
+                      disabledReason =
+                        "Add an input node first (Get Page Text or Get Selected Text)";
+                    } else if (!hasProcessingNode) {
+                      isDisabled = true;
+                      disabledReason =
+                        "Add a processing node first (e.g., Summarize, Translate, or Prompt)";
                     }
                   }
 
