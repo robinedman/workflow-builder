@@ -44,8 +44,8 @@
 .sketch-canvas {
   background-color: var(--pastel-bg);
   background-image: 
-    repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(0,0,0,0.01) 40px, rgba(0,0,0,0.01) 41px),
-    repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(0,0,0,0.01) 40px, rgba(0,0,0,0.01) 41px);
+    repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(0,0,0,0.03) 40px, rgba(0,0,0,0.03) 41px),
+    repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(0,0,0,0.03) 40px, rgba(0,0,0,0.03) 41px);
 }
 
 .sketch-svg-filters {
