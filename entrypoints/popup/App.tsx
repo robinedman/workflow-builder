@@ -111,10 +111,7 @@ function App() {
       }
     >
       {/* SVG Filters for hand-drawn effects */}
-      <svg
-        className="sketch-svg-filters"
-        style={{ position: "absolute", width: 0, height: 0 }}
-      >
+      <svg className="sketch-svg-filters absolute w-0 h-0">
         <defs>
           {/* Rough edge filter for connection lines */}
           <filter id="rough-edge" x="-50%" y="-50%" width="200%" height="200%">
@@ -182,10 +179,7 @@ function App() {
       >
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <div
-              className="flex items-center justify-center"
-              style={{ width: 32, height: 32 }}
-            >
+            <div className="flex items-center justify-center w-8 h-8">
               <Zap size={28} strokeWidth={2.5} />
             </div>
             <h1 className="text-xl font-bold sketch-text">Workflows</h1>
@@ -210,10 +204,7 @@ function App() {
                   <button
                     onClick={openWorkflowBuilder}
                     disabled={!currentTabId}
-                    className="flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed px-3 py-2 font-bold sketch-text cursor-pointer"
-                    style={{
-                      fontSize: "15px",
-                    }}
+                    className="flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed px-3 py-2 font-bold sketch-text cursor-pointer text-[15px]"
                   >
                     <Plus size={16} strokeWidth={2.5} />
                     <span>New</span>
@@ -223,10 +214,7 @@ function App() {
             </div>
           </div>
         </div>
-        <p
-          className="sketch-info-text"
-          style={{ fontSize: "14px", opacity: 0.7 }}
-        >
+        <p className="sketch-info-text text-sm opacity-70">
           Run workflows on the current page
         </p>
       </div>
@@ -236,27 +224,19 @@ function App() {
         {workflows.length === 0 ? (
           <div className="flex items-center justify-center h-full">
             <div className="text-center space-y-4 max-w-xs sketch-text">
-              <div
-                className="flex items-center justify-center mx-auto"
-                style={{ width: 80, height: 80 }}
-              >
+              <div className="flex items-center justify-center mx-auto w-20 h-20">
                 <Zap
                   size={60}
                   strokeWidth={2}
-                  style={{ color: colors.purple.border, opacity: 0.3 }}
+                  className="opacity-30"
+                  style={{ color: colors.purple.border }}
                 />
               </div>
               <div>
-                <p
-                  className="font-bold mb-1"
-                  style={{ fontSize: "17px", color: "#333" }}
-                >
+                <p className="font-bold mb-1 text-[17px] text-gray-800">
                   No workflows yet
                 </p>
-                <p
-                  className="mb-4 sketch-info-text"
-                  style={{ fontSize: "15px", color: "#666", opacity: 0.8 }}
-                >
+                <p className="mb-4 sketch-info-text text-[15px] text-gray-600 opacity-80">
                   Create your first workflow to get started
                 </p>
                 <div className="sketch-node inline-block">
@@ -279,10 +259,7 @@ function App() {
                         <button
                           onClick={openWorkflowBuilder}
                           disabled={!currentTabId}
-                          className="inline-flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed px-3 py-2 font-bold sketch-text cursor-pointer"
-                          style={{
-                            fontSize: "15px",
-                          }}
+                          className="inline-flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed px-3 py-2 font-bold sketch-text cursor-pointer text-[15px]"
                         >
                           <Plus size={16} strokeWidth={2.5} />
                           <span>Create workflow</span>
@@ -342,17 +319,12 @@ function App() {
                     await deleteWorkflow(workflow.id);
                     await loadWorkflows();
                   }}
-                  className="absolute -top-3 -right-3 flex items-center justify-center hover:scale-110 transition-all cursor-pointer"
+                  className="absolute -top-3 -right-3 flex items-center justify-center hover:scale-110 transition-all cursor-pointer w-7 h-7 rounded-full z-20 shadow-md"
                   style={{
                     backgroundColor: bgColor,
                     color: borderColor,
                     border: `3px solid ${borderColor}`,
-                    width: 28,
-                    height: 28,
-                    borderRadius: "50%",
                     filter: "url(#rough-border)",
-                    boxShadow: `2px 2px 4px rgba(0, 0, 0, 0.1)`,
-                    zIndex: 20,
                   }}
                   title="Delete workflow"
                 >
@@ -361,26 +333,18 @@ function App() {
 
                 <div className="sketch-border-inner">
                   <div
-                    className="sketch-border-content"
+                    className="sketch-border-content p-4 rounded-[14px]"
                     style={{
                       backgroundColor: bgColor,
                       color: borderColor,
-                      padding: "16px",
-                      borderRadius: "14px",
                     }}
                   >
                     <div className="flex items-start justify-between gap-3 pr-8">
                       <div className="flex-1 min-w-0">
-                        <h3
-                          className="font-bold mb-1 truncate sketch-text"
-                          style={{ fontSize: "16px" }}
-                        >
+                        <h3 className="font-bold mb-1 truncate sketch-text text-base">
                           {workflow.name}
                         </h3>
-                        <p
-                          className="sketch-info-text"
-                          style={{ fontSize: "11px", opacity: 0.7 }}
-                        >
+                        <p className="sketch-info-text text-[11px] opacity-70">
                           {workflow.nodes.length} node
                           {workflow.nodes.length !== 1 ? "s" : ""}
                         </p>
@@ -398,12 +362,10 @@ function App() {
                           <button
                             onClick={() => runWorkflow(workflow)}
                             disabled={!currentTabId || isRunning}
-                            className="sketch-border-content flex items-center gap-1.5 disabled:cursor-not-allowed disabled:opacity-40 px-3 py-2 font-bold sketch-text cursor-pointer"
+                            className="sketch-border-content flex items-center gap-1.5 disabled:cursor-not-allowed disabled:opacity-40 px-3 py-2 font-bold sketch-text cursor-pointer text-sm whitespace-nowrap"
                             style={{
                               backgroundColor: bgColor,
                               color: borderColor,
-                              fontSize: "14px",
-                              whiteSpace: "nowrap",
                             }}
                           >
                             {isRunning ? (
@@ -433,12 +395,9 @@ function App() {
                     {/* Status Message */}
                     {state && state.status !== "running" && state.message && (
                       <div
-                        className="flex items-center gap-2 mt-3 pt-3 sketch-text"
+                        className="flex items-center gap-2 mt-3 pt-3 sketch-text text-sm font-semibold opacity-90"
                         style={{
                           borderTop: `2px solid ${borderColor}`,
-                          fontSize: "14px",
-                          fontWeight: 600,
-                          opacity: 0.9,
                         }}
                       >
                         {state.status === "success" ? (
@@ -466,10 +425,7 @@ function App() {
             color: colors.mint.border,
           }}
         >
-          <p
-            className="text-center sketch-info-text"
-            style={{ fontSize: "14px", opacity: 0.8 }}
-          >
+          <p className="text-center sketch-info-text text-sm opacity-80">
             Results will appear on the page
           </p>
         </div>
