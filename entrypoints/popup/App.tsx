@@ -338,38 +338,48 @@ function App() {
                         </p>
                       </div>
 
-                      <button
-                        onClick={() => runWorkflow(workflow)}
-                        disabled={!currentTabId || isRunning}
-                        className="sketch-button flex items-center gap-1.5 disabled:cursor-not-allowed disabled:opacity-40"
-                        style={{
-                          backgroundColor: bgColor,
-                          color: borderColor,
-                          borderRadius: "10px",
-                          fontSize: "14px",
-                          whiteSpace: "nowrap",
-                        }}
+                      <div
+                        className="sketch-border"
+                        style={
+                          {
+                            "--sketch-color": borderColor,
+                          } as React.CSSProperties
+                        }
                       >
-                        {isRunning ? (
-                          <>
-                            <Loader2
-                              size={14}
-                              className="animate-spin"
-                              strokeWidth={2.5}
-                            />
-                            <span>Running</span>
-                          </>
-                        ) : (
-                          <>
-                            <Play
-                              size={14}
-                              fill="currentColor"
-                              strokeWidth={0}
-                            />
-                            <span>Run</span>
-                          </>
-                        )}
-                      </button>
+                        <div className="sketch-border-inner">
+                          <button
+                            onClick={() => runWorkflow(workflow)}
+                            disabled={!currentTabId || isRunning}
+                            className="sketch-border-content sketch-button flex items-center gap-1.5 disabled:cursor-not-allowed disabled:opacity-40"
+                            style={{
+                              backgroundColor: bgColor,
+                              color: borderColor,
+                              fontSize: "14px",
+                              whiteSpace: "nowrap",
+                            }}
+                          >
+                            {isRunning ? (
+                              <>
+                                <Loader2
+                                  size={14}
+                                  className="animate-spin"
+                                  strokeWidth={2.5}
+                                />
+                                <span>Running</span>
+                              </>
+                            ) : (
+                              <>
+                                <Play
+                                  size={14}
+                                  fill="currentColor"
+                                  strokeWidth={0}
+                                />
+                                <span>Run</span>
+                              </>
+                            )}
+                          </button>
+                        </div>
+                      </div>
                     </div>
 
                     {/* Status Message */}
