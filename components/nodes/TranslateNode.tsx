@@ -15,6 +15,49 @@ type NodeProps = {
   };
 };
 
+const allLanguages = [
+  { value: "en", label: "English" },
+  { value: "es", label: "Spanish" },
+  { value: "fr", label: "French" },
+  { value: "de", label: "German" },
+  { value: "it", label: "Italian" },
+  { value: "pt", label: "Portuguese" },
+  { value: "ru", label: "Russian" },
+  { value: "ja", label: "Japanese" },
+  { value: "zh", label: "Chinese (Simplified)" },
+  { value: "zh-Hant", label: "Chinese (Traditional)" },
+  { value: "ko", label: "Korean" },
+  { value: "ar", label: "Arabic" },
+  { value: "hi", label: "Hindi" },
+  { value: "bn", label: "Bengali" },
+  { value: "tr", label: "Turkish" },
+  { value: "vi", label: "Vietnamese" },
+  { value: "pl", label: "Polish" },
+  { value: "uk", label: "Ukrainian" },
+  { value: "nl", label: "Dutch" },
+  { value: "th", label: "Thai" },
+  { value: "id", label: "Indonesian" },
+  { value: "cs", label: "Czech" },
+  { value: "sv", label: "Swedish" },
+  { value: "ro", label: "Romanian" },
+  { value: "el", label: "Greek" },
+  { value: "hu", label: "Hungarian" },
+  { value: "da", label: "Danish" },
+  { value: "fi", label: "Finnish" },
+  { value: "no", label: "Norwegian" },
+  { value: "sk", label: "Slovak" },
+  { value: "bg", label: "Bulgarian" },
+  { value: "he", label: "Hebrew" },
+  { value: "ms", label: "Malay" },
+  { value: "ca", label: "Catalan" },
+  { value: "hr", label: "Croatian" },
+  { value: "sr", label: "Serbian" },
+  { value: "sl", label: "Slovenian" },
+  { value: "lt", label: "Lithuanian" },
+  { value: "lv", label: "Latvian" },
+  { value: "et", label: "Estonian" },
+];
+
 export const TranslateNode = ({ data }: NodeProps) => {
   const [modelStatus, setModelStatus] = useState<
     "checking" | "downloadable" | "downloading" | "ready"
@@ -26,6 +69,10 @@ export const TranslateNode = ({ data }: NodeProps) => {
   const [targetLanguage, setTargetLanguage] = useState<string>(
     data.targetLanguage || "fr"
   );
+  const [unavailableTargets, setUnavailableTargets] = useState<Set<string>>(
+    new Set()
+  );
+  const [checkingAvailability, setCheckingAvailability] = useState(false);
 
   useEffect(() => {
     data.sourceLanguage = sourceLanguage;
@@ -34,6 +81,38 @@ export const TranslateNode = ({ data }: NodeProps) => {
   useEffect(() => {
     data.targetLanguage = targetLanguage;
   }, [targetLanguage]);
+
+  // Check availability for all target languages when source changes
+  useEffect(() => {
+    const checkAllTargets = async () => {
+      setCheckingAvailability(true);
+      const unavailable = new Set<string>();
+
+      // Check availability for each potential target language
+      const checks = allLanguages.map(async (lang) => {
+        if (lang.value === sourceLanguage) return;
+        try {
+          const availability = await Translator.availability({
+            sourceLanguage,
+            targetLanguage: lang.value,
+          });
+          // If not ready and not downloadable, mark as unavailable
+          if (availability !== "ready" && availability !== "downloadable") {
+            unavailable.add(lang.value);
+          }
+        } catch {
+          // If the check fails, assume it's unavailable
+          unavailable.add(lang.value);
+        }
+      });
+
+      await Promise.all(checks);
+      setUnavailableTargets(unavailable);
+      setCheckingAvailability(false);
+    };
+
+    checkAllTargets();
+  }, [sourceLanguage]);
 
   useEffect(() => {
     const check = async () => {
@@ -70,13 +149,6 @@ export const TranslateNode = ({ data }: NodeProps) => {
 
   const isRunning = data.status === "running";
 
-  const allLanguages = [
-    { value: "en", label: "English" },
-    { value: "fr", label: "French" },
-    { value: "es", label: "Spanish" },
-    { value: "de", label: "German" },
-  ];
-
   // Mark the selected language as disabled in the other dropdown
   const sourceOptions = allLanguages.map((lang) => ({
     ...lang,
@@ -84,7 +156,7 @@ export const TranslateNode = ({ data }: NodeProps) => {
   }));
   const targetOptions = allLanguages.map((lang) => ({
     ...lang,
-    disabled: lang.value === sourceLanguage,
+    disabled: lang.value === sourceLanguage || unavailableTargets.has(lang.value),
   }));
 
   return (
@@ -132,10 +204,16 @@ export const TranslateNode = ({ data }: NodeProps) => {
                 <SketchDropdown
                   value={targetLanguage}
                   onChange={setTargetLanguage}
-                  disabled={isRunning}
+                  disabled={isRunning || checkingAvailability}
                   options={targetOptions}
                 />
               </div>
+
+              {checkingAvailability && (
+                <div className="text-sm text-gray-600 font-medium">
+                  ⏳ Checking available languages...
+                </div>
+              )}
 
               {modelStatus === "downloadable" && (
                 <div className="space-y-2">

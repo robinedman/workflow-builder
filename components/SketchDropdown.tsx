@@ -22,6 +22,7 @@ export const SketchDropdown = ({
 }: SketchDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const selectedOption = options.find((opt) => opt.value === value);
 
@@ -48,6 +49,18 @@ export const SketchDropdown = ({
     if (option.disabled) return;
     onChange(option.value);
     setIsOpen(false);
+  };
+
+  const handleScroll = (e: React.WheelEvent<HTMLDivElement>) => {
+    // Always prevent default and stop propagation to prevent ReactFlow's panOnScroll
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    
+    // Manually handle the scroll
+    container.scrollTop += e.deltaY;
   };
 
   return (
@@ -77,22 +90,35 @@ export const SketchDropdown = ({
         <div className="absolute top-full mt-2 z-50 min-w-full">
           <div className="sketch-border">
             <div className="sketch-border-inner">
-              <div className="sketch-border-content bg-white">
-                {options.map((option) => (
-                  <button
-                    key={option.value}
-                    type="button"
-                    onClick={() => handleSelect(option)}
-                    disabled={option.disabled}
-                    className={`w-full text-left px-3 py-2 font-semibold text-base transition-colors ${
-                      option.disabled
-                        ? "opacity-40 cursor-not-allowed"
-                        : "hover:bg-gray-100 cursor-pointer"
-                    } ${option.value === value ? "bg-gray-50" : ""}`}
-                  >
-                    {option.label}
-                  </button>
-                ))}
+              <div className="sketch-border-content bg-white" style={{ overflow: 'hidden' }}>
+                <div 
+                  ref={scrollContainerRef}
+                  style={{ 
+                    maxHeight: '300px',
+                    overflowY: 'scroll',
+                    overflowX: 'hidden',
+                    overscrollBehavior: 'contain',
+                    WebkitOverflowScrolling: 'touch'
+                  }}
+                  onWheel={handleScroll}
+                  onTouchMove={(e) => e.stopPropagation()}
+                >
+                  {options.map((option) => (
+                    <button
+                      key={option.value}
+                      type="button"
+                      onClick={() => handleSelect(option)}
+                      disabled={option.disabled}
+                      className={`w-full text-left px-3 py-2 font-semibold text-base transition-colors ${
+                        option.disabled
+                          ? "opacity-40 cursor-not-allowed"
+                          : "hover:bg-gray-100 cursor-pointer"
+                      } ${option.value === value ? "bg-gray-50" : ""}`}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
