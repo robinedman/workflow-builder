@@ -1,6 +1,7 @@
 import { Handle, Position } from "@xyflow/react";
 import { Eye, Loader2, Sparkles } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { SketchDropdown } from "../SketchDropdown";
 
 type NodeProps = {
   data: {
@@ -92,31 +93,31 @@ export const SummarizeNode = ({ data }: NodeProps) => {
             <div className="px-4 py-3 space-y-3 text-base font-medium">
               <div className="flex justify-between items-center">
                 <span>Type</span>
-                <select
+                <SketchDropdown
                   value={type}
-                  onChange={(e) => setType(e.target.value)}
-                  className="bg-white rounded-lg px-2 py-1 border-2 border-black font-semibold"
+                  onChange={setType}
                   disabled={isRunning}
-                >
-                  <option value="tldr">tldr</option>
-                  <option value="teaser">teaser</option>
-                  <option value="key-points">key-points</option>
-                  <option value="headline">headline</option>
-                </select>
+                  options={[
+                    { value: "tldr", label: "tldr" },
+                    { value: "teaser", label: "teaser" },
+                    { value: "key-points", label: "key-points" },
+                    { value: "headline", label: "headline" },
+                  ]}
+                />
               </div>
 
               <div className="flex justify-between items-center">
                 <span>Length</span>
-                <select
+                <SketchDropdown
                   value={length}
-                  onChange={(e) => setLength(e.target.value)}
-                  className="bg-white rounded-lg px-2 py-1 border-2 border-black font-semibold"
+                  onChange={setLength}
                   disabled={isRunning}
-                >
-                  <option value="short">short</option>
-                  <option value="medium">medium</option>
-                  <option value="long">long</option>
-                </select>
+                  options={[
+                    { value: "short", label: "short" },
+                    { value: "medium", label: "medium" },
+                    { value: "long", label: "long" },
+                  ]}
+                />
               </div>
 
               {modelStatus === "downloadable" && (

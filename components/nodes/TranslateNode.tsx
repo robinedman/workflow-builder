@@ -1,6 +1,7 @@
 import { Handle, Position } from "@xyflow/react";
 import { Eye, Languages, Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { SketchDropdown } from "../SketchDropdown";
 
 type NodeProps = {
   data: {
@@ -101,32 +102,32 @@ export const TranslateNode = ({ data }: NodeProps) => {
             <div className="px-4 py-3 space-y-3 text-base font-medium">
               <div className="flex justify-between items-center">
                 <span>From</span>
-                <select
+                <SketchDropdown
                   value={sourceLanguage}
-                  onChange={(e) => setSourceLanguage(e.target.value)}
-                  className="bg-white rounded-lg px-2 py-1 border-2 border-black font-semibold"
+                  onChange={setSourceLanguage}
                   disabled={isRunning}
-                >
-                  <option value="en">English</option>
-                  <option value="fr">French</option>
-                  <option value="es">Spanish</option>
-                  <option value="de">German</option>
-                </select>
+                  options={[
+                    { value: "en", label: "English" },
+                    { value: "fr", label: "French" },
+                    { value: "es", label: "Spanish" },
+                    { value: "de", label: "German" },
+                  ]}
+                />
               </div>
 
               <div className="flex justify-between items-center">
                 <span>To</span>
-                <select
+                <SketchDropdown
                   value={targetLanguage}
-                  onChange={(e) => setTargetLanguage(e.target.value)}
-                  className="bg-white rounded-lg px-2 py-1 border-2 border-black font-semibold"
+                  onChange={setTargetLanguage}
                   disabled={isRunning}
-                >
-                  <option value="fr">French</option>
-                  <option value="en">English</option>
-                  <option value="es">Spanish</option>
-                  <option value="de">German</option>
-                </select>
+                  options={[
+                    { value: "fr", label: "French" },
+                    { value: "en", label: "English" },
+                    { value: "es", label: "Spanish" },
+                    { value: "de", label: "German" },
+                  ]}
+                />
               </div>
 
               {modelStatus === "downloadable" && (

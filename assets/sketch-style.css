@@ -98,6 +98,20 @@
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.12);
 }
 
+/* Custom dropdown styling */
+.sketch-dropdown-option {
+  position: relative;
+  transition: background-color 0.15s ease;
+}
+
+.sketch-dropdown-option:first-child {
+  border-radius: 0;
+}
+
+.sketch-dropdown-option:last-child {
+  border-radius: 0;
+}
+
 /* Scribble animation for running - but NO rotation */
 @keyframes scribble-straight {
   0%, 100% { transform: translateX(0) translateY(0); }
