@@ -1,7 +1,15 @@
 import { useState, useEffect } from "react";
-import { getAllWorkflows } from "@/utils/workflowStorage";
+import { getAllWorkflows, deleteWorkflow } from "@/utils/workflowStorage";
 import { executeWorkflow, type Workflow } from "@/utils/workflowEngine";
-import { Play, Plus, CheckCircle, XCircle, Loader2, Zap } from "lucide-react";
+import {
+  Play,
+  Plus,
+  CheckCircle,
+  XCircle,
+  Loader2,
+  Zap,
+  X,
+} from "lucide-react";
 
 type ExecutionState = {
   workflowId: string;
@@ -85,6 +93,11 @@ function App() {
       });
       setTimeout(() => setExecutionState(null), 4000);
     }
+  };
+
+  const handleDeleteWorkflow = async (workflowId: string) => {
+    await deleteWorkflow(workflowId);
+    await loadWorkflows();
   };
 
   return (
@@ -313,7 +326,7 @@ function App() {
             return (
               <div
                 key={workflow.id}
-                className={`sketch-border ${
+                className={`sketch-border relative ${
                   isRunning ? "sketch-node-running" : ""
                 }`}
                 style={
@@ -322,6 +335,30 @@ function App() {
                   } as React.CSSProperties
                 }
               >
+                {/* Delete button */}
+                <button
+                  onClick={async (e) => {
+                    e.stopPropagation();
+                    await deleteWorkflow(workflow.id);
+                    await loadWorkflows();
+                  }}
+                  className="absolute -top-3 -right-3 flex items-center justify-center hover:scale-110 transition-all cursor-pointer"
+                  style={{
+                    backgroundColor: bgColor,
+                    color: borderColor,
+                    border: `3px solid ${borderColor}`,
+                    width: 28,
+                    height: 28,
+                    borderRadius: "50%",
+                    filter: "url(#rough-border)",
+                    boxShadow: `2px 2px 4px rgba(0, 0, 0, 0.1)`,
+                    zIndex: 20,
+                  }}
+                  title="Delete workflow"
+                >
+                  <X size={14} strokeWidth={2.5} />
+                </button>
+
                 <div className="sketch-border-inner">
                   <div
                     className="sketch-border-content"
@@ -332,7 +369,7 @@ function App() {
                       borderRadius: "14px",
                     }}
                   >
-                    <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-start justify-between gap-3 pr-8">
                       <div className="flex-1 min-w-0">
                         <h3
                           className="font-bold mb-1 truncate sketch-text"
@@ -342,7 +379,7 @@ function App() {
                         </h3>
                         <p
                           className="sketch-info-text"
-                          style={{ fontSize: "13px", opacity: 0.7 }}
+                          style={{ fontSize: "11px", opacity: 0.7 }}
                         >
                           {workflow.nodes.length} node
                           {workflow.nodes.length !== 1 ? "s" : ""}
