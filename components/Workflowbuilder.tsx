@@ -4,7 +4,6 @@ import {
   applyNodeChanges,
   ReactFlow,
 } from "@xyflow/react";
-import { X } from "lucide-react";
 import "@xyflow/react/dist/style.css";
 import { useCallback, useEffect, useState, useMemo } from "react";
 import { allNodes, nodeRegistry } from "@/nodes";
@@ -15,7 +14,6 @@ import { resolveIcon } from "./IconResolver";
 import { BaseNode } from "./nodes/BaseNode";
 
 export const WorkflowBuilder = () => {
-  const [isVisible, setIsVisible] = useState(false);
   const [nodes, setNodes] = useState<any[]>([]);
   const [edges, setEdges] = useState<any[]>([]);
   const [idCounter, setIdCounter] = useState(1);
@@ -120,23 +118,6 @@ export const WorkflowBuilder = () => {
     alert(`Workflow "${workflowName}" saved!`);
   };
 
-  useEffect(() => {
-    const listener = (msg: any) => {
-      if (msg.type === "TOGGLE_OVERLAY") setIsVisible((v) => !v);
-    };
-    browser.runtime.onMessage.addListener(listener);
-    return () => browser.runtime.onMessage.removeListener(listener);
-  }, []);
-
-  useEffect(() => {
-    if (!isVisible) return;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setIsVisible(false);
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isVisible]);
-
   const addNode = (type: string) => {
     const nodeDef = nodeRegistry[type];
     if (!nodeDef) return;
@@ -185,8 +166,6 @@ export const WorkflowBuilder = () => {
     return types;
   }, []);
 
-  //   if (!isVisible) return null;
-
   return (
     <div
       style={{
@@ -201,13 +180,6 @@ export const WorkflowBuilder = () => {
       }}
       className="overflow-hidden"
     >
-      <button
-        onClick={() => setIsVisible(false)}
-        className="absolute top-4 right-4 z-[1000000] rounded-full bg-black/60 p-2 text-white hover:bg-black/80 transition"
-      >
-        <X size={20} />
-      </button>
-
       <Toolbar
         addNode={addNode}
         runWorkflow={runWorkflow}
@@ -242,9 +214,9 @@ export const WorkflowBuilder = () => {
               </h2>
               <button
                 onClick={() => setInspected(null)}
-                className="text-zinc-400 hover:text-white"
+                className="text-zinc-400 hover:text-white text-xl px-2"
               >
-                <X size={16} />
+                ×
               </button>
             </div>
             <pre className="text-xs whitespace-pre-wrap text-zinc-200">
