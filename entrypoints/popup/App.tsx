@@ -1,21 +1,43 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import reactLogo from "@/assets/react.svg";
 import wxtLogo from "/wxt.svg";
 
 function App() {
   const [count, setCount] = useState(0);
-  const url = browser.runtime.getURL("/workflow-builder.html");
+  const [currentTabId, setCurrentTabId] = useState<number | null>(null);
+
+  useEffect(() => {
+    // Get the current tab when popup opens
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (tabs[0]?.id) {
+        setCurrentTabId(tabs[0].id);
+      }
+    });
+  }, []);
+
+  const openWorkflowBuilder = async () => {
+    if (!currentTabId) {
+      console.error("No tab ID available");
+      return;
+    }
+
+    // Open workflow builder with the current tab ID as a parameter
+    const url = browser.runtime.getURL(
+      `/workflow-builder.html?sourceTabId=${currentTabId}`
+    );
+    await chrome.tabs.create({ url });
+  };
 
   return (
     <div className="w-72 min-h-64 bg-gray-900 text-gray-100 flex flex-col items-center justify-center p-4 rounded-2xl shadow-lg space-y-4">
       <div className="flex items-center justify-center space-x-4">
-        <a
-          href={url}
-          target="_blank"
-          className="text-pink-400 hover:text-pink-300 font-medium hover:underline"
+        <button
+          onClick={openWorkflowBuilder}
+          disabled={!currentTabId}
+          className="text-pink-400 hover:text-pink-300 font-medium hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Workflow Builder
-        </a>
+        </button>
         <a href="https://wxt.dev" target="_blank">
           <img
             src={wxtLogo}

@@ -6,10 +6,13 @@ import {
 } from "@xyflow/react";
 import { X } from "lucide-react";
 import "@xyflow/react/dist/style.css";
-import { useCallback, useEffect, useState } from "react";
-import { nodeRegistry } from "./nodes/nodeRegistry";
+import { useCallback, useEffect, useState, useMemo } from "react";
+import { allNodes, nodeRegistry } from "@/nodes";
 import { Toolbar } from "./Toolbar";
-import { nodeTypes } from "./nodes/nodeTypes";
+import { executeWorkflow, type Workflow } from "@/utils/workflowEngine";
+import { saveWorkflow } from "@/utils/workflowStorage";
+import { resolveIcon } from "./IconResolver";
+import { BaseNode } from "./nodes/BaseNode";
 
 export const WorkflowBuilder = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -20,63 +23,109 @@ export const WorkflowBuilder = () => {
     id: string;
     text: string;
   } | null>(null);
+  const [workflowName, setWorkflowName] = useState("Untitled Workflow");
+  const [workflowId] = useState(() => `wf_${Date.now()}`);
 
   const onNodesChange = useCallback(
-    (changes) => setNodes((snapshot) => applyNodeChanges(changes, snapshot)),
+    (changes: any) =>
+      setNodes((snapshot) => applyNodeChanges(changes, snapshot)),
     []
   );
   const onEdgesChange = useCallback(
-    (changes) => setEdges((snapshot) => applyEdgeChanges(changes, snapshot)),
+    (changes: any) =>
+      setEdges((snapshot) => applyEdgeChanges(changes, snapshot)),
     []
   );
   const onConnect = useCallback(
-    (params) => setEdges((snapshot) => addEdge(params, snapshot)),
+    (params: any) => setEdges((snapshot) => addEdge(params, snapshot)),
     []
   );
 
+  const getSourceTabId = (): number | null => {
+    const params = new URLSearchParams(window.location.search);
+    const tabId = params.get("sourceTabId");
+    return tabId ? parseInt(tabId, 10) : null;
+  };
+
   const runWorkflow = async () => {
     console.log("Running workflow...");
-    const updatedNodes = [...nodes];
-    let latestOutput = "";
 
-    for (let i = 0; i < updatedNodes.length; i++) {
-      const node = updatedNodes[i];
-      const def = nodeRegistry[node.type];
-      if (!def) continue;
-
-      updatedNodes[i] = { ...node, data: { ...node.data, status: "running" } };
-      setNodes([...updatedNodes]);
-      await new Promise((r) => setTimeout(r, 200));
-
-      if (def.run) {
-        const result = await def.run(node, latestOutput);
-        latestOutput = result;
-        updatedNodes[i] = {
-          ...node,
-          data: { ...node.data, status: "done", output: result },
-        };
-      } else if (node.type === "textOutput") {
-        updatedNodes[i] = {
-          ...node,
-          data: { ...node.data, status: "done", output: latestOutput },
-        };
-      } else {
-        updatedNodes[i] = {
-          ...node,
-          data: { ...node.data, status: "done" },
-        };
-      }
-
-      setNodes([...updatedNodes]);
+    const sourceTabId = getSourceTabId();
+    if (!sourceTabId) {
+      console.error("No source tab ID in URL");
+      alert(
+        "No source tab available. Please reopen the workflow builder from the extension popup."
+      );
+      return;
     }
+
+    const workflow: Workflow = {
+      id: workflowId,
+      name: workflowName,
+      nodes,
+      edges,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    };
+
+    try {
+      await executeWorkflow(workflow, {
+        tabId: sourceTabId,
+        mode: "visual",
+        onNodeStart: (nodeId) => {
+          setNodes((nodes) =>
+            nodes.map((n) =>
+              n.id === nodeId
+                ? { ...n, data: { ...n.data, status: "running" } }
+                : n
+            )
+          );
+        },
+        onNodeComplete: (nodeId, output) => {
+          setNodes((nodes) =>
+            nodes.map((n) =>
+              n.id === nodeId
+                ? { ...n, data: { ...n.data, status: "done", output } }
+                : n
+            )
+          );
+        },
+        onNodeError: (nodeId, error) => {
+          setNodes((nodes) =>
+            nodes.map((n) =>
+              n.id === nodeId
+                ? { ...n, data: { ...n.data, status: "idle" } }
+                : n
+            )
+          );
+          alert(`Error in node ${nodeId}: ${error}`);
+        },
+      });
+    } catch (error) {
+      console.error("Workflow execution failed:", error);
+    }
+  };
+
+  const handleSaveWorkflow = async () => {
+    const workflow: Workflow = {
+      id: workflowId,
+      name: workflowName,
+      nodes,
+      edges,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    };
+
+    await saveWorkflow(workflow);
+    alert(`Workflow "${workflowName}" saved!`);
   };
 
   useEffect(() => {
     const listener = (msg: any) => {
       if (msg.type === "TOGGLE_OVERLAY") setIsVisible((v) => !v);
     };
-    chrome.runtime.onMessage.addListener(listener);
-    return () => chrome.runtime.onMessage.removeListener(listener);
+    browser.runtime.onMessage.addListener(listener);
+    return () => browser.runtime.onMessage.removeListener(listener);
   }, []);
 
   useEffect(() => {
@@ -89,8 +138,9 @@ export const WorkflowBuilder = () => {
   }, [isVisible]);
 
   const addNode = (type: string) => {
-    const def = nodeRegistry[type];
-    if (!def) return;
+    const nodeDef = nodeRegistry[type];
+    if (!nodeDef) return;
+
     const id = `n${idCounter}`;
     setIdCounter((c) => c + 1);
     setNodes((ns) => [
@@ -101,14 +151,39 @@ export const WorkflowBuilder = () => {
         position: { x: Math.random() * 400, y: Math.random() * 400 },
         data: {
           id,
-          ...def,
+          label: nodeDef.label,
+          color: nodeDef.color,
+          icon: resolveIcon(nodeDef.icon),
           status: "idle",
+          ...nodeDef.defaultConfig, // Apply default config
           onInspect: (id: string, text?: string) =>
             setInspected({ id, text: text || "" }),
         },
       },
     ]);
   };
+
+  // Load node components dynamically for ReactFlow
+  const nodeTypes = useMemo(() => {
+    const types: Record<string, any> = {};
+
+    // Set up all node types
+    allNodes.forEach((node) => {
+      // Use BaseNode as default, components will override when loaded
+      types[node.type] = BaseNode;
+
+      // Async load custom components if available
+      if (node.getComponent) {
+        node.getComponent().then((Component) => {
+          types[node.type] = Component;
+          // Force re-render to pick up the loaded component
+          setNodes((ns) => [...ns]);
+        });
+      }
+    });
+
+    return types;
+  }, []);
 
   //   if (!isVisible) return null;
 
@@ -121,7 +196,7 @@ export const WorkflowBuilder = () => {
         top: 0,
         left: 0,
         zIndex: 999999,
-        backgroundColor: "rgba(0,0,0,0.25)",
+        backgroundColor: "rgba(0,0,0, 0.8)",
         backdropFilter: "blur(6px)",
       }}
       className="overflow-hidden"
@@ -133,7 +208,13 @@ export const WorkflowBuilder = () => {
         <X size={20} />
       </button>
 
-      <Toolbar addNode={addNode} runWorkflow={runWorkflow} />
+      <Toolbar
+        addNode={addNode}
+        runWorkflow={runWorkflow}
+        onSave={handleSaveWorkflow}
+        workflowName={workflowName}
+        onNameChange={setWorkflowName}
+      />
 
       <div style={{ width: "100%", height: "100%" }}>
         <ReactFlow

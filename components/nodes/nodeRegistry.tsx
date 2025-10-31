@@ -1,4 +1,4 @@
-import { extractArticleContent } from "@/utils/extractArticleContent";
+import { getPageTextFromTab } from "@/utils/getPageTextFromTab";
 import { summarizeText } from "@/utils/summarizeText";
 import { translateText } from "@/utils/translateText";
 import {
@@ -14,7 +14,7 @@ export const nodeRegistry = {
     label: "Get Page Text",
     color: "bg-blue-600/70",
     icon: <FileText size={14} />,
-    run: () => extractArticleContent(),
+    run: (_node: any, _input: any, tabId: number) => getPageTextFromTab(tabId),
   },
   summarize: {
     label: "Summarize",
