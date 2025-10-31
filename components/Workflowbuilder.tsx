@@ -400,41 +400,46 @@ export const WorkflowBuilder = () => {
           className="fixed inset-0 z-1000001 flex items-center justify-center"
           style={{ backgroundColor: "rgba(0,0,0,0.25)" }}
         >
-          <div
-            className="sketch-modal sketch-border w-[600px] max-h-[80vh] overflow-hidden"
-            style={{
-              backgroundColor: "#FAFAFA",
-              color: "#666",
-              padding: "20px",
-            }}
-          >
-            <div className="flex justify-between items-center mb-3">
-              <h2
-                className="font-bold text-lg sketch-text"
-                style={{ color: "#444" }}
-              >
-                Node {inspected.id} Output
-              </h2>
-              <button
-                onClick={() => setInspected(null)}
-                className="sketch-button text-lg px-3 py-1 font-bold hover:scale-110 transition-transform"
+          <div className="sketch-modal sketch-border w-[600px] max-h-[80vh]">
+            <div className="sketch-border-inner">
+              <div
+                className="sketch-border-content overflow-hidden"
                 style={{
-                  backgroundColor: "#FFE5E5",
-                  color: "#E57373",
-                  border: "2.5px solid #E57373",
-                  borderRadius: "10px",
+                  backgroundColor: "#FAFAFA",
+                  color: "#666",
+                  padding: "20px",
+                  borderRadius: "20px",
                 }}
               >
-                ×
-              </button>
-            </div>
-            <div className="sketch-modal-content overflow-auto max-h-[calc(80vh-100px)]">
-              <pre
-                className="text-sm whitespace-pre-wrap sketch-text"
-                style={{ color: "#333" }}
-              >
-                {inspected.text}
-              </pre>
+                <div className="flex justify-between items-center mb-3">
+                  <h2
+                    className="font-bold text-lg sketch-text"
+                    style={{ color: "#444" }}
+                  >
+                    Node {inspected.id} Output
+                  </h2>
+                  <button
+                    onClick={() => setInspected(null)}
+                    className="sketch-button text-lg px-3 py-1 font-bold hover:scale-110 transition-transform"
+                    style={{
+                      backgroundColor: "#FFE5E5",
+                      color: "#E57373",
+                      border: "2.5px solid #E57373",
+                      borderRadius: "10px",
+                    }}
+                  >
+                    ×
+                  </button>
+                </div>
+                <div className="sketch-modal-content overflow-auto max-h-[calc(80vh-100px)]">
+                  <pre
+                    className="text-sm whitespace-pre-wrap sketch-text"
+                    style={{ color: "#333" }}
+                  >
+                    {inspected.text}
+                  </pre>
+                </div>
+              </div>
             </div>
           </div>
         </div>
