@@ -93,6 +93,11 @@
   filter: drop-shadow(4px 4px 8px rgba(0, 0, 0, 0.12));
 }
 
+/* Toolbar button hover effect */
+.sketch-toolbar button.sketch-border:hover {
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.12);
+}
+
 /* Scribble animation for running - but NO rotation */
 @keyframes scribble-straight {
   0%, 100% { transform: translateX(0) translateY(0); }

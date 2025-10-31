@@ -42,7 +42,11 @@ export const Toolbar = ({
       </div>
 
       {/* Save */}
-      <button onClick={onSave} className="sketch-border" title="Save workflow">
+      <button
+        onClick={onSave}
+        className="sketch-border cursor-pointer hover:scale-105 active:scale-95 transition-all"
+        title="Save workflow"
+      >
         <div className="sketch-border-inner">
           <div className="sketch-border-content py-2 px-4 flex items-center gap-2">
             <Save size={18} />
@@ -54,7 +58,7 @@ export const Toolbar = ({
       {/* Run */}
       <button
         onClick={runWorkflow}
-        className="sketch-border"
+        className="sketch-border cursor-pointer hover:scale-105 active:scale-95 transition-all"
         title="Run workflow"
       >
         <div className="sketch-border-inner">
@@ -72,7 +76,9 @@ export const Toolbar = ({
         <button
           key={node.type}
           onClick={() => addNode(node.type)}
-          className={`sketch-border ${getNodeButtonStyle(node.color)}`}
+          className={`sketch-border cursor-pointer hover:scale-105 active:scale-95 transition-all ${getNodeButtonStyle(
+            node.color
+          )}`}
           title={node.description}
         >
           <div className="sketch-border-inner">
