@@ -202,7 +202,7 @@ export const Toolbar = ({
       </div>
 
       {/* Node Buttons - Grouped by Category */}
-      <div className="flex flex-wrap gap-x-4 gap-y-2 items-start">
+      <div className="flex flex-wrap gap-x-4 gap-y-2 items-start mt-4">
         {["input", "processing", "output"].map((category) => {
           const categoryNodes = allNodes.filter(
             (node) => node.category === category

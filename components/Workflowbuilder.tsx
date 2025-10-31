@@ -31,6 +31,23 @@ export const WorkflowBuilder = () => {
   const [workflowName, setWorkflowName] = useState("Untitled Workflow");
   const [workflowId, setWorkflowId] = useState(() => `wf_${Date.now()}`);
 
+  // Helper function to get category color (same as in BaseNode)
+  const getCategoryColor = (category?: string) => {
+    const colors = {
+      blue: { bg: "#E3F2FD", border: "#5B9BD5" },
+      purple: { bg: "#F3E5F5", border: "#9B59B6" },
+      sage: { bg: "#E8F5E9", border: "#66BB6A" },
+    };
+    const categoryColors: Record<string, keyof typeof colors> = {
+      input: "blue",
+      processing: "purple",
+      output: "sage",
+    };
+    if (!category) return colors.purple;
+    const colorKey = categoryColors[category] || "purple";
+    return colors[colorKey];
+  };
+
   const deleteNode = useCallback((nodeId: string) => {
     setNodes((ns) => ns.filter((n) => n.id !== nodeId));
     setEdges((es) =>
@@ -65,7 +82,26 @@ export const WorkflowBuilder = () => {
             };
           });
           setNodes(restoredNodes);
-          setEdges(workflow.edges || []);
+          // Restore edge colors based on source node colors
+          const restoredEdges = (workflow.edges || []).map((edge: any) => {
+            const sourceNode = restoredNodes.find((n: any) => n.id === edge.source);
+            const nodeDef = sourceNode ? nodeRegistry[sourceNode.type] : null;
+            const categoryColor = nodeDef
+              ? getCategoryColor(nodeDef.category)
+              : { border: "#000000" };
+            
+            return {
+              ...edge,
+              style: {
+                stroke: categoryColor.border,
+                strokeWidth: 3,
+                strokeLinecap: "round",
+                strokeLinejoin: "round",
+              },
+              markerEnd: "url(#arrowhead)",
+            };
+          });
+          setEdges(restoredEdges);
           // Set idCounter to be higher than any existing node ID
           const maxId = workflow.nodes.reduce((max, node) => {
             const nodeIdNum = parseInt(node.id);
@@ -93,25 +129,55 @@ export const WorkflowBuilder = () => {
       setEdges((snapshot) => applyEdgeChanges(changes, snapshot)),
     []
   );
-  const onConnect = useCallback((params: any) => {
-    // Prevent multiple outgoing connections from the same source node
-    setEdges((snapshot) => {
-      // Check if the source node already has an outgoing edge
-      const hasExistingOutgoingEdge = snapshot.some(
-        (edge) => edge.source === params.source
-      );
-
-      if (hasExistingOutgoingEdge) {
-        // Remove the old edge and add the new one
-        const filteredEdges = snapshot.filter(
-          (edge) => edge.source !== params.source
+  const onConnect = useCallback(
+    (params: any) => {
+      // Prevent multiple outgoing connections from the same source node
+      setEdges((snapshot) => {
+        // Find the source node to get its color
+        const sourceNode = nodes.find((n) => n.id === params.source);
+        const nodeDef = sourceNode ? nodeRegistry[sourceNode.type] : null;
+        const categoryColor = nodeDef
+          ? getCategoryColor(nodeDef.category)
+          : { border: "#000000" };
+        
+        // Check if the source node already has an outgoing edge
+        const hasExistingOutgoingEdge = snapshot.some(
+          (edge) => edge.source === params.source
         );
-        return addEdge(params, filteredEdges);
-      }
-
-      return addEdge(params, snapshot);
-    });
-  }, []);
+        
+        if (hasExistingOutgoingEdge) {
+          // Remove the old edge and add the new one
+          const filteredEdges = snapshot.filter(
+            (edge) => edge.source !== params.source
+          );
+          const newEdge = {
+            ...params,
+            style: {
+              stroke: categoryColor.border,
+              strokeWidth: 3,
+              strokeLinecap: "round",
+              strokeLinejoin: "round",
+            },
+            markerEnd: "url(#arrowhead)",
+          };
+          return addEdge(newEdge, filteredEdges);
+        }
+        
+        const newEdge = {
+          ...params,
+          style: {
+            stroke: categoryColor.border,
+            strokeWidth: 3,
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+          },
+          markerEnd: "url(#arrowhead)",
+        };
+        return addEdge(newEdge, snapshot);
+      });
+    },
+    [nodes]
+  );
 
   const getSourceTabId = (): number | null => {
     const params = new URLSearchParams(window.location.search);
@@ -311,16 +377,30 @@ export const WorkflowBuilder = () => {
     // Automatically create connection if we have a source node
     if (sourceNodeId) {
       setEdges((es) => {
+        // Find the source node to get its color
+        const sourceNode = nodes.find((n) => n.id === sourceNodeId);
+        const sourceNodeDef = sourceNode ? nodeRegistry[sourceNode.type] : null;
+        const categoryColor = sourceNodeDef
+          ? getCategoryColor(sourceNodeDef.category)
+          : { border: "#000000" };
+        
         // Remove any existing outgoing edge from the source node
         const filteredEdges = es.filter((edge) => edge.source !== sourceNodeId);
-
-        // Add the new edge
+        
+        // Add the new edge with the source node's color
         return [
           ...filteredEdges,
           {
             id: `e${sourceNodeId}-${id}`,
             source: sourceNodeId,
             target: id,
+            style: {
+              stroke: categoryColor.border,
+              strokeWidth: 3,
+              strokeLinecap: "round",
+              strokeLinejoin: "round",
+            },
+            markerEnd: "url(#arrowhead)",
           },
         ];
       });
@@ -468,6 +548,27 @@ export const WorkflowBuilder = () => {
             </feDiffuseLighting>
             <feComposite in="SourceGraphic" in2="light" operator="multiply" />
           </filter>
+
+          {/* Chevron arrow marker for edges - color will be inherited from edge stroke */}
+          <marker
+            id="arrowhead"
+            markerWidth="12"
+            markerHeight="10"
+            refX="10"
+            refY="5"
+            orient="auto"
+            markerUnits="strokeWidth"
+          >
+            <path
+              d="M 0 0 L 10 5 L 0 10"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              filter="url(#rough-edge)"
+            />
+          </marker>
         </defs>
       </svg>
 
@@ -519,11 +620,11 @@ export const WorkflowBuilder = () => {
           minZoom={1}
           defaultEdgeOptions={{
             style: {
-              stroke: "var(--sketch-color)",
               strokeWidth: 3,
               strokeLinecap: "round",
               strokeLinejoin: "round",
             },
+            markerEnd: "url(#arrowhead)",
             animated: false,
           }}
         />

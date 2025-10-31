@@ -222,11 +222,25 @@ export const SummarizeNode = ({ data, selected }: NodeProps) => {
 
       {/* Input nodes only have source (bottom) handle */}
       {data.category !== "input" && (
-        <Handle type="target" position={Position.Top} />
+        <Handle 
+          type="target" 
+          position={Position.Top}
+          style={{
+            borderColor: categoryColor.border,
+            "--handle-color": categoryColor.border,
+          } as React.CSSProperties}
+        />
       )}
       {/* Output nodes only have target (top) handle */}
       {data.category !== "output" && (
-        <Handle type="source" position={Position.Bottom} />
+        <Handle 
+          type="source" 
+          position={Position.Bottom}
+          style={{
+            borderColor: categoryColor.border,
+            "--handle-color": categoryColor.border,
+          } as React.CSSProperties}
+        />
       )}
     </div>
   );

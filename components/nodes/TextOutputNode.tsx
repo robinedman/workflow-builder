@@ -107,7 +107,14 @@ export const TextOutputNode = ({ data, selected }: NodeProps) => {
           </div>
         </div>
       </div>
-      <Handle type="target" position={Position.Top} />
+      <Handle 
+        type="target" 
+        position={Position.Top}
+        style={{
+          borderColor: categoryColor.border,
+          "--handle-color": categoryColor.border,
+        } as React.CSSProperties}
+      />
     </div>
   );
 };

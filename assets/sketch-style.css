@@ -165,18 +165,21 @@
   width: 14px !important;
   height: 14px !important;
   background-color: white !important;
-  border: 3px solid var(--sketch-color, black) !important;
+  border: 3px solid var(--handle-color, var(--sketch-color, black)) !important;
   border-radius: 50% !important;
+  outline: none !important;
   box-shadow: 
-    0.5px 0.5px 0 0.5px currentColor,
-    -0.5px 0.5px 0 0.5px currentColor,
-    0.5px -0.5px 0 0.5px currentColor,
-    -0.5px -0.5px 0 0.5px currentColor,
-    2px 2px 4px rgba(0, 0, 0, 0.1);
+    2px 2px 4px rgba(0, 0, 0, 0.1) !important;
   transition: all 0.2s ease;
   filter: url(#rough-border);
   z-index: 10;
   position: relative;
+}
+
+/* Remove any default ReactFlow handle styles that might add black borders */
+.react-flow__handle::before,
+.react-flow__handle::after {
+  display: none !important;
 }
 
 .react-flow__handle:hover {
@@ -185,12 +188,16 @@
 }
 
 /* Edge styles - hand-drawn wobbly lines */
+/* ReactFlow applies inline styles from edge.style to the path element */
+/* Don't set stroke with !important - let inline styles from edge.style work */
 .react-flow__edge-path {
-  stroke: var(--sketch-color, black) !important;
+  /* stroke color comes from edge.style inline styles - don't override it */
   stroke-width: 3 !important;
   stroke-linecap: round !important;
   stroke-linejoin: round !important;
   filter: url(#rough-edge);
+  /* Remove any default ReactFlow stroke color */
+  stroke: unset;
 }
 
 /* Selected node - Clear visual feedback with prominent box shadow */
