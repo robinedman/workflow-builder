@@ -1,5 +1,6 @@
 // Import all nodes
 import { GetPageTextNode } from './GetPageTextNode';
+import { GetSelectionNode } from './GetSelectionNode';
 import { SummarizeNode } from './SummarizeNode';
 import { TranslateNode } from './TranslateNode';
 import { PromptNode } from './PromptNode';
@@ -9,6 +10,7 @@ import type { WorkflowNode } from './types';
 // Auto-register all nodes
 export const allNodes: WorkflowNode[] = [
   GetPageTextNode,
+  GetSelectionNode,
   SummarizeNode,
   TranslateNode,
   PromptNode,
@@ -23,6 +25,7 @@ export const nodeRegistry: Record<string, WorkflowNode> = Object.fromEntries(
 // Export individual nodes for direct access
 export {
   GetPageTextNode,
+  GetSelectionNode,
   SummarizeNode,
   TranslateNode,
   PromptNode,
