@@ -1,11 +1,12 @@
 // Import all nodes
-import { GetPageTextNode } from './GetPageTextNode';
-import { GetSelectionNode } from './GetSelectionNode';
-import { SummarizeNode } from './SummarizeNode';
-import { TranslateNode } from './TranslateNode';
-import { PromptNode } from './PromptNode';
-import { TextOutputNode } from './TextOutputNode';
-import type { WorkflowNode } from './types';
+import { GetPageTextNode } from "./GetPageTextNode";
+import { GetSelectionNode } from "./GetSelectionNode";
+import { SummarizeNode } from "./SummarizeNode";
+import { TranslateNode } from "./TranslateNode";
+import { PromptNode } from "./PromptNode";
+import { TextOutputNode } from "./TextOutputNode";
+import { SelectionPopoverNode } from "./SelectionPopoverNode";
+import type { WorkflowNode } from "./types";
 
 // Auto-register all nodes
 export const allNodes: WorkflowNode[] = [
@@ -15,11 +16,12 @@ export const allNodes: WorkflowNode[] = [
   TranslateNode,
   PromptNode,
   TextOutputNode,
+  SelectionPopoverNode,
 ];
 
 // Create registry by type
 export const nodeRegistry: Record<string, WorkflowNode> = Object.fromEntries(
-  allNodes.map(node => [node.type, node])
+  allNodes.map((node) => [node.type, node])
 );
 
 // Export individual nodes for direct access
@@ -30,8 +32,13 @@ export {
   TranslateNode,
   PromptNode,
   TextOutputNode,
+  SelectionPopoverNode,
 };
 
 // Re-export types
-export type { WorkflowNode, NodeExecutor, PageContext, NodeComponentProps } from './types';
-
+export type {
+  WorkflowNode,
+  NodeExecutor,
+  PageContext,
+  NodeComponentProps,
+} from "./types";

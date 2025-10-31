@@ -68,11 +68,18 @@ Show results on page
 
 ## 📝 Current Nodes
 
+### Input Nodes
 1. **Get Page Text** - Extract readable text using Readability
-2. **Summarize** - AI Summarizer API (configurable type/length)
-3. **Translate** - AI Translator API (configurable languages)
-4. **Prompt** - Custom Gemini Nano prompts with editable instructions
-5. **Text Output** - Display in workflow builder (visual mode only)
+2. **Get Selected Text** - Get currently selected text from page
+
+### Processing Nodes
+3. **Summarize** - AI Summarizer API (configurable type/length)
+4. **Translate** - AI Translator API (configurable languages)
+5. **Prompt** - Custom Gemini Nano prompts with editable instructions
+
+### Output Nodes
+6. **Text Output** - Display in workflow builder (visual mode only)
+7. **Selection Popover** - Show result in popover near selected text
 
 ## 🚀 Adding New Nodes
 
