@@ -20,6 +20,10 @@ export const WorkflowBuilder = () => {
   const [idCounter, setIdCounter] = useState(1);
   const [selectedNodes, setSelectedNodes] = useState<string[]>([]);
   const [isRunning, setIsRunning] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<"idle" | "success" | "error">(
+    "idle"
+  );
   const [inspected, setInspected] = useState<{
     id: string;
     text: string;
@@ -127,8 +131,22 @@ export const WorkflowBuilder = () => {
       updatedAt: Date.now(),
     };
 
-    await saveWorkflow(workflow);
-    alert(`Workflow "${workflowName}" saved!`);
+    setIsSaving(true);
+    setSaveStatus("idle");
+
+    try {
+      await saveWorkflow(workflow);
+      setSaveStatus("success");
+      // Reset success message after 2 seconds
+      setTimeout(() => setSaveStatus("idle"), 2000);
+    } catch (error) {
+      console.error("Failed to save workflow:", error);
+      setSaveStatus("error");
+      // Reset error message after 3 seconds
+      setTimeout(() => setSaveStatus("idle"), 3000);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const deleteNode = useCallback((nodeId: string) => {
@@ -317,6 +335,8 @@ export const WorkflowBuilder = () => {
         workflowName={workflowName}
         onNameChange={setWorkflowName}
         isRunning={isRunning}
+        isSaving={isSaving}
+        saveStatus={saveStatus}
         existingNodeTypes={nodes.map((n) => n.type)}
         canRun={(() => {
           // Check if there's an output node

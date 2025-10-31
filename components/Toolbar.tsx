@@ -1,4 +1,4 @@
-import { Loader2, Play, Plus, Save } from "lucide-react";
+import { Check, Loader2, Play, Plus, Save, X } from "lucide-react";
 import { allNodes } from "@/nodes";
 
 const getNodeButtonStyle = (color: string) => {
@@ -20,6 +20,8 @@ export const Toolbar = ({
   workflowName,
   onNameChange,
   isRunning = false,
+  isSaving = false,
+  saveStatus = "idle",
   canRun = false,
   existingNodeTypes = [],
 }: {
@@ -29,6 +31,8 @@ export const Toolbar = ({
   workflowName: string;
   onNameChange: (name: string) => void;
   isRunning?: boolean;
+  isSaving?: boolean;
+  saveStatus?: "idle" | "success" | "error";
   canRun?: boolean;
   existingNodeTypes?: string[];
 }) => {
@@ -60,26 +64,56 @@ export const Toolbar = ({
         {/* Save */}
         <button
           onClick={onSave}
-          disabled={!canRun}
+          disabled={!canRun || isSaving}
           className={`sketch-border transition-all ${
-            !canRun
+            !canRun || isSaving
               ? "opacity-60 cursor-not-allowed"
               : "cursor-pointer hover:scale-105 active:scale-95"
           }`}
           title={
             !canRun
               ? "Connect all nodes and add an output node to save"
+              : isSaving
+              ? "Saving..."
+              : saveStatus === "success"
+              ? "Workflow saved!"
+              : saveStatus === "error"
+              ? "Failed to save"
               : "Save workflow"
           }
         >
           <div className="sketch-border-inner">
             <div
               className={`sketch-border-content py-2 px-4 flex items-center gap-2 ${
-                !canRun ? "text-gray-400" : ""
+                !canRun
+                  ? "text-gray-400"
+                  : isSaving
+                  ? "text-blue-500"
+                  : saveStatus === "success"
+                  ? "text-green-600"
+                  : saveStatus === "error"
+                  ? "text-red-500"
+                  : ""
               }`}
             >
-              <Save size={18} />
-              <span>Save</span>
+              {isSaving ? (
+                <Loader2 size={18} className="animate-spin" />
+              ) : saveStatus === "success" ? (
+                <Check size={18} />
+              ) : saveStatus === "error" ? (
+                <X size={18} />
+              ) : (
+                <Save size={18} />
+              )}
+              <span>
+                {isSaving
+                  ? "Saving..."
+                  : saveStatus === "success"
+                  ? "Saved!"
+                  : saveStatus === "error"
+                  ? "Error"
+                  : "Save"}
+              </span>
             </div>
           </div>
         </button>
