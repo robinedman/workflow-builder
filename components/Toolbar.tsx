@@ -21,6 +21,7 @@ export const Toolbar = ({
   onNameChange,
   isRunning = false,
   canRun = false,
+  hasInputNode = false,
 }: {
   addNode: (type: string) => void;
   runWorkflow: () => void;
@@ -29,6 +30,7 @@ export const Toolbar = ({
   onNameChange: (name: string) => void;
   isRunning?: boolean;
   canRun?: boolean;
+  hasInputNode?: boolean;
 }) => (
   <div className="absolute top-4 left-4 z-1000000 sketch-toolbar space-y-4">
     <div className="flex items-center gap-3 flex-wrap">
@@ -112,23 +114,39 @@ export const Toolbar = ({
 
     {/* Node Buttons */}
     <div className="sketch-button-group flex flex-wrap gap-3">
-      {allNodes.map((node) => (
-        <button
-          key={node.type}
-          onClick={() => addNode(node.type)}
-          className={`sketch-border cursor-pointer hover:scale-105 active:scale-95 transition-all ${getNodeButtonStyle(
-            node.color
-          )}`}
-          title={node.description}
-        >
-          <div className="sketch-border-inner">
-            <div className="sketch-border-content py-2 px-4 flex items-center gap-2">
-              <Plus size={18} />
-              <span>{node.label}</span>
+      {allNodes.map((node) => {
+        const isInputNode = node.category === "input";
+        const isDisabled = !isInputNode && !hasInputNode;
+
+        return (
+          <button
+            key={node.type}
+            onClick={() => addNode(node.type)}
+            disabled={isDisabled}
+            className={`sketch-border transition-all ${
+              isDisabled
+                ? "opacity-60 cursor-not-allowed"
+                : "cursor-pointer hover:scale-105 active:scale-95"
+            } ${getNodeButtonStyle(node.color)}`}
+            title={
+              isDisabled
+                ? "Add an input node first (Get Page Text or Get Selected Text)"
+                : node.description
+            }
+          >
+            <div className="sketch-border-inner">
+              <div
+                className={`sketch-border-content py-2 px-4 flex items-center gap-2 ${
+                  isDisabled ? "text-gray-400" : ""
+                }`}
+              >
+                <Plus size={18} />
+                <span>{node.label}</span>
+              </div>
             </div>
-          </div>
-        </button>
-      ))}
+          </button>
+        );
+      })}
     </div>
   </div>
 );

@@ -316,6 +316,10 @@ export const WorkflowBuilder = () => {
         workflowName={workflowName}
         onNameChange={setWorkflowName}
         isRunning={isRunning}
+        hasInputNode={nodes.some((node) => {
+          const nodeDef = nodeRegistry[node.type];
+          return nodeDef?.category === "input";
+        })}
         canRun={(() => {
           // Check if there's an output node
           const hasOutputNode = nodes.some((node) => {
