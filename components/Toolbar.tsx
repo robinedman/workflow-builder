@@ -1,4 +1,4 @@
-import { Play, Plus, Save } from "lucide-react";
+import { Loader2, Play, Plus, Save } from "lucide-react";
 import { allNodes } from "@/nodes";
 
 const getNodeButtonStyle = (color: string) => {
@@ -19,14 +19,18 @@ export const Toolbar = ({
   onSave,
   workflowName,
   onNameChange,
+  isRunning = false,
+  canRun = false,
 }: {
   addNode: (type: string) => void;
   runWorkflow: () => void;
   onSave: () => void;
   workflowName: string;
   onNameChange: (name: string) => void;
+  isRunning?: boolean;
+  canRun?: boolean;
 }) => (
-  <div className="absolute top-4 left-4 z-[1000000] sketch-toolbar space-y-4">
+  <div className="absolute top-4 left-4 z-1000000 sketch-toolbar space-y-4">
     <div className="flex items-center gap-3 flex-wrap">
       <div className="sketch-border">
         <div className="sketch-border-inner">
@@ -44,11 +48,24 @@ export const Toolbar = ({
       {/* Save */}
       <button
         onClick={onSave}
-        className="sketch-border cursor-pointer hover:scale-105 active:scale-95 transition-all"
-        title="Save workflow"
+        disabled={!canRun}
+        className={`sketch-border transition-all ${
+          !canRun
+            ? "opacity-60 cursor-not-allowed"
+            : "cursor-pointer hover:scale-105 active:scale-95"
+        }`}
+        title={
+          !canRun
+            ? "Connect all nodes and add an output node to save"
+            : "Save workflow"
+        }
       >
         <div className="sketch-border-inner">
-          <div className="sketch-border-content py-2 px-4 flex items-center gap-2">
+          <div
+            className={`sketch-border-content py-2 px-4 flex items-center gap-2 ${
+              !canRun ? "text-gray-400" : ""
+            }`}
+          >
             <Save size={18} />
             <span>Save</span>
           </div>
@@ -58,13 +75,36 @@ export const Toolbar = ({
       {/* Run */}
       <button
         onClick={runWorkflow}
-        className="sketch-border cursor-pointer hover:scale-105 active:scale-95 transition-all"
-        title="Run workflow"
+        disabled={isRunning || !canRun}
+        className={`sketch-border transition-all ${
+          isRunning || !canRun
+            ? "opacity-60 cursor-not-allowed"
+            : "cursor-pointer hover:scale-105 active:scale-95"
+        }`}
+        title={
+          isRunning
+            ? "Workflow running..."
+            : !canRun
+            ? "Connect all nodes and add an output node"
+            : "Run workflow"
+        }
       >
         <div className="sketch-border-inner">
-          <div className="sketch-border-content py-2 px-4 flex items-center gap-2 text-emerald-600">
-            <Play size={18} />
-            <span>Run</span>
+          <div
+            className={`sketch-border-content py-2 px-4 flex items-center gap-2 ${
+              isRunning
+                ? "text-blue-500"
+                : !canRun
+                ? "text-gray-400"
+                : "text-emerald-600"
+            }`}
+          >
+            {isRunning ? (
+              <Loader2 size={18} className="animate-spin" />
+            ) : (
+              <Play size={18} />
+            )}
+            <span>{isRunning ? "Running..." : "Run"}</span>
           </div>
         </div>
       </button>

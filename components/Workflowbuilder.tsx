@@ -19,6 +19,7 @@ export const WorkflowBuilder = () => {
   const [edges, setEdges] = useState<any[]>([]);
   const [idCounter, setIdCounter] = useState(1);
   const [selectedNodes, setSelectedNodes] = useState<string[]>([]);
+  const [isRunning, setIsRunning] = useState(false);
   const [inspected, setInspected] = useState<{
     id: string;
     text: string;
@@ -74,6 +75,8 @@ export const WorkflowBuilder = () => {
       updatedAt: Date.now(),
     };
 
+    setIsRunning(true);
+
     try {
       await executeWorkflow(workflow, {
         tabId: sourceTabId,
@@ -109,6 +112,8 @@ export const WorkflowBuilder = () => {
       });
     } catch (error) {
       console.error("Workflow execution failed:", error);
+    } finally {
+      setIsRunning(false);
     }
   };
 
@@ -310,6 +315,27 @@ export const WorkflowBuilder = () => {
         onSave={handleSaveWorkflow}
         workflowName={workflowName}
         onNameChange={setWorkflowName}
+        isRunning={isRunning}
+        canRun={(() => {
+          // Check if there's an output node
+          const hasOutputNode = nodes.some((node) => {
+            const nodeDef = nodeRegistry[node.type];
+            return nodeDef?.category === "output";
+          });
+
+          if (!hasOutputNode) return false;
+
+          // Check if all nodes are connected
+          const allNodesConnected = nodes.every((node) => {
+            // Check if node has at least one edge (incoming or outgoing)
+            const hasEdge = edges.some(
+              (edge) => edge.source === node.id || edge.target === node.id
+            );
+            return hasEdge;
+          });
+
+          return allNodesConnected;
+        })()}
       />
 
       <div style={{ width: "100%", height: "100%" }}>
