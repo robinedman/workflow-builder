@@ -206,7 +206,10 @@ function App() {
             </div>
           </div>
         </div>
-        <p className="sketch-text" style={{ fontSize: "14px", opacity: 0.7 }}>
+        <p
+          className="sketch-info-text"
+          style={{ fontSize: "14px", opacity: 0.7 }}
+        >
           Run workflows on the current page
         </p>
       </div>
@@ -234,7 +237,7 @@ function App() {
                   No workflows yet
                 </p>
                 <p
-                  className="mb-4"
+                  className="mb-4 sketch-info-text"
                   style={{ fontSize: "15px", color: "#666", opacity: 0.8 }}
                 >
                   Create your first workflow to get started
@@ -330,8 +333,8 @@ function App() {
                           {workflow.name}
                         </h3>
                         <p
-                          className="sketch-text"
-                          style={{ fontSize: "14px", opacity: 0.7 }}
+                          className="sketch-info-text"
+                          style={{ fontSize: "13px", opacity: 0.7 }}
                         >
                           {workflow.nodes.length} node
                           {workflow.nodes.length !== 1 ? "s" : ""}
@@ -419,7 +422,7 @@ function App() {
           }}
         >
           <p
-            className="text-center sketch-text"
+            className="text-center sketch-info-text"
             style={{ fontSize: "14px", opacity: 0.8 }}
           >
             Results will appear on the page
