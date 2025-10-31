@@ -157,7 +157,7 @@ export const SummarizeNode = ({ data, selected }: NodeProps) => {
                 {data.output && (
                   <button
                     onClick={() => data.onInspect?.(data.id, data.output)}
-                    className="hover:scale-125 transition-transform opacity-90 hover:opacity-100 shrink-0"
+                    className="cursor-pointer hover:scale-125 transition-transform opacity-90 hover:opacity-100 shrink-0"
                     style={{ color: categoryColor.border }}
                     title="Inspect output"
                   >
