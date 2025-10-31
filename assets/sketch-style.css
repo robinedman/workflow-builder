@@ -44,7 +44,7 @@
 .sketch-border-inner::after {
   content: '';
   position: absolute;
-  background-color: black;
+  background-color: var(--sketch-color, black);
   box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.08);
   filter: url(#rough-border);
 }
@@ -54,14 +54,14 @@
   top: -2px;
   left: 0;
   width: 100%;
-  height: 1px;
+  height: 3px;
 }
 
 /* Left border */
 .sketch-border::after {
   top: 0;
   left: 0;
-  width: 1px;
+  width: 3px;
   height: 100%;
 }
 
@@ -70,14 +70,14 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 1px;
+  height: 3px;
 }
 
 /* Right border */
 .sketch-border-inner::after {
   top: 0;
   right: 0;
-  width: 1px;
+  width: 3px;
   height: 100%;
 }
 
@@ -128,7 +128,8 @@
 
 /* Edge styles - hand-drawn wobbly lines */
 .react-flow__edge-path {
-  stroke-width: 3.5 !important;
+  stroke: var(--sketch-color, black) !important;
+  stroke-width: 3 !important;
   stroke-linecap: round !important;
   stroke-linejoin: round !important;
   filter: url(#rough-edge);
@@ -179,7 +180,7 @@
   padding: 18px;
   transition: all 0.2s ease;
   font-size: 17px;
-  color: #5A5A5A;
+  color: var(--sketch-color, black);
   transform: none !important; /* NO TILTING */
 }
 

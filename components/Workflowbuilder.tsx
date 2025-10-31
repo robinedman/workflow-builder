@@ -168,14 +168,17 @@ export const WorkflowBuilder = () => {
 
   return (
     <div
-      style={{
-        width: "100vw",
-        height: "100vh",
-        position: "fixed",
-        top: 0,
-        left: 0,
-        zIndex: 999999,
-      }}
+      style={
+        {
+          width: "100vw",
+          height: "100vh",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          zIndex: 999999,
+          "--sketch-color": "#000000",
+        } as React.CSSProperties
+      }
       className="overflow-hidden sketch-canvas"
     >
       {/* SVG Filters for hand-drawn effects */}
@@ -283,8 +286,8 @@ export const WorkflowBuilder = () => {
           minZoom={1}
           defaultEdgeOptions={{
             style: {
-              stroke: "#000000",
-              strokeWidth: 1,
+              stroke: "var(--sketch-color)",
+              strokeWidth: 3,
               strokeLinecap: "round",
               strokeLinejoin: "round",
             },
