@@ -44,8 +44,8 @@
 .sketch-canvas {
   background-color: var(--pastel-bg);
   background-image: 
-    repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(0,0,0,0.01) 40px, rgba(0,0,0,0.01) 41px),
-    repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(0,0,0,0.01) 40px, rgba(0,0,0,0.01) 41px);
+    repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(0,0,0,0.03) 40px, rgba(0,0,0,0.03) 41px),
+    repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(0,0,0,0.03) 40px, rgba(0,0,0,0.03) 41px);
 }
 
 .sketch-svg-filters {
@@ -336,10 +336,13 @@
 /* ReactFlow */
 .react-flow__node {
   cursor: grab;
+  z-index: 1;
 }
 
-.react-flow__node:active {
+.react-flow__node:active,
+.react-flow__node.dragging {
   cursor: grabbing;
+  z-index: 1000001;
 }
 
 .react-flow__attribution {
