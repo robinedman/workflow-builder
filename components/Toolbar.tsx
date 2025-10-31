@@ -1,6 +1,24 @@
 import { Play, Plus, Save } from "lucide-react";
 import { allNodes } from "@/nodes";
 
+// Map node colors to sketch button styles with better palette
+const getNodeButtonStyle = (color: string) => {
+  if (color.includes("blue")) {
+    return "sketch-button-blue";
+  } else if (color.includes("purple")) {
+    return "sketch-button-purple";
+  } else if (color.includes("emerald") || color.includes("green")) {
+    return "sketch-button-mint";
+  } else if (color.includes("pink")) {
+    return "sketch-button-pink";
+  } else if (color.includes("orange") || color.includes("peach")) {
+    return "sketch-button-peach";
+  } else if (color.includes("yellow")) {
+    return "sketch-button-yellow";
+  }
+  return "sketch-button-purple";
+};
+
 export const Toolbar = ({
   addNode,
   runWorkflow,
@@ -14,50 +32,47 @@ export const Toolbar = ({
   workflowName: string;
   onNameChange: (name: string) => void;
 }) => (
-  <div className="absolute top-4 left-4 z-[1000000] bg-zinc-900 rounded-xl shadow-lg p-3 border border-zinc-700 space-y-2">
-    <div className="flex items-center gap-2">
+  <div className="absolute top-4 left-4 z-[1000000] sketch-toolbar sketch-border sketch-text space-y-4">
+    <div className="flex items-center gap-3 flex-wrap">
       <input
         type="text"
         value={workflowName}
         onChange={(e) => onNameChange(e.target.value)}
-        className="px-3 py-1.5 rounded-lg bg-zinc-800 text-white text-sm border border-zinc-700 focus:outline-none focus:border-blue-500"
+        className="sketch-input"
+        style={{ 
+          color: '#6B46C1',
+          minWidth: '220px'
+        }}
         placeholder="Workflow name..."
       />
       <button
         onClick={onSave}
-        className="flex items-center gap-1 rounded-lg bg-green-600/80 px-3 py-1.5 text-sm text-white hover:bg-green-600"
+        className="sketch-button sketch-button-green flex items-center gap-2"
         title="Save workflow"
       >
-        <Save size={14} />
-        Save
+        <Save size={18} />
+        <span>Save</span>
       </button>
       <button
         onClick={runWorkflow}
-        className="flex items-center gap-1 rounded-lg bg-emerald-600/80 px-3 py-1.5 text-sm text-white hover:bg-emerald-600"
+        className="sketch-button sketch-button-mint flex items-center gap-2"
         title="Run workflow"
       >
-        <Play size={14} />
-        Run
+        <Play size={18} />
+        <span>Run</span>
       </button>
     </div>
     
-    <div className="flex gap-2 flex-wrap">
+    <div className="sketch-button-group">
       {allNodes.map((node) => (
         <button
           key={node.type}
           onClick={() => addNode(node.type)}
-          className="flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm text-white hover:brightness-110"
-          style={{
-            backgroundColor: node.color.includes("blue")
-              ? "#2563ebcc"
-              : node.color.includes("purple")
-              ? "#9333eacc"
-              : "#059669cc",
-          }}
+          className={`sketch-button ${getNodeButtonStyle(node.color)} flex items-center gap-2`}
           title={node.description}
         >
-          <Plus size={14} />
-          {node.label}
+          <Plus size={18} />
+          <span>{node.label}</span>
         </button>
       ))}
     </div>

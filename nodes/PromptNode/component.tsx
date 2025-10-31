@@ -27,79 +27,135 @@ export const PromptNodeComponent = ({ data }: NodeComponentProps) => {
     check();
   }, []);
 
+  const isRunning = data.status === "running";
+  const colors = {
+    bg: "var(--pastel-purple)",
+    border: "#8B7EC8",
+    text: "#5A4E8A",
+  };
+
   return (
     <div
-      style={{ width: 280 }}
-      className="rounded-xl overflow-hidden shadow-lg border border-zinc-800 bg-zinc-900 text-white"
+      style={{
+        width: 300,
+        backgroundColor: colors.bg,
+        color: colors.border,
+      }}
+      className={`sketch-node sketch-border sketch-text overflow-hidden ${
+        isRunning ? "sketch-node-running" : ""
+      }`}
     >
-      <div className="flex items-center justify-between gap-2 px-3 py-2 bg-purple-600/70">
-        <div className="flex items-center gap-2">
-          {data.status === "running" ? (
-            <Loader2 size={14} className="animate-spin" />
+      <div
+        className="sketch-node-header flex items-center justify-between gap-2"
+        style={{
+          backgroundColor: colors.border,
+          color: "white",
+        }}
+      >
+        <div className="flex items-center gap-2.5">
+          {isRunning ? (
+            <Loader2 size={20} className="animate-spin flex-shrink-0" />
           ) : (
-            <MessageSquare size={14} />
+            <MessageSquare size={20} className="flex-shrink-0" />
           )}
-          <span className="text-sm font-medium">Prompt</span>
+          <span style={{ fontSize: "20px", lineHeight: "1.2" }}>Prompt</span>
         </div>
         {data.output && (
           <button
             onClick={() => data.onInspect?.(data.id, data.output)}
-            className="text-white/70 hover:text-white"
+            className="hover:scale-125 transition-transform opacity-90 hover:opacity-100 flex-shrink-0"
           >
-            <Eye size={14} />
+            <Eye size={18} />
           </button>
         )}
       </div>
 
-      <div className="p-3 space-y-2 text-xs">
+      <div
+        className="p-4 space-y-3"
+        style={{
+          backgroundColor: "rgba(255, 255, 255, 0.7)",
+          fontSize: "16px",
+        }}
+      >
         <div>
-          <label className="block text-zinc-400 mb-1">
+          <label
+            className="block mb-2"
+            style={{ color: colors.text, fontSize: "17px", fontWeight: 700 }}
+          >
             Custom Prompt
             {data.status === "done" && (
-              <span className="ml-2 text-green-400">
-                ✓ Edit & re-run anytime
+              <span
+                className="ml-2"
+                style={{ color: "#52B788", fontSize: "16px" }}
+              >
+                ✓ Edit & re-run
               </span>
             )}
           </label>
           <textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            disabled={data.status === "running"}
-            className="w-full bg-zinc-800 text-white rounded px-2 py-1.5 border border-zinc-700 focus:outline-none focus:border-purple-500 resize-none disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={isRunning}
+            className="w-full rounded-lg px-3 py-2.5 border-3 resize-none disabled:opacity-50 disabled:cursor-not-allowed sketch-text transition-all"
+            style={{
+              backgroundColor: "white",
+              color: colors.text,
+              borderColor: colors.border,
+              borderWidth: "3px",
+              borderStyle: "solid",
+              fontSize: "16px",
+              fontWeight: 600,
+              lineHeight: "1.4",
+            }}
             rows={3}
             placeholder="Enter your instruction..."
           />
         </div>
 
         {modelStatus === "unavailable" && (
-          <div className="text-yellow-300 text-xs">
-            ⚠️ Prompt API not available. Enable in chrome://flags
+          <div style={{ color: "#E09F7D", fontSize: "15px", fontWeight: 600 }}>
+            ⚠️ Prompt API not available
           </div>
         )}
 
         {modelStatus === "downloadable" && (
-          <div className="text-blue-300 text-xs">
-            📥 Model available for download
+          <div style={{ color: "#5B9BD5", fontSize: "15px", fontWeight: 600 }}>
+            📥 Model available
           </div>
         )}
 
         {modelStatus === "downloading" && (
-          <div className="text-blue-300 text-xs">⏳ Downloading model...</div>
+          <div style={{ color: "#5B9BD5", fontSize: "15px", fontWeight: 600 }}>
+            ⏳ Downloading model...
+          </div>
         )}
 
         {modelStatus === "ready" && (
-          <div className="text-green-400 text-xs">✅ Model ready</div>
+          <div style={{ color: "#52B788", fontSize: "15px", fontWeight: 600 }}>
+            ✅ Model ready
+          </div>
         )}
 
-        {data.status === "running" && (
-          <div className="text-blue-400 text-xs animate-pulse">
+        {isRunning && (
+          <div
+            className="animate-pulse"
+            style={{ color: "#5B9BD5", fontSize: "15px", fontWeight: 600 }}
+          >
             ⚡ Processing with Gemini Nano...
           </div>
         )}
       </div>
 
-      <Handle type="target" position={Position.Top} />
-      <Handle type="source" position={Position.Bottom} />
+      <Handle
+        type="target"
+        position={Position.Top}
+        style={{ borderColor: colors.border }}
+      />
+      <Handle
+        type="source"
+        position={Position.Bottom}
+        style={{ borderColor: colors.border }}
+      />
     </div>
   );
 };

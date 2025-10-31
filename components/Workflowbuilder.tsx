@@ -175,11 +175,90 @@ export const WorkflowBuilder = () => {
         top: 0,
         left: 0,
         zIndex: 999999,
-        backgroundColor: "rgba(0,0,0, 0.8)",
-        backdropFilter: "blur(6px)",
       }}
-      className="overflow-hidden"
+      className="overflow-hidden sketch-canvas"
     >
+      {/* SVG Filters for hand-drawn effects */}
+      <svg
+        className="sketch-svg-filters"
+        style={{ position: "absolute", width: 0, height: 0 }}
+      >
+        <defs>
+          {/* Rough edge filter for connection lines */}
+          <filter id="rough-edge" x="-50%" y="-50%" width="200%" height="200%">
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.02"
+              numOctaves="4"
+              seed="1"
+              result="noise"
+            />
+            <feDisplacementMap
+              in="SourceGraphic"
+              in2="noise"
+              scale="4"
+              xChannelSelector="R"
+              yChannelSelector="G"
+              result="displacement"
+            />
+            <feGaussianBlur
+              in="displacement"
+              stdDeviation="0.5"
+              result="blur"
+            />
+          </filter>
+
+          {/* Rough border filter for boxes */}
+          <filter
+            id="rough-border"
+            x="-50%"
+            y="-50%"
+            width="200%"
+            height="200%"
+          >
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.04"
+              numOctaves="5"
+              seed="2"
+              result="noise"
+            />
+            <feDisplacementMap
+              in="SourceGraphic"
+              in2="noise"
+              scale="3"
+              xChannelSelector="R"
+              yChannelSelector="G"
+              result="displacement"
+            />
+            <feGaussianBlur
+              in="displacement"
+              stdDeviation="0.3"
+              result="blur"
+            />
+          </filter>
+
+          {/* Pencil texture filter */}
+          <filter id="pencil" x="0%" y="0%" width="100%" height="100%">
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.8"
+              numOctaves="4"
+              result="noise"
+            />
+            <feDiffuseLighting
+              in="noise"
+              lightingColor="white"
+              surfaceScale="1"
+              result="light"
+            >
+              <feDistantLight azimuth="45" elevation="60" />
+            </feDiffuseLighting>
+            <feComposite in="SourceGraphic" in2="light" operator="multiply" />
+          </filter>
+        </defs>
+      </svg>
+
       <Toolbar
         addNode={addNode}
         runWorkflow={runWorkflow}
@@ -202,26 +281,59 @@ export const WorkflowBuilder = () => {
           panOnDrag={[1, 2]}
           maxZoom={1}
           minZoom={1}
+          defaultEdgeOptions={{
+            style: {
+              stroke: "#8B7EC8",
+              strokeWidth: 3.5,
+              strokeLinecap: "round",
+              strokeLinejoin: "round",
+            },
+            animated: false,
+          }}
         />
       </div>
 
       {inspected && (
-        <div className="fixed inset-0 z-[1000001] flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="bg-zinc-900 text-white rounded-xl p-4 w-[600px] max-h-[80vh] overflow-auto shadow-lg border border-zinc-700">
-            <div className="flex justify-between items-center mb-2">
-              <h2 className="font-medium text-sm">
+        <div
+          className="fixed inset-0 z-[1000001] flex items-center justify-center"
+          style={{ backgroundColor: "rgba(0,0,0,0.25)" }}
+        >
+          <div
+            className="sketch-modal sketch-border w-[600px] max-h-[80vh] overflow-hidden"
+            style={{
+              backgroundColor: "#FAFAFA",
+              color: "#666",
+              padding: "20px",
+            }}
+          >
+            <div className="flex justify-between items-center mb-3">
+              <h2
+                className="font-bold text-lg sketch-text"
+                style={{ color: "#444" }}
+              >
                 Node {inspected.id} Output
               </h2>
               <button
                 onClick={() => setInspected(null)}
-                className="text-zinc-400 hover:text-white text-xl px-2"
+                className="sketch-button text-lg px-3 py-1 font-bold hover:scale-110 transition-transform"
+                style={{
+                  backgroundColor: "#FFE5E5",
+                  color: "#E57373",
+                  border: "2.5px solid #E57373",
+                  borderRadius: "10px",
+                }}
               >
                 ×
               </button>
             </div>
-            <pre className="text-xs whitespace-pre-wrap text-zinc-200">
-              {inspected.text}
-            </pre>
+            <div className="sketch-modal-content overflow-auto max-h-[calc(80vh-100px)]">
+              <pre
+                className="text-sm whitespace-pre-wrap sketch-text"
+                style={{ color: "#333" }}
+              >
+                {inspected.text}
+              </pre>
+            </div>
           </div>
         </div>
       )}

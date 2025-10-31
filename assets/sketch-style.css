@@ -1,0 +1,475 @@
+/* Hand-Drawn Sketch Style for Workflow Builder */
+
+/* Import simple readable font */
+@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&display=swap');
+
+/* MUCH BETTER Color Palette - Soft, Neutral, Professional */
+:root {
+  /* Cream/beige background like real paper */
+  --pastel-bg: #F5F5F0;
+  
+  /* Node backgrounds - very subtle colors */
+  --pastel-pink: #FFF5F7;
+  --pastel-blue: #F0F8FF;
+  --pastel-purple: #F9F5FF;
+  --pastel-mint: #F0FFF8;
+  --pastel-peach: #FFF8F0;
+  --pastel-yellow: #FFFEF0;
+  --pastel-lavender: #F8F7FF;
+  --pastel-coral: #FFF7F5;
+  --pastel-sage: #F5FFF5;
+  
+  /* Border colors - darker but not garish */
+  --border-pink: #D87093;
+  --border-blue: #5B9BD5;
+  --border-purple: #8B7EC8;
+  --border-mint: #52B788;
+  --border-peach: #E09F7D;
+  --border-yellow: #D4A574;
+  --border-lavender: #9F91B8;
+  --border-coral: #E57373;
+  --border-sage: #73A874;
+}
+
+/* Handwriting font */
+.sketch-text,
+.sketch-node,
+.sketch-toolbar,
+.sketch-button,
+.sketch-input,
+.sketch-modal {
+  font-family: 'Kalam', cursive, -apple-system, sans-serif;
+}
+
+/* Main canvas - simple paper texture */
+.sketch-canvas {
+  background-color: var(--pastel-bg);
+  background-image: 
+    repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(0,0,0,0.01) 40px, rgba(0,0,0,0.01) 41px),
+    repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(0,0,0,0.01) 40px, rgba(0,0,0,0.01) 41px);
+}
+
+.sketch-svg-filters {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+/* ACTUALLY ROUGH HAND-DRAWN BORDERS - with gaps and overlaps */
+.sketch-border {
+  position: relative;
+  border: none !important;
+  border-radius: 16px;
+  background-clip: padding-box;
+}
+
+/* Create rough top border with gaps */
+.sketch-border::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  height: 4px;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    transparent 1%,
+    currentColor 1%,
+    currentColor 3%,
+    transparent 3%,
+    transparent 4%,
+    currentColor 4%,
+    currentColor 10%,
+    transparent 10%,
+    transparent 11%,
+    currentColor 11%,
+    currentColor 20%,
+    transparent 20%,
+    transparent 20.5%,
+    currentColor 20.5%,
+    currentColor 30%,
+    transparent 30%,
+    transparent 31%,
+    currentColor 31%,
+    currentColor 42%,
+    transparent 42%,
+    transparent 42.5%,
+    currentColor 42.5%,
+    currentColor 52%,
+    transparent 52%,
+    transparent 53%,
+    currentColor 53%,
+    currentColor 65%,
+    transparent 65%,
+    transparent 65.5%,
+    currentColor 65.5%,
+    currentColor 78%,
+    transparent 78%,
+    transparent 79%,
+    currentColor 79%,
+    currentColor 91%,
+    transparent 91%,
+    transparent 92%,
+    currentColor 92%,
+    currentColor 99%,
+    transparent 99%
+  );
+  background-size: 100% 4px;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  filter: url(#rough-border);
+  pointer-events: none;
+  transform: translateY(-0.5px);
+}
+
+/* Bottom border */
+.sketch-border::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: -2px;
+  right: -2px;
+  height: 4px;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    transparent 0.5%,
+    currentColor 0.5%,
+    currentColor 8%,
+    transparent 8%,
+    transparent 9%,
+    currentColor 9%,
+    currentColor 18%,
+    transparent 18%,
+    transparent 19%,
+    currentColor 19%,
+    currentColor 32%,
+    transparent 32%,
+    transparent 33%,
+    currentColor 33%,
+    currentColor 44%,
+    transparent 44%,
+    transparent 44.5%,
+    currentColor 44.5%,
+    currentColor 57%,
+    transparent 57%,
+    transparent 58%,
+    currentColor 58%,
+    currentColor 69%,
+    transparent 69%,
+    transparent 70%,
+    currentColor 70%,
+    currentColor 83%,
+    transparent 83%,
+    transparent 83.5%,
+    currentColor 83.5%,
+    currentColor 95%,
+    transparent 95%,
+    transparent 96%,
+    currentColor 96%,
+    currentColor 100%
+  );
+  filter: url(#rough-border);
+  pointer-events: none;
+  transform: translateY(0.5px);
+}
+
+/* Left and right borders created with box-shadow to simulate rough drawing */
+.sketch-border {
+  box-shadow:
+    /* Left border - rough with gaps */
+    -3px 2px 0 0 currentColor,
+    -3px 8px 0 0 currentColor,
+    -3px 15px 0 0 currentColor,
+    -3px 22px 0 0 currentColor,
+    -3px 30px 0 0 currentColor,
+    -3px 37px 0 0 currentColor,
+    -3px 45px 0 0 currentColor,
+    -3px 53px 0 0 currentColor,
+    -3px 61px 0 0 currentColor,
+    -2.5px 4px 0 0 currentColor,
+    -3.5px 11px 0 0 currentColor,
+    -2.5px 18px 0 0 currentColor,
+    -3.5px 26px 0 0 currentColor,
+    -2.5px 33px 0 0 currentColor,
+    -3.5px 41px 0 0 currentColor,
+    -2.5px 48px 0 0 currentColor,
+    -3.5px 56px 0 0 currentColor,
+    
+    /* Right border - rough with gaps */
+    calc(100% + 3px) 3px 0 0 currentColor,
+    calc(100% + 3px) 10px 0 0 currentColor,
+    calc(100% + 3px) 17px 0 0 currentColor,
+    calc(100% + 3px) 25px 0 0 currentColor,
+    calc(100% + 3px) 32px 0 0 currentColor,
+    calc(100% + 3px) 40px 0 0 currentColor,
+    calc(100% + 3px) 48px 0 0 currentColor,
+    calc(100% + 3px) 56px 0 0 currentColor,
+    calc(100% + 3px) 64px 0 0 currentColor,
+    calc(100% + 2.5px) 6px 0 0 currentColor,
+    calc(100% + 3.5px) 13px 0 0 currentColor,
+    calc(100% + 2.5px) 21px 0 0 currentColor,
+    calc(100% + 3.5px) 28px 0 0 currentColor,
+    calc(100% + 2.5px) 36px 0 0 currentColor,
+    calc(100% + 3.5px) 44px 0 0 currentColor,
+    calc(100% + 2.5px) 52px 0 0 currentColor,
+    calc(100% + 3.5px) 60px 0 0 currentColor,
+    
+    /* Soft drop shadow */
+    3px 3px 8px rgba(0, 0, 0, 0.08);
+  
+  filter: url(#rough-border);
+}
+
+/* NO rotation animations - keep straight */
+.sketch-node {
+  border-radius: 16px;
+  transition: all 0.2s ease;
+  cursor: grab !important;
+  font-size: 17px;
+  font-weight: 600;
+  transform: none !important; /* NO TILTING */
+}
+
+.sketch-node:hover {
+  filter: drop-shadow(4px 4px 8px rgba(0, 0, 0, 0.12));
+}
+
+/* Scribble animation for running - but NO rotation */
+@keyframes scribble-straight {
+  0%, 100% { transform: translateX(0) translateY(0); }
+  25% { transform: translateX(-1px) translateY(-0.5px); }
+  50% { transform: translateX(1px) translateY(0.5px); }
+  75% { transform: translateX(-0.5px) translateY(-1px); }
+}
+
+.sketch-node-running {
+  animation: scribble-straight 0.3s ease-in-out infinite !important;
+}
+
+/* Node header styles */
+.sketch-node-header {
+  border-radius: 14px 14px 0 0;
+  padding: 11px 15px;
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 0.2px;
+}
+
+.sketch-node-body {
+  padding: 12px 15px;
+  border-radius: 0 0 14px 14px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* Connection handles - simple circles with rough edges */
+.react-flow__handle {
+  width: 14px !important;
+  height: 14px !important;
+  background-color: white !important;
+  border: 3px solid currentColor !important;
+  border-radius: 50% !important;
+  box-shadow: 
+    0.5px 0.5px 0 0.5px currentColor,
+    -0.5px 0.5px 0 0.5px currentColor,
+    0.5px -0.5px 0 0.5px currentColor,
+    -0.5px -0.5px 0 0.5px currentColor,
+    2px 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.react-flow__handle:hover {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+/* Edge styles - hand-drawn wobbly lines */
+.react-flow__edge-path {
+  stroke-width: 3.5 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+  filter: url(#rough-edge);
+}
+
+/* Selected node */
+.react-flow__node.selected .sketch-border {
+  box-shadow:
+    -3px 2px 0 0 currentColor,
+    -3px 8px 0 0 currentColor,
+    -3px 15px 0 0 currentColor,
+    -3px 22px 0 0 currentColor,
+    -3px 30px 0 0 currentColor,
+    -3px 37px 0 0 currentColor,
+    -3px 45px 0 0 currentColor,
+    -3px 53px 0 0 currentColor,
+    -3px 61px 0 0 currentColor,
+    -2.5px 4px 0 0 currentColor,
+    -3.5px 11px 0 0 currentColor,
+    -2.5px 18px 0 0 currentColor,
+    -3.5px 26px 0 0 currentColor,
+    -2.5px 33px 0 0 currentColor,
+    -3.5px 41px 0 0 currentColor,
+    -2.5px 48px 0 0 currentColor,
+    -3.5px 56px 0 0 currentColor,
+    calc(100% + 3px) 3px 0 0 currentColor,
+    calc(100% + 3px) 10px 0 0 currentColor,
+    calc(100% + 3px) 17px 0 0 currentColor,
+    calc(100% + 3px) 25px 0 0 currentColor,
+    calc(100% + 3px) 32px 0 0 currentColor,
+    calc(100% + 3px) 40px 0 0 currentColor,
+    calc(100% + 3px) 48px 0 0 currentColor,
+    calc(100% + 3px) 56px 0 0 currentColor,
+    calc(100% + 3px) 64px 0 0 currentColor,
+    calc(100% + 2.5px) 6px 0 0 currentColor,
+    calc(100% + 3.5px) 13px 0 0 currentColor,
+    calc(100% + 2.5px) 21px 0 0 currentColor,
+    calc(100% + 3.5px) 28px 0 0 currentColor,
+    calc(100% + 2.5px) 36px 0 0 currentColor,
+    calc(100% + 3.5px) 44px 0 0 currentColor,
+    calc(100% + 2.5px) 52px 0 0 currentColor,
+    calc(100% + 3.5px) 60px 0 0 currentColor,
+    /* Selection highlight */
+    0 0 0 5px rgba(91, 155, 213, 0.15),
+    4px 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+/* Toolbar - NO TILTING */
+.sketch-toolbar {
+  border-radius: 18px;
+  padding: 18px;
+  transition: all 0.2s ease;
+  font-size: 17px;
+  background-color: #FAFAFA;
+  color: #5A5A5A;
+  transform: none !important; /* NO TILTING */
+}
+
+/* Button styles - NO TILTING */
+.sketch-button {
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  padding: 9px 14px !important;
+  border: 2.5px solid currentColor !important;
+  transform: none !important; /* NO TILTING */
+}
+
+.sketch-button:hover {
+  transform: translateY(-2px) !important; /* Only move up, no rotation */
+  filter: brightness(0.95) drop-shadow(3px 3px 5px rgba(0, 0, 0, 0.12));
+}
+
+.sketch-button:active {
+  transform: translateY(0) !important;
+}
+
+/* Input styles - NO TILTING */
+.sketch-input {
+  border-radius: 10px;
+  background-color: white;
+  border: 2.5px solid #999 !important;
+  padding: 9px 13px;
+  font-weight: 500;
+  font-size: 16px;
+  transform: none !important; /* NO TILTING */
+  transition: all 0.2s ease;
+  color: #333;
+}
+
+.sketch-input:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(91, 155, 213, 0.15);
+  border-color: #5B9BD5 !important;
+}
+
+/* Modal - NO TILTING */
+.sketch-modal {
+  border-radius: 20px;
+  font-size: 16px;
+  transform: none !important; /* NO TILTING */
+}
+
+.sketch-modal-content {
+  background-color: white;
+  border-radius: 14px;
+  border: 2px solid #999;
+  padding: 18px;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.sketch-button-group {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+}
+
+/* Better color buttons */
+.sketch-button-blue {
+  background-color: var(--pastel-blue);
+  color: var(--border-blue);
+}
+
+.sketch-button-purple {
+  background-color: var(--pastel-purple);
+  color: var(--border-purple);
+}
+
+.sketch-button-mint {
+  background-color: var(--pastel-mint);
+  color: var(--border-mint);
+}
+
+.sketch-button-pink {
+  background-color: var(--pastel-pink);
+  color: var(--border-pink);
+}
+
+.sketch-button-peach {
+  background-color: var(--pastel-peach);
+  color: var(--border-peach);
+}
+
+.sketch-button-green {
+  background-color: var(--pastel-sage);
+  color: var(--border-sage);
+}
+
+.sketch-button-yellow {
+  background-color: var(--pastel-yellow);
+  color: var(--border-yellow);
+}
+
+/* ReactFlow */
+.react-flow__node {
+  cursor: grab;
+}
+
+.react-flow__node:active {
+  cursor: grabbing;
+}
+
+.react-flow__attribution {
+  display: none !important;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+textarea.sketch-text {
+  font-family: 'Kalam', cursive;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  line-height: 1.5;
+}
+
+textarea.sketch-text::placeholder {
+  opacity: 0.5;
+}
