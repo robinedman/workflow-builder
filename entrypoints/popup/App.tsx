@@ -9,6 +9,17 @@ type ExecutionState = {
   message?: string;
 };
 
+// Color definitions matching the sketch style
+const colors = {
+  blue: { bg: "#E3F2FD", border: "#5B9BD5" },
+  purple: { bg: "#F3E5F5", border: "#9B59B6" },
+  mint: { bg: "#E0F2F1", border: "#4DB6AC" },
+  pink: { bg: "#FCE4EC", border: "#EC407A" },
+  peach: { bg: "#FFE0B2", border: "#FF8A65" },
+  sage: { bg: "#E8F5E9", border: "#66BB6A" },
+  yellow: { bg: "#FFF9C4", border: "#FDD835" },
+};
+
 function App() {
   const [currentTabId, setCurrentTabId] = useState<number | null>(null);
   const [workflows, setWorkflows] = useState<Workflow[]>([]);
@@ -77,126 +88,301 @@ function App() {
   };
 
   return (
-    <div className="w-96 min-h-[500px] max-h-[600px] bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex flex-col">
+    <div
+      className="w-96 min-h-[500px] max-h-[600px] flex flex-col sketch-canvas overflow-hidden"
+      style={
+        {
+          "--pastel-bg": "#FAFAFA",
+          "--sketch-color": "#000000",
+        } as React.CSSProperties
+      }
+    >
+      {/* SVG Filters for hand-drawn effects */}
+      <svg
+        className="sketch-svg-filters"
+        style={{ position: "absolute", width: 0, height: 0 }}
+      >
+        <defs>
+          {/* Rough edge filter for connection lines */}
+          <filter id="rough-edge" x="-50%" y="-50%" width="200%" height="200%">
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.02"
+              numOctaves="4"
+              seed="1"
+              result="noise"
+            />
+            <feDisplacementMap
+              in="SourceGraphic"
+              in2="noise"
+              scale="4"
+              xChannelSelector="R"
+              yChannelSelector="G"
+              result="displacement"
+            />
+            <feGaussianBlur
+              in="displacement"
+              stdDeviation="0.5"
+              result="blur"
+            />
+          </filter>
+
+          {/* Rough border filter for boxes */}
+          <filter
+            id="rough-border"
+            x="-50%"
+            y="-50%"
+            width="200%"
+            height="200%"
+          >
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.04"
+              numOctaves="5"
+              seed="2"
+              result="noise"
+            />
+            <feDisplacementMap
+              in="SourceGraphic"
+              in2="noise"
+              scale="3"
+              xChannelSelector="R"
+              yChannelSelector="G"
+              result="displacement"
+            />
+            <feGaussianBlur
+              in="displacement"
+              stdDeviation="0.3"
+              result="blur"
+            />
+          </filter>
+        </defs>
+      </svg>
+
       {/* Header */}
-      <div className="px-5 py-4 border-b border-white/10 bg-black/20 backdrop-blur">
+      <div
+        className="px-5 py-4"
+        style={{
+          backgroundColor: colors.purple.bg,
+          color: colors.purple.border,
+        }}
+      >
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-              <Zap size={18} className="text-white" />
+            <div
+              className="flex items-center justify-center"
+              style={{ width: 32, height: 32 }}
+            >
+              <Zap size={28} strokeWidth={2.5} />
             </div>
-            <h1 className="text-lg font-bold text-white">Workflows</h1>
+            <h1 className="text-xl font-bold sketch-text">Workflows</h1>
           </div>
-          <button
-            onClick={openWorkflowBuilder}
-            disabled={!currentTabId}
-            className="flex items-center gap-1.5 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-4 py-2 rounded-lg text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-purple-500/50"
-          >
-            <Plus size={16} />
-            New
-          </button>
+          <div className="sketch-node">
+            <div className="sketch-border">
+              <div className="sketch-border-inner">
+                <div
+                  className="sketch-border-content"
+                  style={
+                    {
+                      backgroundColor: colors.purple.bg,
+                      color: colors.purple.border,
+                      "--sketch-color": colors.purple.border,
+                    } as React.CSSProperties
+                  }
+                >
+                  <button
+                    onClick={openWorkflowBuilder}
+                    disabled={!currentTabId}
+                    className="flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed px-3 py-2 font-bold sketch-text"
+                    style={{
+                      fontSize: "15px",
+                    }}
+                  >
+                    <Plus size={16} strokeWidth={2.5} />
+                    <span>New</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <p className="text-xs text-purple-200/60">
+        <p className="sketch-text" style={{ fontSize: "14px", opacity: 0.7 }}>
           Run workflows on the current page
         </p>
       </div>
 
       {/* Workflow List */}
-      <div className="flex-1 overflow-y-auto px-4 py-3 space-y-2.5">
+      <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
         {workflows.length === 0 ? (
           <div className="flex items-center justify-center h-full">
-            <div className="text-center space-y-4 max-w-xs">
-              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center mx-auto border border-purple-500/20">
-                <Zap size={40} className="text-purple-400" />
+            <div className="text-center space-y-4 max-w-xs sketch-text">
+              <div
+                className="flex items-center justify-center mx-auto"
+                style={{ width: 80, height: 80 }}
+              >
+                <Zap
+                  size={60}
+                  strokeWidth={2}
+                  style={{ color: colors.purple.border, opacity: 0.3 }}
+                />
               </div>
               <div>
-                <p className="text-white font-medium mb-1">No workflows yet</p>
-                <p className="text-sm text-purple-200/60 mb-4">
+                <p
+                  className="font-bold mb-1"
+                  style={{ fontSize: "17px", color: "#333" }}
+                >
+                  No workflows yet
+                </p>
+                <p
+                  className="mb-4"
+                  style={{ fontSize: "15px", color: "#666", opacity: 0.8 }}
+                >
                   Create your first workflow to get started
                 </p>
-                <button
-                  onClick={openWorkflowBuilder}
-                  disabled={!currentTabId}
-                  className="inline-flex items-center gap-1.5 text-purple-400 hover:text-purple-300 text-sm font-medium disabled:opacity-50 transition-colors"
-                >
-                  <Plus size={16} />
-                  Create workflow
-                </button>
+                <div className="sketch-node inline-block">
+                  <div className="sketch-border">
+                    <div className="sketch-border-inner">
+                      <div
+                        className="sketch-border-content"
+                        style={
+                          {
+                            backgroundColor: colors.purple.bg,
+                            color: colors.purple.border,
+                            "--sketch-color": colors.purple.border,
+                          } as React.CSSProperties
+                        }
+                      >
+                        <button
+                          onClick={openWorkflowBuilder}
+                          disabled={!currentTabId}
+                          className="inline-flex items-center gap-1.5 disabled:opacity-40 px-3 py-2 font-bold sketch-text"
+                          style={{
+                            fontSize: "15px",
+                          }}
+                        >
+                          <Plus size={16} strokeWidth={2.5} />
+                          <span>Create workflow</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         ) : (
-          workflows.map((workflow) => {
+          workflows.map((workflow, index) => {
             const state =
               executionState?.workflowId === workflow.id
                 ? executionState
                 : null;
             const isRunning = state?.status === "running";
+            const isSuccess = state?.status === "success";
+            const isError = state?.status === "error";
+
+            // Choose a color based on index
+            const colorKeys = Object.keys(colors) as Array<keyof typeof colors>;
+            const colorKey = colorKeys[index % colorKeys.length];
+            const color = colors[colorKey];
+
+            // Override color based on state
+            let bgColor = color.bg;
+            let borderColor = color.border;
+            if (isRunning) {
+              bgColor = colors.blue.bg;
+              borderColor = colors.blue.border;
+            } else if (isSuccess) {
+              bgColor = colors.sage.bg;
+              borderColor = colors.sage.border;
+            } else if (isError) {
+              bgColor = colors.peach.bg;
+              borderColor = colors.peach.border;
+            }
 
             return (
               <div
                 key={workflow.id}
-                className={`group relative rounded-xl p-4 transition-all ${
-                  isRunning
-                    ? "bg-blue-500/10 border-2 border-blue-400/50 shadow-lg shadow-blue-500/20"
-                    : state?.status === "success"
-                    ? "bg-green-500/10 border-2 border-green-400/50"
-                    : state?.status === "error"
-                    ? "bg-red-500/10 border-2 border-red-400/50"
-                    : "bg-white/5 border-2 border-transparent hover:border-purple-500/30 hover:bg-white/10"
+                className={`sketch-border ${
+                  isRunning ? "sketch-node-running" : ""
                 }`}
+                style={
+                  {
+                    backgroundColor: bgColor,
+                    color: borderColor,
+                    "--sketch-color": borderColor,
+                    padding: "16px",
+                    borderRadius: "14px",
+                  } as React.CSSProperties
+                }
               >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-white font-medium text-sm mb-1 truncate">
-                      {workflow.name}
-                    </h3>
-                    <p className="text-xs text-purple-200/50">
-                      {workflow.nodes.length} node
-                      {workflow.nodes.length !== 1 ? "s" : ""}
-                    </p>
+                <div className="sketch-border-inner">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1 min-w-0">
+                      <h3
+                        className="font-bold mb-1 truncate sketch-text"
+                        style={{ fontSize: "16px" }}
+                      >
+                        {workflow.name}
+                      </h3>
+                      <p
+                        className="sketch-text"
+                        style={{ fontSize: "14px", opacity: 0.7 }}
+                      >
+                        {workflow.nodes.length} node
+                        {workflow.nodes.length !== 1 ? "s" : ""}
+                      </p>
+                    </div>
+
+                    <button
+                      onClick={() => runWorkflow(workflow)}
+                      disabled={!currentTabId || isRunning}
+                      className="sketch-button flex items-center gap-1.5 disabled:cursor-not-allowed disabled:opacity-40"
+                      style={{
+                        backgroundColor: bgColor,
+                        color: borderColor,
+                        borderRadius: "10px",
+                        fontSize: "14px",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {isRunning ? (
+                        <>
+                          <Loader2
+                            size={14}
+                            className="animate-spin"
+                            strokeWidth={2.5}
+                          />
+                          <span>Running</span>
+                        </>
+                      ) : (
+                        <>
+                          <Play size={14} fill="currentColor" strokeWidth={0} />
+                          <span>Run</span>
+                        </>
+                      )}
+                    </button>
                   </div>
 
-                  <button
-                    onClick={() => runWorkflow(workflow)}
-                    disabled={!currentTabId || isRunning}
-                    className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-medium transition-all disabled:cursor-not-allowed ${
-                      isRunning
-                        ? "bg-blue-500/20 text-blue-300 border border-blue-400/30"
-                        : "bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white shadow-lg hover:shadow-purple-500/50 disabled:opacity-50"
-                    }`}
-                  >
-                    {isRunning ? (
-                      <>
-                        <Loader2 size={14} className="animate-spin" />
-                        Running
-                      </>
-                    ) : (
-                      <>
-                        <Play size={14} fill="currentColor" />
-                        Run
-                      </>
-                    )}
-                  </button>
+                  {/* Status Message */}
+                  {state && state.status !== "running" && state.message && (
+                    <div
+                      className="flex items-center gap-2 mt-3 pt-3 sketch-text"
+                      style={{
+                        borderTop: `2px solid ${borderColor}`,
+                        fontSize: "14px",
+                        fontWeight: 600,
+                        opacity: 0.9,
+                      }}
+                    >
+                      {state.status === "success" ? (
+                        <CheckCircle size={14} strokeWidth={2.5} />
+                      ) : (
+                        <XCircle size={14} strokeWidth={2.5} />
+                      )}
+                      <span>{state.message}</span>
+                    </div>
+                  )}
                 </div>
-
-                {/* Status Message */}
-                {state && state.status !== "running" && state.message && (
-                  <div
-                    className={`flex items-center gap-2 mt-3 pt-3 border-t text-xs font-medium ${
-                      state.status === "success"
-                        ? "border-green-400/20 text-green-300"
-                        : "border-red-400/20 text-red-300"
-                    }`}
-                  >
-                    {state.status === "success" ? (
-                      <CheckCircle size={14} />
-                    ) : (
-                      <XCircle size={14} />
-                    )}
-                    {state.message}
-                  </div>
-                )}
               </div>
             );
           })
@@ -205,8 +391,17 @@ function App() {
 
       {/* Footer */}
       {workflows.length > 0 && (
-        <div className="px-5 py-3 border-t border-white/10 bg-black/20 backdrop-blur">
-          <p className="text-xs text-purple-200/60 text-center">
+        <div
+          className="px-5 py-3"
+          style={{
+            backgroundColor: colors.mint.bg,
+            color: colors.mint.border,
+          }}
+        >
+          <p
+            className="text-center sketch-text"
+            style={{ fontSize: "14px", opacity: 0.8 }}
+          >
             Results will appear on the page
           </p>
         </div>
