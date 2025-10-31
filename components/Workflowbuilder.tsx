@@ -287,14 +287,6 @@ export const WorkflowBuilder = () => {
     }
   };
 
-  const deleteNode = useCallback((nodeId: string) => {
-    setNodes((ns) => ns.filter((n) => n.id !== nodeId));
-    setEdges((es) =>
-      es.filter((e) => e.source !== nodeId && e.target !== nodeId)
-    );
-    setSelectedNodes((selected) => selected.filter((id) => id !== nodeId));
-  }, []);
-
   const addNode = (type: string) => {
     const nodeDef = nodeRegistry[type];
     if (!nodeDef) return;
@@ -313,7 +305,7 @@ export const WorkflowBuilder = () => {
       const availableSourceNodes = nodes.filter((n) => {
         const nDef = nodeRegistry[n.type];
         if (!nDef || nDef.category === "output") return false;
-        
+
         // Check if this node already has an outgoing edge
         const hasOutgoingEdge = edges.some((edge) => edge.source === n.id);
         return !hasOutgoingEdge;

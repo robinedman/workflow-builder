@@ -123,8 +123,9 @@ export const TranslateNode = ({ data, selected }: NodeProps) => {
             sourceLanguage,
             targetLanguage: lang.value,
           });
+
           // If not ready and not downloadable, mark as unavailable
-          if (availability !== "ready" && availability !== "downloadable") {
+          if (availability !== "available" && availability !== "downloadable") {
             unavailable.add(lang.value);
           }
         } catch {
@@ -184,7 +185,8 @@ export const TranslateNode = ({ data, selected }: NodeProps) => {
   }));
   const targetOptions = allLanguages.map((lang) => ({
     ...lang,
-    disabled: lang.value === sourceLanguage || unavailableTargets.has(lang.value),
+    disabled:
+      lang.value === sourceLanguage || unavailableTargets.has(lang.value),
   }));
 
   return (
@@ -277,7 +279,9 @@ export const TranslateNode = ({ data, selected }: NodeProps) => {
 
               {modelStatus === "downloadable" && (
                 <div className="space-y-2">
-                  <p className="text-[#E09F7D] font-semibold">⚠️ Model not installed</p>
+                  <p className="text-[#E09F7D] font-semibold">
+                    ⚠️ Model not installed
+                  </p>
                   <button
                     onClick={handleDownload}
                     className="bg-[#5B9BD5] text-white rounded-lg px-3 py-2 font-semibold hover:scale-105 transition-transform"
@@ -289,7 +293,9 @@ export const TranslateNode = ({ data, selected }: NodeProps) => {
 
               {modelStatus === "downloading" && (
                 <div className="space-y-1">
-                  <p className="text-[#5B9BD5] font-semibold">⏳ Downloading... {progress}%</p>
+                  <p className="text-[#5B9BD5] font-semibold">
+                    ⏳ Downloading... {progress}%
+                  </p>
                   <div className="w-full bg-gray-200 h-2 rounded overflow-hidden border-2 border-black">
                     <div
                       className="bg-[#5B9BD5] h-full transition-all"
@@ -300,7 +306,9 @@ export const TranslateNode = ({ data, selected }: NodeProps) => {
               )}
 
               {modelStatus === "ready" && (
-                <div className="text-[#52B788] font-semibold">✅ Model ready</div>
+                <div className="text-[#52B788] font-semibold">
+                  ✅ Model ready
+                </div>
               )}
 
               <div className="sketch-info-text font-medium" style={{ color: "#2C2C2C" }}>
