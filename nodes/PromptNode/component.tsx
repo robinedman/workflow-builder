@@ -123,22 +123,36 @@ export const PromptNodeComponent = ({ data, selected }: NodeComponentProps) => {
             {/* Config section with white background */}
             <div className="px-4 py-3 space-y-3 bg-white sketch-info-text">
               <div>
-                <label className="block mb-2 text-[17px] font-bold">
+                <label className="block mb-2 sketch-info-text text-sm font-medium">
                   Custom Prompt
                   {data.status === "done" && (
-                    <span className="ml-2 text-[#52B788] text-base">
+                    <span className="ml-2 text-[#52B788] text-sm">
                       ✓ Edit & re-run
                     </span>
                   )}
                 </label>
-                <textarea
-                  value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  disabled={isRunning}
-                  className="w-full rounded-lg px-3 py-2.5 border-3 resize-none disabled:opacity-50 disabled:cursor-not-allowed sketch-text transition-all bg-white border-solid text-base font-semibold leading-snug"
-                  rows={3}
-                  placeholder="Enter your instruction..."
-                />
+                <div
+                  className="sketch-border"
+                  style={
+                    {
+                      "--sketch-color": categoryColor.border,
+                    } as React.CSSProperties
+                  }
+                >
+                  <div className="sketch-border-inner">
+                    <textarea
+                      value={prompt}
+                      onChange={(e) => setPrompt(e.target.value)}
+                      disabled={isRunning}
+                      className="w-full py-1.5 px-3 sketch-input resize-none disabled:opacity-50 disabled:cursor-not-allowed bg-transparent border-0 outline-none focus:outline-none focus:ring-0 focus:border-transparent appearance-none sketch-text font-bold text-[14px]"
+                      style={{
+                        backgroundColor: "transparent",
+                      }}
+                      rows={3}
+                      placeholder="Enter your instruction..."
+                    />
+                  </div>
+                </div>
               </div>
 
               {modelStatus === "unavailable" && (

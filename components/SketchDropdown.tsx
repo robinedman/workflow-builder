@@ -75,11 +75,11 @@ export const SketchDropdown = ({
       >
         <div className="sketch-border-inner">
           <div className="sketch-border-content bg-white px-3 py-1 flex items-center gap-2 min-w-[130px] justify-between">
-            <span className="font-semibold text-base whitespace-nowrap">
+            <span className="sketch-info-text text-sm font-medium whitespace-nowrap">
               {selectedOption?.label || value}
             </span>
             <ChevronDown
-              size={16}
+              size={14}
               className={`transition-transform ${isOpen ? "rotate-180" : ""}`}
             />
           </div>
@@ -109,7 +109,7 @@ export const SketchDropdown = ({
                       type="button"
                       onClick={() => handleSelect(option)}
                       disabled={option.disabled}
-                      className={`w-full text-left px-3 py-2 font-semibold text-base transition-colors ${
+                      className={`w-full text-left px-3 py-2 sketch-info-text text-sm font-medium transition-colors ${
                         option.disabled
                           ? "opacity-40 cursor-not-allowed"
                           : "hover:bg-gray-100 cursor-pointer"

@@ -189,13 +189,28 @@ export const SummarizeNode = ({ data, selected }: NodeProps) => {
 
               {modelStatus === "downloadable" && (
                 <div className="space-y-2">
-                  <p className="text-[#E09F7D] font-semibold">⚠️ Model not installed</p>
-                  <button
-                    onClick={handleDownload}
-                    className="bg-[#5B9BD5] text-white rounded-lg px-3 py-2 font-semibold hover:scale-105 transition-transform"
+                  <p className="text-[#E09F7D] text-[15px] font-semibold">⚠️ Model not installed</p>
+                  <div
+                    className="sketch-border sketch-button-hover inline-flex"
+                    style={
+                      {
+                        "--sketch-color": categoryColor.border,
+                      } as React.CSSProperties
+                    }
                   >
-                    Download model
-                  </button>
+                    <div className="sketch-border-inner">
+                      <button
+                        onClick={handleDownload}
+                        className="sketch-border-content px-3 py-2 font-bold sketch-text text-sm cursor-pointer whitespace-nowrap"
+                        style={{
+                          backgroundColor: categoryColor.bg,
+                          color: categoryColor.border,
+                        }}
+                      >
+                        Download model
+                      </button>
+                    </div>
+                  </div>
                 </div>
               )}
 
@@ -220,7 +235,7 @@ export const SummarizeNode = ({ data, selected }: NodeProps) => {
                   ? "✨ Summarizing..."
                   : data.status === "done"
                   ? "✓ Done!"
-                  : "Ready"}
+                  : <span className="font-semibold">✓ Ready</span>}
               </div>
             </div>
           </div>
