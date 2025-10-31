@@ -95,11 +95,6 @@ function App() {
     }
   };
 
-  const handleDeleteWorkflow = async (workflowId: string) => {
-    await deleteWorkflow(workflowId);
-    await loadWorkflows();
-  };
-
   return (
     <div
       className="w-96 min-h-[500px] max-h-[600px] flex flex-col sketch-canvas overflow-hidden"
@@ -333,13 +328,13 @@ function App() {
 
                 <div className="sketch-border-inner">
                   <div
-                    className="sketch-border-content p-4 rounded-[14px]"
+                    className="sketch-border-content p-4"
                     style={{
                       backgroundColor: bgColor,
                       color: borderColor,
                     }}
                   >
-                    <div className="flex items-start justify-between gap-3 pr-8">
+                    <div className="flex items-start justify-between gap-3 pr-2">
                       <div className="flex-1 min-w-0">
                         <h3 className="font-bold mb-1 truncate sketch-text text-base">
                           {workflow.name}
@@ -415,21 +410,6 @@ function App() {
           })
         )}
       </div>
-
-      {/* Footer */}
-      {workflows.length > 0 && (
-        <div
-          className="px-5 py-3"
-          style={{
-            backgroundColor: colors.mint.bg,
-            color: colors.mint.border,
-          }}
-        >
-          <p className="text-center sketch-info-text text-sm opacity-80">
-            Results will appear on the page
-          </p>
-        </div>
-      )}
     </div>
   );
 }
