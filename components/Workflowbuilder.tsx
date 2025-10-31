@@ -29,7 +29,7 @@ export const WorkflowBuilder = () => {
     text: string;
   } | null>(null);
   const [workflowName, setWorkflowName] = useState("Untitled Workflow");
-  const [workflowId] = useState(() => `wf_${Date.now()}`);
+  const [workflowId, setWorkflowId] = useState(() => `wf_${Date.now()}`);
 
   const onNodesChange = useCallback((changes: any) => {
     setNodes((snapshot) => applyNodeChanges(changes, snapshot));
@@ -146,6 +146,8 @@ export const WorkflowBuilder = () => {
     try {
       await saveWorkflow(workflow);
       setSaveStatus("success");
+      // Generate a new workflow ID for the next save
+      setWorkflowId(`wf_${Date.now()}`);
       // Reset success message after 2 seconds
       setTimeout(() => setSaveStatus("idle"), 2000);
     } catch (error) {

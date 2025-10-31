@@ -74,8 +74,8 @@ export const SketchDropdown = ({
         }`}
       >
         <div className="sketch-border-inner">
-          <div className="sketch-border-content bg-white px-3 py-1 flex items-center gap-2 min-w-[100px] justify-between">
-            <span className="font-semibold text-base">
+          <div className="sketch-border-content bg-white px-3 py-1 flex items-center gap-2 min-w-[130px] justify-between">
+            <span className="font-semibold text-base whitespace-nowrap">
               {selectedOption?.label || value}
             </span>
             <ChevronDown

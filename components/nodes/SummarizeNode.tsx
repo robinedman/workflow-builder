@@ -11,6 +11,7 @@ type NodeProps = {
     icon: React.ReactNode;
     output?: string;
     status?: "idle" | "running" | "done";
+    category?: "input" | "processing" | "output";
     onInspect?: (id: string, output?: string) => void;
     onDelete?: (id: string) => void;
   };
@@ -177,8 +178,14 @@ export const SummarizeNode = ({ data, selected }: NodeProps) => {
         </div>
       </div>
 
-      <Handle type="target" position={Position.Top} />
-      <Handle type="source" position={Position.Bottom} />
+      {/* Input nodes only have source (bottom) handle */}
+      {data.category !== "input" && (
+        <Handle type="target" position={Position.Top} />
+      )}
+      {/* Output nodes only have target (top) handle */}
+      {data.category !== "output" && (
+        <Handle type="source" position={Position.Bottom} />
+      )}
     </div>
   );
 };
