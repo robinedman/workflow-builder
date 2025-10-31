@@ -72,7 +72,7 @@ export const Toolbar = ({
   const hasSelectionPopover = existingNodeTypes.includes("selectionPopover");
 
   return (
-    <div className="absolute top-4 left-4 z-1000000 sketch-toolbar space-y-2">
+    <div className="absolute top-4 left-4 z-[1000000] sketch-toolbar bg-white p-3 rounded-sm shadow-sm space-y-2">
       <div className="flex items-center gap-2 flex-wrap">
         <div className="sketch-border">
           <div className="sketch-border-inner">
@@ -165,7 +165,7 @@ export const Toolbar = ({
               "--sketch-color":
                 isRunning || !canRun
                   ? "#CCCCCC"
-                  : colors.sage.border,
+                  : "#2C2C2C",
             } as React.CSSProperties
           }
         >
@@ -176,9 +176,9 @@ export const Toolbar = ({
               className="sketch-border-content py-1.5 px-3 flex items-center gap-1.5 disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
               style={{
                 backgroundColor:
-                  isRunning || !canRun ? "#F5F5F5" : colors.sage.bg,
+                  isRunning || !canRun ? "#F5F5F5" : "#FFFFFF",
                 color:
-                  isRunning || !canRun ? "#CCCCCC" : colors.sage.border,
+                  isRunning || !canRun ? "#CCCCCC" : "#2C2C2C",
               }}
               title={
                 isRunning
