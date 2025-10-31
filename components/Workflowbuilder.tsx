@@ -197,12 +197,46 @@ export const WorkflowBuilder = () => {
 
     const id = `n${idCounter}`;
     setIdCounter((c) => c + 1);
+
+    // Find the last node that can be a source (input or processing, not output)
+    // Output nodes only have target handles
+    let sourceNodeId: string | null = null;
+    let newPosition = { x: Math.random() * 400 + 300, y: Math.random() * 400 };
+
+    if (nodeDef.category !== "input") {
+      // Find the most recent node that has a source handle (input or processing)
+      const availableSourceNodes = nodes.filter((n) => {
+        const nDef = nodeRegistry[n.type];
+        return nDef && nDef.category !== "output"; // Only input and processing can be sources
+      });
+
+      if (availableSourceNodes.length > 0) {
+        // Get the last added node (highest ID number)
+        const lastSourceNode = availableSourceNodes.reduce((latest, node) => {
+          const latestNum = parseInt(latest.id.replace("n", ""));
+          const nodeNum = parseInt(node.id.replace("n", ""));
+          return nodeNum > latestNum ? node : latest;
+        });
+
+        sourceNodeId = lastSourceNode.id;
+        // Position new node to the right of the source node
+        newPosition = {
+          x: lastSourceNode.position.x + 300,
+          y: lastSourceNode.position.y + (Math.random() - 0.5) * 100,
+        };
+      }
+    } else {
+      // Input nodes start at a base position
+      newPosition = { x: 100, y: 200 + nodes.length * 150 };
+    }
+
+    // Add the new node
     setNodes((ns) => [
       ...ns,
       {
         id,
         type,
-        position: { x: Math.random() * 400, y: Math.random() * 400 },
+        position: newPosition,
         data: {
           id,
           label: nodeDef.label,
@@ -217,6 +251,18 @@ export const WorkflowBuilder = () => {
         },
       },
     ]);
+
+    // Automatically create connection if we have a source node
+    if (sourceNodeId) {
+      setEdges((es) => [
+        ...es,
+        {
+          id: `e${sourceNodeId}-${id}`,
+          source: sourceNodeId,
+          target: id,
+        },
+      ]);
+    }
   };
 
   // Keyboard event handler for delete key
