@@ -178,22 +178,26 @@ function App() {
             <h1 className="text-xl font-bold sketch-text">Workflows</h1>
           </div>
           <div className="sketch-node">
-            <div className="sketch-border">
+            <div
+              className="sketch-border sketch-button-hover"
+              style={
+                {
+                  "--sketch-color": colors.purple.border,
+                } as React.CSSProperties
+              }
+            >
               <div className="sketch-border-inner">
                 <div
                   className="sketch-border-content"
-                  style={
-                    {
-                      backgroundColor: colors.purple.bg,
-                      color: colors.purple.border,
-                      "--sketch-color": colors.purple.border,
-                    } as React.CSSProperties
-                  }
+                  style={{
+                    backgroundColor: colors.purple.bg,
+                    color: colors.purple.border,
+                  }}
                 >
                   <button
                     onClick={openWorkflowBuilder}
                     disabled={!currentTabId}
-                    className="flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed px-3 py-2 font-bold sketch-text"
+                    className="flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed px-3 py-2 font-bold sketch-text cursor-pointer"
                     style={{
                       fontSize: "15px",
                     }}
@@ -243,22 +247,26 @@ function App() {
                   Create your first workflow to get started
                 </p>
                 <div className="sketch-node inline-block">
-                  <div className="sketch-border">
+                  <div
+                    className="sketch-border sketch-button-hover"
+                    style={
+                      {
+                        "--sketch-color": colors.purple.border,
+                      } as React.CSSProperties
+                    }
+                  >
                     <div className="sketch-border-inner">
                       <div
                         className="sketch-border-content"
-                        style={
-                          {
-                            backgroundColor: colors.purple.bg,
-                            color: colors.purple.border,
-                            "--sketch-color": colors.purple.border,
-                          } as React.CSSProperties
-                        }
+                        style={{
+                          backgroundColor: colors.purple.bg,
+                          color: colors.purple.border,
+                        }}
                       >
                         <button
                           onClick={openWorkflowBuilder}
                           disabled={!currentTabId}
-                          className="inline-flex items-center gap-1.5 disabled:opacity-40 px-3 py-2 font-bold sketch-text"
+                          className="inline-flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed px-3 py-2 font-bold sketch-text cursor-pointer"
                           style={{
                             fontSize: "15px",
                           }}
@@ -342,7 +350,7 @@ function App() {
                       </div>
 
                       <div
-                        className="sketch-border"
+                        className="sketch-border sketch-button-hover"
                         style={
                           {
                             "--sketch-color": borderColor,
@@ -353,7 +361,7 @@ function App() {
                           <button
                             onClick={() => runWorkflow(workflow)}
                             disabled={!currentTabId || isRunning}
-                            className="sketch-border-content sketch-button flex items-center gap-1.5 disabled:cursor-not-allowed disabled:opacity-40"
+                            className="sketch-border-content flex items-center gap-1.5 disabled:cursor-not-allowed disabled:opacity-40 px-3 py-2 font-bold sketch-text cursor-pointer"
                             style={{
                               backgroundColor: bgColor,
                               color: borderColor,

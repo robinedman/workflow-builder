@@ -20,6 +20,26 @@
   letter-spacing: -0.01em;
 }
 
+/* Consistent button hover effect */
+.sketch-button-hover {
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+}
+
+.sketch-button-hover:hover:not(:has(button:disabled)) {
+  transform: scale(1.05) translateY(-1px);
+  box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.sketch-button-hover:active:not(:has(button:disabled)) {
+  transform: scale(1.02) translateY(0);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sketch-button-hover:has(button:disabled) {
+  cursor: not-allowed;
+}
+
 /* Main canvas - simple paper texture */
 .sketch-canvas {
   background-color: var(--pastel-bg);
