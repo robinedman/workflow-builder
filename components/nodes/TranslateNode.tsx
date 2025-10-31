@@ -3,6 +3,30 @@ import { Eye, Languages, Loader2, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { SketchDropdown } from "../SketchDropdown";
 
+// Color definitions matching the popup app and toolbar
+const colors = {
+  blue: { bg: "#E3F2FD", border: "#5B9BD5" },
+  purple: { bg: "#F3E5F5", border: "#9B59B6" },
+  mint: { bg: "#E0F2F1", border: "#4DB6AC" },
+  pink: { bg: "#FCE4EC", border: "#EC407A" },
+  peach: { bg: "#FFE0B2", border: "#FF8A65" },
+  sage: { bg: "#E8F5E9", border: "#66BB6A" },
+  yellow: { bg: "#FFF9C4", border: "#FDD835" },
+};
+
+// Map categories to colors
+const categoryColors: Record<string, keyof typeof colors> = {
+  input: "blue",
+  processing: "purple",
+  output: "sage",
+};
+
+const getCategoryColor = (category?: string) => {
+  if (!category) return colors.purple;
+  const colorKey = categoryColors[category] || "purple";
+  return colors[colorKey];
+};
+
 type NodeProps = {
   data: {
     id: string;
@@ -151,6 +175,7 @@ export const TranslateNode = ({ data, selected }: NodeProps) => {
   };
 
   const isRunning = data.status === "running";
+  const categoryColor = getCategoryColor(data.category);
 
   // Mark the selected language as disabled in the other dropdown
   const sourceOptions = allLanguages.map((lang) => ({
@@ -165,30 +190,46 @@ export const TranslateNode = ({ data, selected }: NodeProps) => {
   return (
     <div
       style={{ width: 250 }}
-      className={`sketch-node sketch-text ${
+      className={`sketch-node ${
         isRunning ? "sketch-node-running" : ""
       } ${selected ? "sketch-node-selected" : ""}`}
     >
-      <div className="sketch-border">
+      <div
+        className="sketch-border"
+        style={
+          {
+            "--sketch-color": categoryColor.border,
+          } as React.CSSProperties
+        }
+      >
         <div className="sketch-border-inner">
-          <div className="sketch-border-content bg-white">
-            <div className="px-4 py-3 font-bold text-lg tracking-tight flex items-center justify-between gap-2">
+          <div className="sketch-border-content">
+            {/* Title section with colored background */}
+            <div
+              className="px-4 py-3 font-bold text-base tracking-tight flex items-center justify-between gap-2"
+              style={{
+                backgroundColor: categoryColor.bg,
+              }}
+            >
               <div className="flex items-center gap-2.5">
                 {isRunning ? (
-                  <Loader2 size={20} className="animate-spin shrink-0" />
+                  <Loader2 size={18} className="animate-spin shrink-0" style={{ color: categoryColor.border }} />
                 ) : (
-                  <Languages size={20} className="shrink-0 opacity-90" />
+                  <Languages size={18} className="shrink-0 opacity-90" style={{ color: categoryColor.border }} />
                 )}
-                <span className="text-[20px] leading-tight">Translate</span>
+                <span className="sketch-text text-[17px] leading-tight" style={{ color: categoryColor.border }}>
+                  Translate
+                </span>
               </div>
               <div className="flex items-center gap-1.5">
                 {data.output && (
                   <button
                     onClick={() => data.onInspect?.(data.id, data.output)}
                     className="hover:scale-125 transition-transform opacity-90 hover:opacity-100 shrink-0"
+                    style={{ color: categoryColor.border }}
                     title="Inspect output"
                   >
-                    <Eye size={18} />
+                    <Eye size={18} style={{ color: categoryColor.border }} />
                   </button>
                 )}
                 {selected && data.onDelete && (
@@ -206,7 +247,8 @@ export const TranslateNode = ({ data, selected }: NodeProps) => {
               </div>
             </div>
 
-            <div className="px-4 py-3 space-y-3 text-base font-medium">
+            {/* Config section with white background */}
+            <div className="px-4 py-3 space-y-3 sketch-info-text text-sm font-medium bg-white">
               <div className="flex justify-between items-center">
                 <span>From</span>
                 <SketchDropdown
@@ -261,7 +303,7 @@ export const TranslateNode = ({ data, selected }: NodeProps) => {
                 <div className="text-[#52B788] font-semibold">✅ Model ready</div>
               )}
 
-              <div className="font-semibold">
+              <div className="sketch-info-text font-medium" style={{ color: "#2C2C2C" }}>
                 {isRunning
                   ? "✨ Translating..."
                   : data.status === "done"

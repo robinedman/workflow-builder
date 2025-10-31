@@ -31,6 +31,14 @@ export const WorkflowBuilder = () => {
   const [workflowName, setWorkflowName] = useState("Untitled Workflow");
   const [workflowId, setWorkflowId] = useState(() => `wf_${Date.now()}`);
 
+  const deleteNode = useCallback((nodeId: string) => {
+    setNodes((ns) => ns.filter((n) => n.id !== nodeId));
+    setEdges((es) =>
+      es.filter((e) => e.source !== nodeId && e.target !== nodeId)
+    );
+    setSelectedNodes((selected) => selected.filter((id) => id !== nodeId));
+  }, []);
+
   // Load workflow from URL parameter if editing
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -41,7 +49,22 @@ export const WorkflowBuilder = () => {
         if (workflow) {
           setWorkflowId(workflow.id);
           setWorkflowName(workflow.name);
-          setNodes(workflow.nodes);
+          // Restore category and other properties for nodes loaded from storage
+          const restoredNodes = workflow.nodes.map((node: any) => {
+            const nodeDef = nodeRegistry[node.type];
+            return {
+              ...node,
+              data: {
+                ...node.data,
+                category: nodeDef?.category || node.data?.category,
+                icon: resolveIcon(nodeDef?.icon),
+                onInspect: (id: string, text?: string) =>
+                  setInspected({ id, text: text || "" }),
+                onDelete: deleteNode,
+              },
+            };
+          });
+          setNodes(restoredNodes);
           setEdges(workflow.edges || []);
           // Set idCounter to be higher than any existing node ID
           const maxId = workflow.nodes.reduce((max, node) => {
@@ -52,7 +75,7 @@ export const WorkflowBuilder = () => {
         }
       });
     }
-  }, []);
+  }, [deleteNode]);
 
   const onNodesChange = useCallback((changes: any) => {
     setNodes((snapshot) => applyNodeChanges(changes, snapshot));
