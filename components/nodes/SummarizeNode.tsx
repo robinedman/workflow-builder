@@ -134,11 +134,22 @@ export const SummarizeNode = ({ data, selected }: NodeProps) => {
             >
               <div className="flex items-center gap-2.5">
                 {isRunning ? (
-                  <Loader2 size={18} className="animate-spin shrink-0" style={{ color: categoryColor.border }} />
+                  <Loader2
+                    size={18}
+                    className="animate-spin shrink-0"
+                    style={{ color: categoryColor.border }}
+                  />
                 ) : (
-                  <Sparkles size={18} className="shrink-0 opacity-90" style={{ color: categoryColor.border }} />
+                  <Sparkles
+                    size={18}
+                    className="shrink-0 opacity-90"
+                    style={{ color: categoryColor.border }}
+                  />
                 )}
-                <span className="sketch-text text-[17px] leading-tight" style={{ color: categoryColor.border }}>
+                <span
+                  className="sketch-text text-[17px] leading-tight"
+                  style={{ color: categoryColor.border }}
+                >
                   Summarize
                 </span>
               </div>
@@ -189,7 +200,9 @@ export const SummarizeNode = ({ data, selected }: NodeProps) => {
 
               {modelStatus === "downloadable" && (
                 <div className="space-y-2">
-                  <p className="text-[#E09F7D] text-[15px] font-semibold">⚠️ Model not installed</p>
+                  <p className="text-[#E09F7D] text-[15px] font-semibold">
+                    ⚠️ Model not installed
+                  </p>
                   <div
                     className="sketch-border sketch-button-hover inline-flex"
                     style={
@@ -216,7 +229,9 @@ export const SummarizeNode = ({ data, selected }: NodeProps) => {
 
               {modelStatus === "downloading" && (
                 <div className="space-y-1">
-                  <p className="text-[#5B9BD5] font-semibold">⏳ Downloading... {progress}%</p>
+                  <p className="text-[#5B9BD5] font-semibold">
+                    ⏳ Downloading... {progress}%
+                  </p>
                   <div className="w-full bg-gray-200 h-2 rounded overflow-hidden border-2 border-black">
                     <div
                       className="bg-[#5B9BD5] h-full transition-all"
@@ -227,15 +242,22 @@ export const SummarizeNode = ({ data, selected }: NodeProps) => {
               )}
 
               {modelStatus === "ready" && (
-                <div className="text-[#52B788] font-semibold">✅ Model ready</div>
+                <div className="text-[#52B788] font-semibold">
+                  ✅ Model ready
+                </div>
               )}
 
-              <div className="sketch-info-text font-medium" style={{ color: "#2C2C2C" }}>
-                {isRunning
-                  ? "✨ Summarizing..."
-                  : data.status === "done"
-                  ? "✓ Done!"
-                  : <span className="font-bold">✓ Ready</span>}
+              <div
+                className="sketch-info-text font-medium"
+                style={{ color: "#2C2C2C" }}
+              >
+                {isRunning ? (
+                  "✨ Summarizing..."
+                ) : data.status === "done" ? (
+                  <span className="font-bold">✓ Done!</span>
+                ) : (
+                  <span className="font-bold">✓ Ready</span>
+                )}
               </div>
             </div>
           </div>
@@ -244,24 +266,28 @@ export const SummarizeNode = ({ data, selected }: NodeProps) => {
 
       {/* Input nodes only have source (bottom) handle */}
       {data.category !== "input" && (
-        <Handle 
-          type="target" 
+        <Handle
+          type="target"
           position={Position.Top}
-          style={{
-            borderColor: categoryColor.border,
-            "--handle-color": categoryColor.border,
-          } as React.CSSProperties}
+          style={
+            {
+              borderColor: categoryColor.border,
+              "--handle-color": categoryColor.border,
+            } as React.CSSProperties
+          }
         />
       )}
       {/* Output nodes only have target (top) handle */}
       {data.category !== "output" && (
-        <Handle 
-          type="source" 
+        <Handle
+          type="source"
           position={Position.Bottom}
-          style={{
-            borderColor: categoryColor.border,
-            "--handle-color": categoryColor.border,
-          } as React.CSSProperties}
+          style={
+            {
+              borderColor: categoryColor.border,
+              "--handle-color": categoryColor.border,
+            } as React.CSSProperties
+          }
         />
       )}
     </div>

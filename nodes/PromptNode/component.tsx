@@ -98,11 +98,22 @@ export const PromptNodeComponent = ({ data, selected }: NodeComponentProps) => {
             >
               <div className="flex items-center gap-2.5">
                 {isRunning ? (
-                  <Loader2 size={18} className="animate-spin shrink-0" style={{ color: categoryColor.border }} />
+                  <Loader2
+                    size={18}
+                    className="animate-spin shrink-0"
+                    style={{ color: categoryColor.border }}
+                  />
                 ) : (
-                  <MessageSquare size={18} className="shrink-0 opacity-90" style={{ color: categoryColor.border }} />
+                  <MessageSquare
+                    size={18}
+                    className="shrink-0 opacity-90"
+                    style={{ color: categoryColor.border }}
+                  />
                 )}
-                <span className="sketch-text text-[17px] leading-tight" style={{ color: categoryColor.border }}>
+                <span
+                  className="sketch-text text-[17px] leading-tight"
+                  style={{ color: categoryColor.border }}
+                >
                   Prompt
                 </span>
               </div>
@@ -144,9 +155,12 @@ export const PromptNodeComponent = ({ data, selected }: NodeComponentProps) => {
                       value={prompt}
                       onChange={(e) => setPrompt(e.target.value)}
                       disabled={isRunning}
-                      className="w-full py-1.5 px-3 sketch-input resize-none disabled:opacity-50 disabled:cursor-not-allowed bg-transparent border-0 outline-none focus:outline-none focus:ring-0 focus:border-transparent appearance-none sketch-text font-bold text-[14px]"
+                      className="w-full py-1.5 px-3 resize-none disabled:opacity-50 disabled:cursor-not-allowed bg-transparent border-0 outline-none focus:outline-none focus:ring-0 focus:border-transparent appearance-none font-sans text-[14px]"
                       style={{
                         backgroundColor: "transparent",
+                        lineHeight: "1.5",
+                        fontFamily:
+                          "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
                       }}
                       rows={3}
                       placeholder="Enter your instruction..."
@@ -180,7 +194,10 @@ export const PromptNodeComponent = ({ data, selected }: NodeComponentProps) => {
               )}
 
               {isRunning && (
-                <div className="animate-pulse text-[#5B9BD5] text-[15px] font-semibold">
+                <div
+                  className="animate-pulse sketch-info-text text-sm font-bold"
+                  style={{ color: "#5B9BD5" }}
+                >
                   ⚡ Processing with Gemini Nano...
                 </div>
               )}
@@ -191,24 +208,28 @@ export const PromptNodeComponent = ({ data, selected }: NodeComponentProps) => {
 
       {/* Input nodes only have source (bottom) handle */}
       {data.category !== "input" && (
-        <Handle 
-          type="target" 
+        <Handle
+          type="target"
           position={Position.Top}
-          style={{
-            borderColor: categoryColor.border,
-            "--handle-color": categoryColor.border,
-          } as React.CSSProperties}
+          style={
+            {
+              borderColor: categoryColor.border,
+              "--handle-color": categoryColor.border,
+            } as React.CSSProperties
+          }
         />
       )}
       {/* Output nodes only have target (top) handle */}
       {data.category !== "output" && (
-        <Handle 
-          type="source" 
+        <Handle
+          type="source"
           position={Position.Bottom}
-          style={{
-            borderColor: categoryColor.border,
-            "--handle-color": categoryColor.border,
-          } as React.CSSProperties}
+          style={
+            {
+              borderColor: categoryColor.border,
+              "--handle-color": categoryColor.border,
+            } as React.CSSProperties
+          }
         />
       )}
     </div>

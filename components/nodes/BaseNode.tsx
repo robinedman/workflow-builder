@@ -90,11 +90,23 @@ export const BaseNode = ({ data, selected }: NodeProps) => {
             >
               <div className="flex items-center gap-2.5">
                 {isRunning ? (
-                  <Loader2 size={18} className="animate-spin shrink-0" style={{ color: categoryColor.border }} />
+                  <Loader2
+                    size={18}
+                    className="animate-spin shrink-0"
+                    style={{ color: categoryColor.border }}
+                  />
                 ) : (
-                  <div className="opacity-90 shrink-0" style={{ color: categoryColor.border }}>{data.icon}</div>
+                  <div
+                    className="opacity-90 shrink-0"
+                    style={{ color: categoryColor.border }}
+                  >
+                    {data.icon}
+                  </div>
                 )}
-                <span className="sketch-text text-[17px] leading-tight" style={{ color: categoryColor.border }}>
+                <span
+                  className="sketch-text text-[17px] leading-tight"
+                  style={{ color: categoryColor.border }}
+                >
                   {data.label}
                 </span>
               </div>
@@ -113,12 +125,17 @@ export const BaseNode = ({ data, selected }: NodeProps) => {
             </div>
 
             {/* Status section with white background */}
-            <div className="px-4 py-3 sketch-info-text text-sm font-medium bg-white" style={{ color: "#2C2C2C" }}>
-              {isRunning
-                ? "✨ Running..."
-                : data.status === "done"
-                ? "✓ Done!"
-                : <span className="font-bold">✓ Ready</span>}
+            <div
+              className="px-4 py-3 sketch-info-text text-sm font-medium bg-white"
+              style={{ color: "#2C2C2C" }}
+            >
+              {isRunning ? (
+                "✨ Running..."
+              ) : data.status === "done" ? (
+                <span className="font-bold">✓ Done!</span>
+              ) : (
+                <span className="font-bold">✓ Ready</span>
+              )}
             </div>
           </div>
         </div>
@@ -126,24 +143,28 @@ export const BaseNode = ({ data, selected }: NodeProps) => {
 
       {/* Input nodes only have source (bottom) handle */}
       {data.category !== "input" && (
-        <Handle 
-          type="target" 
+        <Handle
+          type="target"
           position={Position.Top}
-          style={{
-            borderColor: categoryColor.border,
-            "--handle-color": categoryColor.border,
-          } as React.CSSProperties}
+          style={
+            {
+              borderColor: categoryColor.border,
+              "--handle-color": categoryColor.border,
+            } as React.CSSProperties
+          }
         />
       )}
       {/* Output nodes only have target (top) handle */}
       {data.category !== "output" && (
-        <Handle 
-          type="source" 
+        <Handle
+          type="source"
           position={Position.Bottom}
-          style={{
-            borderColor: categoryColor.border,
-            "--handle-color": categoryColor.border,
-          } as React.CSSProperties}
+          style={
+            {
+              borderColor: categoryColor.border,
+              "--handle-color": categoryColor.border,
+            } as React.CSSProperties
+          }
         />
       )}
     </div>
