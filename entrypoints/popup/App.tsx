@@ -172,13 +172,7 @@ function App() {
       </svg>
 
       {/* Header */}
-      <div
-        className="px-5 py-4"
-        style={{
-          backgroundColor: colors.purple.bg,
-          color: colors.purple.border,
-        }}
-      >
+      <div className="px-5 py-4 bg-white text-gray-800">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
             <div className="flex items-center justify-center w-8 h-8">
@@ -191,18 +185,12 @@ function App() {
               className="sketch-border sketch-button-hover"
               style={
                 {
-                  "--sketch-color": colors.purple.border,
+                  "--sketch-color": "#2C2C2C",
                 } as React.CSSProperties
               }
             >
               <div className="sketch-border-inner">
-                <div
-                  className="sketch-border-content"
-                  style={{
-                    backgroundColor: colors.purple.bg,
-                    color: colors.purple.border,
-                  }}
-                >
+                <div className="sketch-border-content bg-white text-gray-800">
                   <button
                     onClick={() => openWorkflowBuilder()}
                     disabled={!currentTabId}
@@ -230,8 +218,7 @@ function App() {
                 <Zap
                   size={60}
                   strokeWidth={2}
-                  className="opacity-30"
-                  style={{ color: colors.purple.border }}
+                  className="opacity-30 text-gray-800"
                 />
               </div>
               <div>
@@ -246,18 +233,12 @@ function App() {
                     className="sketch-border sketch-button-hover"
                     style={
                       {
-                        "--sketch-color": colors.purple.border,
+                        "--sketch-color": "#2C2C2C",
                       } as React.CSSProperties
                     }
                   >
                     <div className="sketch-border-inner">
-                      <div
-                        className="sketch-border-content"
-                        style={{
-                          backgroundColor: colors.purple.bg,
-                          color: colors.purple.border,
-                        }}
-                      >
+                      <div className="sketch-border-content bg-white text-gray-800">
                         <button
                           onClick={() => openWorkflowBuilder()}
                           disabled={!currentTabId}
