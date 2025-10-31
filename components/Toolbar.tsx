@@ -225,16 +225,15 @@ export const Toolbar = ({
                   let disabledReason = node.description;
 
                   if (isInputNode) {
-                    // For input nodes: disable if the OTHER input node exists
-                    if (node.type === "getPageText" && hasGetSelection) {
+                    // For input nodes: disable BOTH if ANY input node exists
+                    if (hasInputNode) {
                       isDisabled = true;
-                      disabledReason = "Remove 'Get Selected Text' to use this";
-                    } else if (
-                      node.type === "getSelection" &&
-                      hasGetPageText
-                    ) {
-                      isDisabled = true;
-                      disabledReason = "Remove 'Get Page Text' to use this";
+                      const existingInputType = hasGetPageText
+                        ? "Get Page Text"
+                        : hasGetSelection
+                        ? "Get Selected Text"
+                        : "input node";
+                      disabledReason = `Remove the existing ${existingInputType} node to add a different input node`;
                     }
                   } else if (isProcessingNode) {
                     // For processing nodes: disable if no input node exists

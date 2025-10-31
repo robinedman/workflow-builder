@@ -71,7 +71,25 @@ export const WorkflowBuilder = () => {
     []
   );
   const onConnect = useCallback(
-    (params: any) => setEdges((snapshot) => addEdge(params, snapshot)),
+    (params: any) => {
+      // Prevent multiple outgoing connections from the same source node
+      setEdges((snapshot) => {
+        // Check if the source node already has an outgoing edge
+        const hasExistingOutgoingEdge = snapshot.some(
+          (edge) => edge.source === params.source
+        );
+        
+        if (hasExistingOutgoingEdge) {
+          // Remove the old edge and add the new one
+          const filteredEdges = snapshot.filter(
+            (edge) => edge.source !== params.source
+          );
+          return addEdge(params, filteredEdges);
+        }
+        
+        return addEdge(params, snapshot);
+      });
+    },
     []
   );
 
@@ -204,14 +222,19 @@ export const WorkflowBuilder = () => {
     let newPosition = { x: Math.random() * 400 + 300, y: Math.random() * 400 };
 
     if (nodeDef.category !== "input") {
-      // Find the most recent node that has a source handle (input or processing)
+      // Find nodes that can be a source (input or processing, not output)
+      // and don't already have an outgoing connection
       const availableSourceNodes = nodes.filter((n) => {
         const nDef = nodeRegistry[n.type];
-        return nDef && nDef.category !== "output"; // Only input and processing can be sources
+        if (!nDef || nDef.category === "output") return false;
+        
+        // Check if this node already has an outgoing edge
+        const hasOutgoingEdge = edges.some((edge) => edge.source === n.id);
+        return !hasOutgoingEdge;
       });
 
       if (availableSourceNodes.length > 0) {
-        // Get the last added node (highest ID number)
+        // Get the last added node (highest ID number) that doesn't have an outgoing connection
         const lastSourceNode = availableSourceNodes.reduce((latest, node) => {
           const latestNum = parseInt(latest.id.replace("n", ""));
           const nodeNum = parseInt(node.id.replace("n", ""));
@@ -224,6 +247,27 @@ export const WorkflowBuilder = () => {
           x: lastSourceNode.position.x + 300,
           y: lastSourceNode.position.y + (Math.random() - 0.5) * 100,
         };
+      } else {
+        // If all nodes have connections, find the last node that can be a source
+        // and use that (this will replace its existing connection)
+        const allSourceNodes = nodes.filter((n) => {
+          const nDef = nodeRegistry[n.type];
+          return nDef && nDef.category !== "output";
+        });
+
+        if (allSourceNodes.length > 0) {
+          const lastSourceNode = allSourceNodes.reduce((latest, node) => {
+            const latestNum = parseInt(latest.id.replace("n", ""));
+            const nodeNum = parseInt(node.id.replace("n", ""));
+            return nodeNum > latestNum ? node : latest;
+          });
+
+          sourceNodeId = lastSourceNode.id;
+          newPosition = {
+            x: lastSourceNode.position.x + 300,
+            y: lastSourceNode.position.y + (Math.random() - 0.5) * 100,
+          };
+        }
       }
     } else {
       // Input nodes start at a base position
@@ -254,14 +298,20 @@ export const WorkflowBuilder = () => {
 
     // Automatically create connection if we have a source node
     if (sourceNodeId) {
-      setEdges((es) => [
-        ...es,
-        {
-          id: `e${sourceNodeId}-${id}`,
-          source: sourceNodeId,
-          target: id,
-        },
-      ]);
+      setEdges((es) => {
+        // Remove any existing outgoing edge from the source node
+        const filteredEdges = es.filter((edge) => edge.source !== sourceNodeId);
+        
+        // Add the new edge
+        return [
+          ...filteredEdges,
+          {
+            id: `e${sourceNodeId}-${id}`,
+            source: sourceNodeId,
+            target: id,
+          },
+        ];
+      });
     }
   };
 
