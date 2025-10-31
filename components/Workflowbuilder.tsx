@@ -122,10 +122,19 @@ export const WorkflowBuilder = () => {
   };
 
   const handleSaveWorkflow = async () => {
+    // Clean node data by removing non-serializable properties (functions)
+    const cleanedNodes = nodes.map((node) => {
+      const { onInspect, onDelete, icon, ...cleanData } = node.data;
+      return {
+        ...node,
+        data: cleanData,
+      };
+    });
+
     const workflow: Workflow = {
       id: workflowId,
       name: workflowName,
-      nodes,
+      nodes: cleanedNodes,
       edges,
       createdAt: Date.now(),
       updatedAt: Date.now(),
