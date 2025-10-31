@@ -71,7 +71,7 @@ Show results on page
 1. **Get Page Text** - Extract readable text using Readability
 2. **Summarize** - AI Summarizer API (configurable type/length)
 3. **Translate** - AI Translator API (configurable languages)
-4. **Prompt** - Placeholder for custom logic
+4. **Prompt** - Custom Gemini Nano prompts with editable instructions
 5. **Text Output** - Display in workflow builder (visual mode only)
 
 ## 🚀 Adding New Nodes
