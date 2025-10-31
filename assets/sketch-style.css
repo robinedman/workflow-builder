@@ -166,8 +166,14 @@
   filter: url(#rough-edge);
 }
 
-/* Selected node */
+/* Selected node - Clear visual feedback with prominent box shadow */
+.react-flow__node.selected .sketch-node {
+  transform: scale(1.03) !important;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
 .react-flow__node.selected .sketch-border {
+  /* Keep the sketch border styling */
   box-shadow:
     -3px 2px 0 0 currentColor,
     -3px 8px 0 0 currentColor,
@@ -203,9 +209,15 @@
     calc(100% + 3.5px) 44px 0 0 currentColor,
     calc(100% + 2.5px) 52px 0 0 currentColor,
     calc(100% + 3.5px) 60px 0 0 currentColor,
-    /* Selection highlight */
-    0 0 0 5px rgba(91, 155, 213, 0.15),
-    4px 4px 10px rgba(0, 0, 0, 0.12);
+    /* Bold, clear selection box shadow with blue outline */
+    0 0 0 4px #5B9BD5,
+    0 0 0 8px rgba(91, 155, 213, 0.4),
+    0 0 20px 4px rgba(91, 155, 213, 0.6),
+    0 4px 24px rgba(0, 0, 0, 0.2);
+}
+
+.react-flow__node.selected .sketch-border-content {
+  background-color: #f0f7ff !important;
 } 
 .sketch-toolbar {
   padding: 18px;

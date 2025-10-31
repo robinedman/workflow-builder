@@ -3,6 +3,7 @@ import {
   applyEdgeChanges,
   applyNodeChanges,
   ReactFlow,
+  useReactFlow,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { useCallback, useEffect, useState, useMemo } from "react";
@@ -17,6 +18,7 @@ export const WorkflowBuilder = () => {
   const [nodes, setNodes] = useState<any[]>([]);
   const [edges, setEdges] = useState<any[]>([]);
   const [idCounter, setIdCounter] = useState(1);
+  const [selectedNodes, setSelectedNodes] = useState<string[]>([]);
   const [inspected, setInspected] = useState<{
     id: string;
     text: string;
@@ -24,11 +26,17 @@ export const WorkflowBuilder = () => {
   const [workflowName, setWorkflowName] = useState("Untitled Workflow");
   const [workflowId] = useState(() => `wf_${Date.now()}`);
 
-  const onNodesChange = useCallback(
-    (changes: any) =>
-      setNodes((snapshot) => applyNodeChanges(changes, snapshot)),
-    []
-  );
+  const onNodesChange = useCallback((changes: any) => {
+    setNodes((snapshot) => applyNodeChanges(changes, snapshot));
+
+    // Track selected nodes
+    const selectionChanges = changes.filter((c: any) => c.type === "select");
+    if (selectionChanges.length > 0) {
+      setSelectedNodes(
+        selectionChanges.filter((c: any) => c.selected).map((c: any) => c.id)
+      );
+    }
+  }, []);
   const onEdgesChange = useCallback(
     (changes: any) =>
       setEdges((snapshot) => applyEdgeChanges(changes, snapshot)),
@@ -118,6 +126,14 @@ export const WorkflowBuilder = () => {
     alert(`Workflow "${workflowName}" saved!`);
   };
 
+  const deleteNode = useCallback((nodeId: string) => {
+    setNodes((ns) => ns.filter((n) => n.id !== nodeId));
+    setEdges((es) =>
+      es.filter((e) => e.source !== nodeId && e.target !== nodeId)
+    );
+    setSelectedNodes((selected) => selected.filter((id) => id !== nodeId));
+  }, []);
+
   const addNode = (type: string) => {
     const nodeDef = nodeRegistry[type];
     if (!nodeDef) return;
@@ -139,10 +155,36 @@ export const WorkflowBuilder = () => {
           ...nodeDef.defaultConfig, // Apply default config
           onInspect: (id: string, text?: string) =>
             setInspected({ id, text: text || "" }),
+          onDelete: deleteNode,
         },
       },
     ]);
   };
+
+  // Keyboard event handler for delete key
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (
+        (event.key === "Backspace" || event.key === "Delete") &&
+        selectedNodes.length > 0 &&
+        !inspected // Don't delete if modal is open
+      ) {
+        // Check if user is not typing in an input/textarea
+        const target = event.target as HTMLElement;
+        if (
+          target.tagName !== "INPUT" &&
+          target.tagName !== "TEXTAREA" &&
+          !target.isContentEditable
+        ) {
+          event.preventDefault();
+          selectedNodes.forEach((nodeId) => deleteNode(nodeId));
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedNodes, inspected, deleteNode]);
 
   // Load node components dynamically for ReactFlow
   const nodeTypes = useMemo(() => {
@@ -298,7 +340,7 @@ export const WorkflowBuilder = () => {
 
       {inspected && (
         <div
-          className="fixed inset-0 z-[1000001] flex items-center justify-center"
+          className="fixed inset-0 z-1000001 flex items-center justify-center"
           style={{ backgroundColor: "rgba(0,0,0,0.25)" }}
         >
           <div

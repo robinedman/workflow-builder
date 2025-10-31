@@ -42,7 +42,9 @@ export type NodeComponentProps = {
     status?: 'idle' | 'running' | 'done';
     output?: string;
     onInspect?: (id: string, output?: string) => void;
+    onDelete?: (id: string) => void;
     [key: string]: any; // Config values
   };
+  selected?: boolean;
 };
 
