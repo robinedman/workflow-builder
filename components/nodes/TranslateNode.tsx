@@ -67,90 +67,105 @@ export const TranslateNode = ({ data }: NodeProps) => {
     }
   };
 
+  const isRunning = data.status === "running";
+
   return (
     <div
       style={{ width: 250 }}
-      className="rounded-xl overflow-hidden shadow-lg border border-zinc-800 bg-zinc-900 text-white"
+      className={`sketch-node sketch-text ${
+        isRunning ? "sketch-node-running" : ""
+      }`}
     >
-      <div className="flex items-center justify-between gap-2 px-3 py-2 bg-blue-600/70">
-        <div className="flex items-center gap-2">
-          {data.status === "running" ? (
-            <Loader2 size={14} className="animate-spin text-white opacity-80" />
-          ) : (
-            <Languages size={14} className="text-white opacity-80" />
-          )}
-          <span className="text-sm font-medium">Translate</span>
-        </div>
-        {data.output && (
-          <button
-            onClick={() => data.onInspect?.(data.id, data.output)}
-            className="text-white/70 hover:text-white"
-          >
-            <Eye size={14} />
-          </button>
-        )}
-      </div>
+      <div className="sketch-border">
+        <div className="sketch-border-inner">
+          <div className="sketch-border-content bg-white">
+            <div className="px-4 py-3 font-bold text-lg tracking-tight flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2.5">
+                {isRunning ? (
+                  <Loader2 size={20} className="animate-spin shrink-0" />
+                ) : (
+                  <Languages size={20} className="shrink-0 opacity-90" />
+                )}
+                <span className="text-[20px] leading-tight">Translate</span>
+              </div>
+              {data.output && (
+                <button
+                  onClick={() => data.onInspect?.(data.id, data.output)}
+                  className="hover:scale-125 transition-transform opacity-90 hover:opacity-100 shrink-0"
+                >
+                  <Eye size={18} />
+                </button>
+              )}
+            </div>
 
-      <div className="p-3 text-xs text-zinc-300 space-y-2">
-        <div className="flex justify-between items-center">
-          <span>From</span>
-          <select
-            value={sourceLanguage}
-            onChange={(e) => setSourceLanguage(e.target.value)}
-            className="bg-zinc-800 text-white text-xs rounded px-1 py-0.5 border border-zinc-700"
-          >
-            <option value="en">English</option>
-            <option value="fr">French</option>
-            <option value="es">Spanish</option>
-            <option value="de">German</option>
-          </select>
-        </div>
+            <div className="px-4 py-3 space-y-3 text-base font-medium">
+              <div className="flex justify-between items-center">
+                <span>From</span>
+                <select
+                  value={sourceLanguage}
+                  onChange={(e) => setSourceLanguage(e.target.value)}
+                  className="bg-white rounded-lg px-2 py-1 border-2 border-black font-semibold"
+                  disabled={isRunning}
+                >
+                  <option value="en">English</option>
+                  <option value="fr">French</option>
+                  <option value="es">Spanish</option>
+                  <option value="de">German</option>
+                </select>
+              </div>
 
-        <div className="flex justify-between items-center">
-          <span>To</span>
-          <select
-            value={targetLanguage}
-            onChange={(e) => setTargetLanguage(e.target.value)}
-            className="bg-zinc-800 text-white text-xs rounded px-1 py-0.5 border border-zinc-700"
-          >
-            <option value="fr">French</option>
-            <option value="en">English</option>
-            <option value="es">Spanish</option>
-            <option value="de">German</option>
-          </select>
-        </div>
+              <div className="flex justify-between items-center">
+                <span>To</span>
+                <select
+                  value={targetLanguage}
+                  onChange={(e) => setTargetLanguage(e.target.value)}
+                  className="bg-white rounded-lg px-2 py-1 border-2 border-black font-semibold"
+                  disabled={isRunning}
+                >
+                  <option value="fr">French</option>
+                  <option value="en">English</option>
+                  <option value="es">Spanish</option>
+                  <option value="de">German</option>
+                </select>
+              </div>
 
-        {modelStatus === "downloadable" && (
-          <div className="space-y-1">
-            <p className="text-yellow-300">Model not installed.</p>
-            <button
-              onClick={handleDownload}
-              className="bg-blue-600 text-white rounded px-2 py-1 text-xs"
-            >
-              Download model
-            </button>
+              {modelStatus === "downloadable" && (
+                <div className="space-y-2">
+                  <p className="text-[#E09F7D] font-semibold">⚠️ Model not installed</p>
+                  <button
+                    onClick={handleDownload}
+                    className="bg-[#5B9BD5] text-white rounded-lg px-3 py-2 font-semibold hover:scale-105 transition-transform"
+                  >
+                    Download model
+                  </button>
+                </div>
+              )}
+
+              {modelStatus === "downloading" && (
+                <div className="space-y-1">
+                  <p className="text-[#5B9BD5] font-semibold">⏳ Downloading... {progress}%</p>
+                  <div className="w-full bg-gray-200 h-2 rounded overflow-hidden border-2 border-black">
+                    <div
+                      className="bg-[#5B9BD5] h-full transition-all"
+                      style={{ width: `${progress}%` }}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {modelStatus === "ready" && (
+                <div className="text-[#52B788] font-semibold">✅ Model ready</div>
+              )}
+
+              <div className="font-semibold">
+                {isRunning
+                  ? "✨ Translating..."
+                  : data.status === "done"
+                  ? "✓ Done!"
+                  : "Ready"}
+              </div>
+            </div>
           </div>
-        )}
-
-        {modelStatus === "downloading" && (
-          <div className="w-full bg-zinc-800 h-2 rounded mt-1 overflow-hidden">
-            <div
-              className="bg-blue-500 h-2 transition-all"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-        )}
-
-        {modelStatus === "ready" && (
-          <div className="text-xs text-green-400 mt-2">Model ready ✅</div>
-        )}
-
-        <div className="pt-1 text-zinc-400">
-          {data.status === "running"
-            ? "Translating..."
-            : data.status === "done"
-            ? "Done"
-            : "Ready"}
         </div>
       </div>
 

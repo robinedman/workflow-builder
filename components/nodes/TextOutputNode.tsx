@@ -15,26 +15,30 @@ type NodeProps = {
 };
 
 export const TextOutputNode = ({ data }: NodeProps) => (
-  <div
-    style={{ width: 300 }}
-    className="rounded-xl overflow-hidden shadow-lg border border-emerald-800 bg-zinc-900 text-white"
-  >
-    <div className="flex items-center justify-between gap-2 px-3 py-2 bg-emerald-600/70">
-      <div className="flex items-center gap-2">
-        <MonitorPlay size={14} />
-        <span className="text-sm font-medium">{data.label}</span>
+  <div style={{ width: 300 }} className="sketch-node sketch-text">
+    <div className="sketch-border">
+      <div className="sketch-border-inner">
+        <div className="sketch-border-content bg-white">
+          <div className="px-4 py-3 font-bold text-lg tracking-tight flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2.5">
+              <MonitorPlay size={20} className="shrink-0 opacity-90" />
+              <span className="text-[20px] leading-tight">{data.label}</span>
+            </div>
+            {data.output && (
+              <button
+                onClick={() => data.onInspect?.(data.id, data.output)}
+                className="hover:scale-125 transition-transform opacity-90 hover:opacity-100 shrink-0"
+              >
+                <Eye size={18} />
+              </button>
+            )}
+          </div>
+
+          <div className="px-4 py-3 text-base font-medium whitespace-pre-wrap max-h-56 overflow-auto">
+            {data.output || "No output yet"}
+          </div>
+        </div>
       </div>
-      {data.output && (
-        <button
-          onClick={() => data.onInspect?.(data.id, data.output)}
-          className="text-white/80 hover:text-white"
-        >
-          <Eye size={14} />
-        </button>
-      )}
-    </div>
-    <div className="p-3 text-xs text-zinc-300 whitespace-pre-wrap max-h-56 overflow-auto">
-      {data.output || "No output yet"}
     </div>
     <Handle type="target" position={Position.Top} />
   </div>
