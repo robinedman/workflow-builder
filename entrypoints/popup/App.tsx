@@ -233,12 +233,18 @@ function App() {
                     className="sketch-border sketch-button-hover"
                     style={
                       {
-                        "--sketch-color": "#2C2C2C",
+                        "--sketch-color": colors.purple.border,
                       } as React.CSSProperties
                     }
                   >
                     <div className="sketch-border-inner">
-                      <div className="sketch-border-content bg-white text-gray-800">
+                      <div
+                        className="sketch-border-content"
+                        style={{
+                          backgroundColor: colors.purple.bg,
+                          color: colors.purple.border,
+                        }}
+                      >
                         <button
                           onClick={() => openWorkflowBuilder()}
                           disabled={!currentTabId}
