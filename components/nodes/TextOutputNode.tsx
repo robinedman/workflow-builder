@@ -88,8 +88,15 @@ export const TextOutputNode = ({ data, selected }: NodeProps) => {
               }}
             >
               <div className="flex items-center gap-2.5">
-                <MonitorPlay size={18} className="shrink-0 opacity-90" style={{ color: categoryColor.border }} />
-                <span className="sketch-text text-[17px] leading-tight" style={{ color: categoryColor.border }}>
+                <MonitorPlay
+                  size={18}
+                  className="shrink-0 opacity-90"
+                  style={{ color: categoryColor.border }}
+                />
+                <span
+                  className="sketch-text text-[17px] leading-tight"
+                  style={{ color: categoryColor.border }}
+                >
                   {data.label}
                 </span>
               </div>
@@ -108,19 +115,24 @@ export const TextOutputNode = ({ data, selected }: NodeProps) => {
             </div>
 
             {/* Output section with white background */}
-            <div className="px-4 py-3 sketch-info-text text-sm font-medium whitespace-pre-wrap max-h-56 overflow-auto bg-white" style={{ color: "#2C2C2C" }}>
+            <div
+              className="px-4 py-3 sketch-info-text text-sm font-medium whitespace-pre-wrap max-h-56 overflow-auto bg-white nowheel"
+              style={{ color: "#2C2C2C" }}
+            >
               {data.output || <span className="font-bold">No output yet</span>}
             </div>
           </div>
         </div>
       </div>
-      <Handle 
-        type="target" 
+      <Handle
+        type="target"
         position={Position.Top}
-        style={{
-          borderColor: categoryColor.border,
-          "--handle-color": categoryColor.border,
-        } as React.CSSProperties}
+        style={
+          {
+            borderColor: categoryColor.border,
+            "--handle-color": categoryColor.border,
+          } as React.CSSProperties
+        }
       />
     </div>
   );
