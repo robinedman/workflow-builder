@@ -60,176 +60,60 @@
 .sketch-border {
   position: relative;
   border: none !important;
-  border-radius: 16px;
-  background-clip: padding-box;
 }
 
-/* Create rough top border with gaps */
-.sketch-border::before {
+.sketch-border-inner {
+  position: relative;
+}
+
+.sketch-border::before,
+.sketch-border::after,
+.sketch-border-inner::before,
+.sketch-border-inner::after {
   content: '';
   position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  height: 4px;
-  background: linear-gradient(
-    to right,
-    transparent 0%,
-    transparent 1%,
-    currentColor 1%,
-    currentColor 3%,
-    transparent 3%,
-    transparent 4%,
-    currentColor 4%,
-    currentColor 10%,
-    transparent 10%,
-    transparent 11%,
-    currentColor 11%,
-    currentColor 20%,
-    transparent 20%,
-    transparent 20.5%,
-    currentColor 20.5%,
-    currentColor 30%,
-    transparent 30%,
-    transparent 31%,
-    currentColor 31%,
-    currentColor 42%,
-    transparent 42%,
-    transparent 42.5%,
-    currentColor 42.5%,
-    currentColor 52%,
-    transparent 52%,
-    transparent 53%,
-    currentColor 53%,
-    currentColor 65%,
-    transparent 65%,
-    transparent 65.5%,
-    currentColor 65.5%,
-    currentColor 78%,
-    transparent 78%,
-    transparent 79%,
-    currentColor 79%,
-    currentColor 91%,
-    transparent 91%,
-    transparent 92%,
-    currentColor 92%,
-    currentColor 99%,
-    transparent 99%
-  );
-  background-size: 100% 4px;
-  background-repeat: no-repeat;
-  background-position: 0 0;
+  background-color: black;
+  box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.08);
   filter: url(#rough-border);
-  pointer-events: none;
-  transform: translateY(-0.5px);
+}
+
+/* Top border */
+.sketch-border::before {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+}
+
+/* Left border */
+.sketch-border::after {
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 100%;
 }
 
 /* Bottom border */
-.sketch-border::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: -2px;
-  right: -2px;
-  height: 4px;
-  background: linear-gradient(
-    to right,
-    transparent 0%,
-    transparent 0.5%,
-    currentColor 0.5%,
-    currentColor 8%,
-    transparent 8%,
-    transparent 9%,
-    currentColor 9%,
-    currentColor 18%,
-    transparent 18%,
-    transparent 19%,
-    currentColor 19%,
-    currentColor 32%,
-    transparent 32%,
-    transparent 33%,
-    currentColor 33%,
-    currentColor 44%,
-    transparent 44%,
-    transparent 44.5%,
-    currentColor 44.5%,
-    currentColor 57%,
-    transparent 57%,
-    transparent 58%,
-    currentColor 58%,
-    currentColor 69%,
-    transparent 69%,
-    transparent 70%,
-    currentColor 70%,
-    currentColor 83%,
-    transparent 83%,
-    transparent 83.5%,
-    currentColor 83.5%,
-    currentColor 95%,
-    transparent 95%,
-    transparent 96%,
-    currentColor 96%,
-    currentColor 100%
-  );
-  filter: url(#rough-border);
-  pointer-events: none;
-  transform: translateY(0.5px);
+.sketch-border-inner::before {
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
 }
 
-/* Left and right borders created with box-shadow to simulate rough drawing */
-.sketch-border {
-  box-shadow:
-    /* Left border - rough with gaps */
-    -3px 2px 0 0 currentColor,
-    -3px 8px 0 0 currentColor,
-    -3px 15px 0 0 currentColor,
-    -3px 22px 0 0 currentColor,
-    -3px 30px 0 0 currentColor,
-    -3px 37px 0 0 currentColor,
-    -3px 45px 0 0 currentColor,
-    -3px 53px 0 0 currentColor,
-    -3px 61px 0 0 currentColor,
-    -2.5px 4px 0 0 currentColor,
-    -3.5px 11px 0 0 currentColor,
-    -2.5px 18px 0 0 currentColor,
-    -3.5px 26px 0 0 currentColor,
-    -2.5px 33px 0 0 currentColor,
-    -3.5px 41px 0 0 currentColor,
-    -2.5px 48px 0 0 currentColor,
-    -3.5px 56px 0 0 currentColor,
-    
-    /* Right border - rough with gaps */
-    calc(100% + 3px) 3px 0 0 currentColor,
-    calc(100% + 3px) 10px 0 0 currentColor,
-    calc(100% + 3px) 17px 0 0 currentColor,
-    calc(100% + 3px) 25px 0 0 currentColor,
-    calc(100% + 3px) 32px 0 0 currentColor,
-    calc(100% + 3px) 40px 0 0 currentColor,
-    calc(100% + 3px) 48px 0 0 currentColor,
-    calc(100% + 3px) 56px 0 0 currentColor,
-    calc(100% + 3px) 64px 0 0 currentColor,
-    calc(100% + 2.5px) 6px 0 0 currentColor,
-    calc(100% + 3.5px) 13px 0 0 currentColor,
-    calc(100% + 2.5px) 21px 0 0 currentColor,
-    calc(100% + 3.5px) 28px 0 0 currentColor,
-    calc(100% + 2.5px) 36px 0 0 currentColor,
-    calc(100% + 3.5px) 44px 0 0 currentColor,
-    calc(100% + 2.5px) 52px 0 0 currentColor,
-    calc(100% + 3.5px) 60px 0 0 currentColor,
-    
-    /* Soft drop shadow */
-    3px 3px 8px rgba(0, 0, 0, 0.08);
-  
-  filter: url(#rough-border);
+/* Right border */
+.sketch-border-inner::after {
+  top: 0;
+  right: 0;
+  width: 1px;
+  height: 100%;
 }
 
 /* NO rotation animations - keep straight */
 .sketch-node {
-  border-radius: 16px;
   transition: all 0.2s ease;
   cursor: grab !important;
   font-size: 17px;
-  font-weight: 600;
   transform: none !important; /* NO TILTING */
 }
 
@@ -251,7 +135,6 @@
 
 /* Node header styles */
 .sketch-node-header {
-  border-radius: 14px 14px 0 0;
   padding: 11px 15px;
   font-weight: 700;
   font-size: 18px;
@@ -260,7 +143,6 @@
 
 .sketch-node-body {
   padding: 12px 15px;
-  border-radius: 0 0 14px 14px;
   font-size: 16px;
   font-weight: 500;
 }
@@ -336,21 +218,30 @@
     4px 4px 10px rgba(0, 0, 0, 0.12);
 }
 
-/* Toolbar - NO TILTING */
+.sketch-input {
+  background: transparent;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important; 
+}
+.sketch-input:focus {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
 .sketch-toolbar {
-  border-radius: 18px;
   padding: 18px;
   transition: all 0.2s ease;
   font-size: 17px;
-  background-color: #FAFAFA;
   color: #5A5A5A;
   transform: none !important; /* NO TILTING */
 }
 
 /* Button styles - NO TILTING */
 .sketch-button {
-  border-radius: 12px;
-  font-weight: 700;
   font-size: 16px;
   transition: all 0.2s ease;
   cursor: pointer;
@@ -366,19 +257,6 @@
 
 .sketch-button:active {
   transform: translateY(0) !important;
-}
-
-/* Input styles - NO TILTING */
-.sketch-input {
-  border-radius: 10px;
-  background-color: white;
-  border: 2.5px solid #999 !important;
-  padding: 9px 13px;
-  font-weight: 500;
-  font-size: 16px;
-  transform: none !important; /* NO TILTING */
-  transition: all 0.2s ease;
-  color: #333;
 }
 
 .sketch-input:focus {
@@ -397,7 +275,6 @@
 .sketch-modal-content {
   background-color: white;
   border-radius: 14px;
-  border: 2px solid #999;
   padding: 18px;
   font-size: 15px;
   font-weight: 400;
@@ -411,37 +288,30 @@
 
 /* Better color buttons */
 .sketch-button-blue {
-  background-color: var(--pastel-blue);
   color: var(--border-blue);
 }
 
 .sketch-button-purple {
-  background-color: var(--pastel-purple);
   color: var(--border-purple);
 }
 
 .sketch-button-mint {
-  background-color: var(--pastel-mint);
   color: var(--border-mint);
 }
 
 .sketch-button-pink {
-  background-color: var(--pastel-pink);
   color: var(--border-pink);
 }
 
 .sketch-button-peach {
-  background-color: var(--pastel-peach);
   color: var(--border-peach);
 }
 
 .sketch-button-green {
-  background-color: var(--pastel-sage);
   color: var(--border-sage);
 }
 
 .sketch-button-yellow {
-  background-color: var(--pastel-yellow);
   color: var(--border-yellow);
 }
 
