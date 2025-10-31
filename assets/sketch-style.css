@@ -110,15 +110,16 @@
   width: 14px !important;
   height: 14px !important;
   background-color: white !important;
-  border: 3px solid currentColor !important;
+  border: 3px solid var(--sketch-color, black) !important;
   border-radius: 50% !important;
   box-shadow: 
-    0.5px 0.5px 0 0.5px currentColor,
-    -0.5px 0.5px 0 0.5px currentColor,
-    0.5px -0.5px 0 0.5px currentColor,
-    -0.5px -0.5px 0 0.5px currentColor,
+    0.5px 0.5px 0 0.5px var(--sketch-color, black),
+    -0.5px 0.5px 0 0.5px var(--sketch-color, black),
+    0.5px -0.5px 0 0.5px var(--sketch-color, black),
+    -0.5px -0.5px 0 0.5px var(--sketch-color, black),
     2px 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease;
+  filter: url(#rough-border);
 }
 
 .react-flow__handle:hover {
