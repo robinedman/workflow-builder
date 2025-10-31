@@ -8,6 +8,7 @@ import {
 import "@xyflow/react/dist/style.css";
 import { useCallback, useEffect, useState, useMemo } from "react";
 import { X } from "lucide-react";
+import { marked } from "marked";
 import { allNodes, nodeRegistry } from "@/nodes";
 import { Toolbar } from "./Toolbar";
 import { executeWorkflow, type Workflow } from "@/utils/workflowEngine";
@@ -215,6 +216,7 @@ export const WorkflowBuilder = () => {
       await executeWorkflow(workflow, {
         tabId: sourceTabId,
         mode: "visual",
+        workflowName: workflowName,
         onNodeStart: (nodeId) => {
           setNodes((nodes) =>
             nodes.map((n) =>
@@ -670,13 +672,19 @@ export const WorkflowBuilder = () => {
                     Node {inspected.id} Output
                   </h2>
                 </div>
-                <div className="sketch-modal-content overflow-auto max-h-[calc(80vh-100px)]">
-                  <pre
-                    className="text-sm whitespace-pre-wrap font-sans"
-                    style={{ color: "#333", lineHeight: "1.6" }}
-                  >
-                    {inspected.text}
-                  </pre>
+                <div className="overflow-auto max-h-[calc(80vh-100px)] bg-white rounded-xl p-5">
+                  <div
+                    className="workflow-markdown-content"
+                    dangerouslySetInnerHTML={{
+                      __html: (() => {
+                        try {
+                          return marked.parse(inspected.text) as string;
+                        } catch (e) {
+                          return `<pre style="white-space: pre-wrap;">${inspected.text}</pre>`;
+                        }
+                      })(),
+                    }}
+                  />
                 </div>
               </div>
             </div>

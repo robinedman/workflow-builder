@@ -155,7 +155,7 @@ export const PromptNodeComponent = ({ data, selected }: NodeComponentProps) => {
                       value={prompt}
                       onChange={(e) => setPrompt(e.target.value)}
                       disabled={isRunning}
-                      className="w-full py-1.5 px-3 resize-none disabled:opacity-50 disabled:cursor-not-allowed bg-transparent border-0 outline-none focus:outline-none focus:ring-0 focus:border-transparent appearance-none font-sans text-[14px]"
+                      className="nowheel w-full py-1.5 px-3 resize-none disabled:opacity-50 disabled:cursor-not-allowed bg-transparent border-0 outline-none focus:outline-none focus:ring-0 focus:border-transparent appearance-none font-sans text-[14px]"
                       style={{
                         backgroundColor: "transparent",
                         lineHeight: "1.5",

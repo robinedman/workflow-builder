@@ -6,6 +6,7 @@ import { TranslateNode } from "./TranslateNode";
 import { PromptNode } from "./PromptNode";
 import { TextOutputNode } from "./TextOutputNode";
 import { SelectionPopoverNode } from "./SelectionPopoverNode";
+import { PageModalNode } from "./PageModalNode";
 import type { WorkflowNode } from "./types";
 
 // Auto-register all nodes
@@ -17,6 +18,7 @@ export const allNodes: WorkflowNode[] = [
   PromptNode,
   TextOutputNode,
   SelectionPopoverNode,
+  PageModalNode,
 ];
 
 // Create registry by type
@@ -33,6 +35,7 @@ export {
   PromptNode,
   TextOutputNode,
   SelectionPopoverNode,
+  PageModalNode,
 };
 
 // Re-export types

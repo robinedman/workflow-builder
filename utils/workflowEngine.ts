@@ -27,6 +27,7 @@ export type ExecutionContext = {
   tabId: number;
   mode: "visual" | "headless";
   pageContext?: PageContext;
+  workflowName?: string;
   onNodeStart?: (nodeId: string) => void;
   onNodeComplete?: (nodeId: string, output: string) => void;
   onNodeError?: (nodeId: string, error: string) => void;
@@ -66,7 +67,8 @@ export async function executeWorkflow(
           node,
           input,
           context.tabId,
-          context.pageContext
+          context.pageContext,
+          context.workflowName
         );
         nodeOutputs.set(node.id, result);
         finalOutput = result;

@@ -1,14 +1,16 @@
-import type { ReactNode } from 'react';
+import type { ReactNode } from "react";
 
 export type NodeExecutor = (
   node: any,
   input: string,
   tabId: number,
-  pageContext?: PageContext
+  pageContext?: PageContext,
+  workflowName?: string
 ) => Promise<string>;
 
 export type PageContext = {
   selection?: string;
+  selectedText?: string;
   url?: string;
   title?: string;
   selectionRect?: {
@@ -25,7 +27,7 @@ export type NodeMetadata = {
   description?: string;
   color: string;
   icon: string; // Icon name, not component
-  category?: 'input' | 'processing' | 'output';
+  category?: "input" | "processing" | "output";
   defaultConfig?: Record<string, any>;
 };
 
@@ -39,7 +41,7 @@ export type NodeComponentProps = {
     id: string;
     label: string;
     color: string;
-    status?: 'idle' | 'running' | 'done';
+    status?: "idle" | "running" | "done";
     output?: string;
     onInspect?: (id: string, output?: string) => void;
     onDelete?: (id: string) => void;
@@ -47,4 +49,3 @@ export type NodeComponentProps = {
   };
   selected?: boolean;
 };
-

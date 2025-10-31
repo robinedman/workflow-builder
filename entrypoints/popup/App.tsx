@@ -83,6 +83,7 @@ function App() {
       await executeWorkflow(workflow, {
         tabId: currentTabId,
         mode: "headless",
+        workflowName: workflow.name,
       });
 
       setExecutionState({

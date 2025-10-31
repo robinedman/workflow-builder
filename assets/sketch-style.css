@@ -323,3 +323,140 @@ textarea.sketch-text {
 textarea.sketch-text::placeholder {
   opacity: 0.5;
 }
+
+/* Markdown Content Styles */
+.workflow-markdown-content {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.workflow-markdown-content h1,
+.workflow-markdown-content h2,
+.workflow-markdown-content h3,
+.workflow-markdown-content h4,
+.workflow-markdown-content h5,
+.workflow-markdown-content h6 {
+  margin-top: 24px;
+  margin-bottom: 12px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #1f2937;
+}
+
+.workflow-markdown-content h1 {
+  font-size: 2em;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 8px;
+}
+
+.workflow-markdown-content h2 {
+  font-size: 1.5em;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 6px;
+}
+
+.workflow-markdown-content h3 {
+  font-size: 1.25em;
+}
+
+.workflow-markdown-content h4 {
+  font-size: 1em;
+}
+
+.workflow-markdown-content h1:first-child,
+.workflow-markdown-content h2:first-child,
+.workflow-markdown-content h3:first-child {
+  margin-top: 0;
+}
+
+.workflow-markdown-content p {
+  margin-bottom: 16px;
+}
+
+.workflow-markdown-content ul,
+.workflow-markdown-content ol {
+  margin-bottom: 16px;
+  padding-left: 24px;
+}
+
+.workflow-markdown-content li {
+  margin-bottom: 4px;
+}
+
+.workflow-markdown-content code {
+  background: #f3f4f6;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: 0.9em;
+  color: #e83e8c;
+}
+
+.workflow-markdown-content pre {
+  background: #f3f4f6;
+  padding: 16px;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin-bottom: 16px;
+}
+
+.workflow-markdown-content pre code {
+  background: none;
+  padding: 0;
+  color: #374151;
+}
+
+.workflow-markdown-content blockquote {
+  border-left: 4px solid #e5e7eb;
+  padding-left: 16px;
+  margin-left: 0;
+  margin-bottom: 16px;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.workflow-markdown-content a {
+  color: #3b82f6;
+  text-decoration: none;
+}
+
+.workflow-markdown-content a:hover {
+  text-decoration: underline;
+}
+
+.workflow-markdown-content hr {
+  border: none;
+  border-top: 1px solid #e5e7eb;
+  margin: 24px 0;
+}
+
+.workflow-markdown-content table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.workflow-markdown-content th,
+.workflow-markdown-content td {
+  border: 1px solid #e5e7eb;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.workflow-markdown-content th {
+  background: #f9fafb;
+  font-weight: 600;
+}
+
+.workflow-markdown-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+
+.workflow-markdown-content strong {
+  font-weight: 600;
+}
+
+.workflow-markdown-content em {
+  font-style: italic;
+}
