@@ -58,9 +58,18 @@ export const Toolbar = ({
     (node) => node.category === "processing" && existingNodeTypes.includes(node.type)
   );
 
+  // Check if there's an output node
+  const hasOutputNode = allNodes.some(
+    (node) => node.category === "output" && existingNodeTypes.includes(node.type)
+  );
+
   // Check which input nodes exist
   const hasGetPageText = existingNodeTypes.includes("getPageText");
   const hasGetSelection = existingNodeTypes.includes("getSelection");
+
+  // Check which output nodes exist
+  const hasTextOutput = existingNodeTypes.includes("textOutput");
+  const hasSelectionPopover = existingNodeTypes.includes("selectionPopover");
 
   return (
     <div className="absolute top-4 left-4 z-1000000 sketch-toolbar space-y-2">
@@ -243,8 +252,17 @@ export const Toolbar = ({
                         "Add an input node first (Get Page Text or Get Selected Text)";
                     }
                   } else if (isOutputNode) {
-                    // For output nodes: disable if no input node OR no processing node exists
-                    if (!hasInputNode) {
+                    // For output nodes: disable BOTH if ANY output node exists
+                    if (hasOutputNode) {
+                      isDisabled = true;
+                      const existingOutputType = hasTextOutput
+                        ? "Text Output"
+                        : hasSelectionPopover
+                        ? "Selection Popover"
+                        : "output node";
+                      disabledReason = `Remove the existing ${existingOutputType} node to add a different output node`;
+                    } else if (!hasInputNode) {
+                      // Also disable if prerequisites are not met
                       isDisabled = true;
                       disabledReason =
                         "Add an input node first (Get Page Text or Get Selected Text)";
