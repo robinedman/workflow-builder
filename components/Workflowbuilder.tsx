@@ -10,7 +10,7 @@ import { useCallback, useEffect, useState, useMemo } from "react";
 import { allNodes, nodeRegistry } from "@/nodes";
 import { Toolbar } from "./Toolbar";
 import { executeWorkflow, type Workflow } from "@/utils/workflowEngine";
-import { saveWorkflow } from "@/utils/workflowStorage";
+import { saveWorkflow, getWorkflow } from "@/utils/workflowStorage";
 import { resolveIcon } from "./IconResolver";
 import { BaseNode } from "./nodes/BaseNode";
 
@@ -30,6 +30,29 @@ export const WorkflowBuilder = () => {
   } | null>(null);
   const [workflowName, setWorkflowName] = useState("Untitled Workflow");
   const [workflowId, setWorkflowId] = useState(() => `wf_${Date.now()}`);
+
+  // Load workflow from URL parameter if editing
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const workflowIdParam = params.get("workflowId");
+
+    if (workflowIdParam) {
+      getWorkflow(workflowIdParam).then((workflow) => {
+        if (workflow) {
+          setWorkflowId(workflow.id);
+          setWorkflowName(workflow.name);
+          setNodes(workflow.nodes);
+          setEdges(workflow.edges || []);
+          // Set idCounter to be higher than any existing node ID
+          const maxId = workflow.nodes.reduce((max, node) => {
+            const nodeIdNum = parseInt(node.id);
+            return !isNaN(nodeIdNum) && nodeIdNum > max ? nodeIdNum : max;
+          }, 0);
+          setIdCounter(maxId + 1);
+        }
+      });
+    }
+  }, []);
 
   const onNodesChange = useCallback((changes: any) => {
     setNodes((snapshot) => applyNodeChanges(changes, snapshot));

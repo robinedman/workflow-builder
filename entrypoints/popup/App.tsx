@@ -9,6 +9,7 @@ import {
   Loader2,
   Zap,
   X,
+  Pencil,
 } from "lucide-react";
 
 type ExecutionState = {
@@ -49,10 +50,16 @@ function App() {
     setWorkflows(wfs);
   };
 
-  const openWorkflowBuilder = async () => {
+  const openWorkflowBuilder = async (workflowId?: string) => {
     if (!currentTabId) return;
+    const params = new URLSearchParams({
+      sourceTabId: currentTabId.toString(),
+    });
+    if (workflowId) {
+      params.append("workflowId", workflowId);
+    }
     const url = browser.runtime.getURL(
-      `/workflow-builder.html?sourceTabId=${currentTabId}`
+      `/workflow-builder.html?${params.toString()}`
     );
     await browser.tabs.create({ url });
   };
@@ -197,7 +204,7 @@ function App() {
                   }}
                 >
                   <button
-                    onClick={openWorkflowBuilder}
+                    onClick={() => openWorkflowBuilder()}
                     disabled={!currentTabId}
                     className="flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed px-3 py-2 font-bold sketch-text cursor-pointer text-[15px]"
                   >
@@ -252,7 +259,7 @@ function App() {
                         }}
                       >
                         <button
-                          onClick={openWorkflowBuilder}
+                          onClick={() => openWorkflowBuilder()}
                           disabled={!currentTabId}
                           className="inline-flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed px-3 py-2 font-bold sketch-text cursor-pointer text-[15px]"
                         >
@@ -345,54 +352,82 @@ function App() {
                         </p>
                       </div>
 
-                      <div
-                        className="sketch-border sketch-button-hover"
-                        style={
-                          {
-                            "--sketch-color": borderColor,
-                          } as React.CSSProperties
-                        }
-                      >
-                        <div className="sketch-border-inner">
-                          <button
-                            onClick={() => runWorkflow(workflow)}
-                            disabled={!currentTabId || isRunning}
-                            className="sketch-border-content flex items-center gap-1.5 disabled:cursor-not-allowed disabled:opacity-40 px-3 py-2 font-bold sketch-text cursor-pointer text-sm whitespace-nowrap"
-                            style={{
-                              backgroundColor: bgColor,
-                              color: borderColor,
-                            }}
-                          >
-                            {isRunning ? (
-                              <>
-                                <Loader2
-                                  size={14}
-                                  className="animate-spin"
-                                  strokeWidth={2.5}
-                                />
-                                <span>Running</span>
-                              </>
-                            ) : isSuccess ? (
-                              <>
-                                <CheckCircle size={14} strokeWidth={2.5} />
-                                <span>Done!</span>
-                              </>
-                            ) : isError ? (
-                              <>
-                                <XCircle size={14} strokeWidth={2.5} />
-                                <span>Failed</span>
-                              </>
-                            ) : (
-                              <>
-                                <Play
-                                  size={14}
-                                  fill="currentColor"
-                                  strokeWidth={0}
-                                />
-                                <span>Run</span>
-                              </>
-                            )}
-                          </button>
+                      <div className="flex gap-2">
+                        {/* Edit button */}
+                        <div
+                          className="sketch-border sketch-button-hover"
+                          style={
+                            {
+                              "--sketch-color": borderColor,
+                            } as React.CSSProperties
+                          }
+                        >
+                          <div className="sketch-border-inner">
+                            <button
+                              onClick={() => openWorkflowBuilder(workflow.id)}
+                              disabled={!currentTabId}
+                              className="sketch-border-content flex items-center gap-1.5 disabled:cursor-not-allowed disabled:opacity-40 px-3 py-2 font-bold sketch-text cursor-pointer text-sm whitespace-nowrap"
+                              style={{
+                                backgroundColor: bgColor,
+                                color: borderColor,
+                              }}
+                            >
+                              <Pencil size={14} strokeWidth={2.5} />
+                              <span>Edit</span>
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Run button */}
+                        <div
+                          className="sketch-border sketch-button-hover"
+                          style={
+                            {
+                              "--sketch-color": borderColor,
+                            } as React.CSSProperties
+                          }
+                        >
+                          <div className="sketch-border-inner">
+                            <button
+                              onClick={() => runWorkflow(workflow)}
+                              disabled={!currentTabId || isRunning}
+                              className="sketch-border-content flex items-center gap-1.5 disabled:cursor-not-allowed disabled:opacity-40 px-3 py-2 font-bold sketch-text cursor-pointer text-sm whitespace-nowrap"
+                              style={{
+                                backgroundColor: bgColor,
+                                color: borderColor,
+                              }}
+                            >
+                              {isRunning ? (
+                                <>
+                                  <Loader2
+                                    size={14}
+                                    className="animate-spin"
+                                    strokeWidth={2.5}
+                                  />
+                                  <span>Running</span>
+                                </>
+                              ) : isSuccess ? (
+                                <>
+                                  <CheckCircle size={14} strokeWidth={2.5} />
+                                  <span>Done!</span>
+                                </>
+                              ) : isError ? (
+                                <>
+                                  <XCircle size={14} strokeWidth={2.5} />
+                                  <span>Failed</span>
+                                </>
+                              ) : (
+                                <>
+                                  <Play
+                                    size={14}
+                                    fill="currentColor"
+                                    strokeWidth={0}
+                                  />
+                                  <span>Run</span>
+                                </>
+                              )}
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
