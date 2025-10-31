@@ -1,16 +1,28 @@
 import { Check, Loader2, Play, Plus, Save, X } from "lucide-react";
 import { allNodes } from "@/nodes";
 
-const getNodeButtonStyle = (color: string) => {
-  if (color.includes("blue")) return "sketch-button-blue";
-  if (color.includes("purple")) return "sketch-button-purple";
-  if (color.includes("emerald") || color.includes("green"))
-    return "sketch-button-mint";
-  if (color.includes("pink")) return "sketch-button-pink";
-  if (color.includes("orange") || color.includes("peach"))
-    return "sketch-button-peach";
-  if (color.includes("yellow")) return "sketch-button-yellow";
-  return "sketch-button-purple";
+// Color definitions matching the popup app
+const colors = {
+  blue: { bg: "#E3F2FD", border: "#5B9BD5" },
+  purple: { bg: "#F3E5F5", border: "#9B59B6" },
+  mint: { bg: "#E0F2F1", border: "#4DB6AC" },
+  pink: { bg: "#FCE4EC", border: "#EC407A" },
+  peach: { bg: "#FFE0B2", border: "#FF8A65" },
+  sage: { bg: "#E8F5E9", border: "#66BB6A" },
+  yellow: { bg: "#FFF9C4", border: "#FDD835" },
+};
+
+// Map categories to colors
+const categoryColors: Record<string, keyof typeof colors> = {
+  input: "blue",
+  processing: "purple",
+  output: "sage",
+};
+
+const getCategoryColor = (category?: string) => {
+  if (!category) return colors.purple;
+  const colorKey = categoryColors[category] || "purple";
+  return colors[colorKey];
 };
 
 export const Toolbar = ({
@@ -46,8 +58,8 @@ export const Toolbar = ({
   const hasGetSelection = existingNodeTypes.includes("getSelection");
 
   return (
-    <div className="absolute top-4 left-4 z-1000000 sketch-toolbar space-y-4">
-      <div className="flex items-center gap-3 flex-wrap">
+    <div className="absolute top-4 left-4 z-1000000 sketch-toolbar space-y-2">
+      <div className="flex items-center gap-2 flex-wrap">
         <div className="sketch-border">
           <div className="sketch-border-inner">
             <input
@@ -55,57 +67,70 @@ export const Toolbar = ({
               value={workflowName}
               onChange={(e) => onNameChange(e.target.value)}
               placeholder="Workflow name..."
-              className="py-2 px-4 sketch-input w-full bg-transparent border-0 outline-none focus:outline-none focus:ring-0 focus:border-transparent appearance-none"
-              style={{ minWidth: "220px" }}
+              className="py-1.5 px-3 sketch-input w-full bg-transparent border-0 outline-none focus:outline-none focus:ring-0 focus:border-transparent appearance-none sketch-text font-bold text-[14px]"
+              style={{ minWidth: "180px" }}
             />
           </div>
         </div>
 
         {/* Save */}
-        <button
-          onClick={onSave}
-          disabled={!canRun || isSaving}
-          className={`sketch-border transition-all ${
-            !canRun || isSaving
-              ? "opacity-60 cursor-not-allowed"
-              : "cursor-pointer hover:scale-105 active:scale-95"
-          }`}
-          title={
-            !canRun
-              ? "Connect all nodes and add an output node to save"
-              : isSaving
-              ? "Saving..."
-              : saveStatus === "success"
-              ? "Workflow saved!"
-              : saveStatus === "error"
-              ? "Failed to save"
-              : "Save workflow"
+        <div
+          className="sketch-border sketch-button-hover"
+          style={
+            {
+              "--sketch-color": !canRun || isSaving
+                ? "#CCCCCC"
+                : saveStatus === "success"
+                ? colors.sage.border
+                : saveStatus === "error"
+                ? colors.peach.border
+                : "#2C2C2C",
+            } as React.CSSProperties
           }
         >
           <div className="sketch-border-inner">
-            <div
-              className={`sketch-border-content py-2 px-4 flex items-center gap-2 ${
+            <button
+              onClick={onSave}
+              disabled={!canRun || isSaving}
+              className="sketch-border-content py-1.5 px-3 flex items-center gap-1.5 disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
+              style={{
+                backgroundColor:
+                  saveStatus === "success"
+                    ? colors.sage.bg
+                    : saveStatus === "error"
+                    ? colors.peach.bg
+                    : "#FFFFFF",
+                color:
+                  !canRun || isSaving
+                    ? "#CCCCCC"
+                    : saveStatus === "success"
+                    ? colors.sage.border
+                    : saveStatus === "error"
+                    ? colors.peach.border
+                    : "#2C2C2C",
+              }}
+              title={
                 !canRun
-                  ? "text-gray-400"
+                  ? "Connect all nodes and add an output node to save"
                   : isSaving
-                  ? "text-blue-500"
+                  ? "Saving..."
                   : saveStatus === "success"
-                  ? "text-green-600"
+                  ? "Workflow saved!"
                   : saveStatus === "error"
-                  ? "text-red-500"
-                  : ""
-              }`}
+                  ? "Failed to save"
+                  : "Save workflow"
+              }
             >
               {isSaving ? (
-                <Loader2 size={18} className="animate-spin" />
+                <Loader2 size={16} className="animate-spin" strokeWidth={2.5} />
               ) : saveStatus === "success" ? (
-                <Check size={18} />
+                <Check size={16} strokeWidth={2.5} />
               ) : saveStatus === "error" ? (
-                <X size={18} />
+                <X size={16} strokeWidth={2.5} />
               ) : (
-                <Save size={18} />
+                <Save size={16} strokeWidth={2.5} />
               )}
-              <span>
+              <span className="sketch-text font-bold text-[14px]">
                 {isSaving
                   ? "Saving..."
                   : saveStatus === "success"
@@ -114,98 +139,147 @@ export const Toolbar = ({
                   ? "Error"
                   : "Save"}
               </span>
-            </div>
+            </button>
           </div>
-        </button>
+        </div>
 
         {/* Run */}
-        <button
-          onClick={runWorkflow}
-          disabled={isRunning || !canRun}
-          className={`sketch-border transition-all ${
-            isRunning || !canRun
-              ? "opacity-60 cursor-not-allowed"
-              : "cursor-pointer hover:scale-105 active:scale-95"
-          }`}
-          title={
-            isRunning
-              ? "Workflow running..."
-              : !canRun
-              ? "Connect all nodes and add an output node"
-              : "Run workflow"
+        <div
+          className="sketch-border sketch-button-hover"
+          style={
+            {
+              "--sketch-color":
+                isRunning || !canRun
+                  ? "#CCCCCC"
+                  : colors.sage.border,
+            } as React.CSSProperties
           }
         >
           <div className="sketch-border-inner">
-            <div
-              className={`sketch-border-content py-2 px-4 flex items-center gap-2 ${
+            <button
+              onClick={runWorkflow}
+              disabled={isRunning || !canRun}
+              className="sketch-border-content py-1.5 px-3 flex items-center gap-1.5 disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
+              style={{
+                backgroundColor:
+                  isRunning || !canRun ? "#F5F5F5" : colors.sage.bg,
+                color:
+                  isRunning || !canRun ? "#CCCCCC" : colors.sage.border,
+              }}
+              title={
                 isRunning
-                  ? "text-blue-500"
+                  ? "Workflow running..."
                   : !canRun
-                  ? "text-gray-400"
-                  : "text-emerald-600"
-              }`}
+                  ? "Connect all nodes and add an output node"
+                  : "Run workflow"
+              }
             >
               {isRunning ? (
-                <Loader2 size={18} className="animate-spin" />
+                <Loader2 size={16} className="animate-spin" strokeWidth={2.5} />
               ) : (
-                <Play size={18} />
+                <Play size={16} strokeWidth={2.5} fill="currentColor" />
               )}
-              <span>{isRunning ? "Running..." : "Run"}</span>
-            </div>
+              <span className="sketch-text font-bold text-[14px]">
+                {isRunning ? "Running..." : "Run"}
+              </span>
+            </button>
           </div>
-        </button>
+        </div>
       </div>
 
-      {/* Node Buttons */}
-      <div className="sketch-button-group flex flex-wrap gap-3">
-        {allNodes.map((node) => {
-          const isInputNode = node.category === "input";
+      {/* Node Buttons - Grouped by Category */}
+      <div className="flex flex-wrap gap-x-4 gap-y-2 items-start">
+        {["input", "processing", "output"].map((category) => {
+          const categoryNodes = allNodes.filter(
+            (node) => node.category === category
+          );
+          
+          if (categoryNodes.length === 0) return null;
 
-          // Determine if this specific button should be disabled
-          let isDisabled = false;
-          let disabledReason = node.description;
-
-          if (isInputNode) {
-            // For input nodes: disable if the OTHER input node exists
-            if (node.type === "getPageText" && hasGetSelection) {
-              isDisabled = true;
-              disabledReason = "Remove 'Get Selected Text' to use this";
-            } else if (node.type === "getSelection" && hasGetPageText) {
-              isDisabled = true;
-              disabledReason = "Remove 'Get Page Text' to use this";
-            }
-          } else {
-            // For non-input nodes: disable if no input node exists
-            if (!hasInputNode) {
-              isDisabled = true;
-              disabledReason =
-                "Add an input node first (Get Page Text or Get Selected Text)";
-            }
-          }
+          const categoryColor = getCategoryColor(category);
 
           return (
-            <button
-              key={node.type}
-              onClick={() => addNode(node.type)}
-              disabled={isDisabled}
-              className={`sketch-border transition-all ${
-                isDisabled
-                  ? "opacity-60 cursor-not-allowed"
-                  : "cursor-pointer hover:scale-105 active:scale-95"
-              } ${getNodeButtonStyle(node.color)}`}
-              title={isDisabled ? disabledReason : node.description}
-            >
-              <div className="sketch-border-inner">
-                <div
-                  className={`sketch-border-content py-2 px-4 flex items-center gap-2 ${
-                    isDisabled ? "text-gray-400" : ""
-                  }`}
-                >
-                  <Plus size={18} />
-                  <span>{node.label}</span>
-                </div>
+            <div key={category} className="flex flex-col gap-1.5">
+              {/* Category Label - Subtle */}
+              <span
+                className="sketch-info-text text-xs font-medium uppercase tracking-wide opacity-60 whitespace-nowrap pl-1"
+                style={{ color: categoryColor.border }}
+              >
+                {category}
+              </span>
+
+              {/* Category Nodes */}
+              <div className="flex flex-wrap gap-2">
+                {categoryNodes.map((node) => {
+                  const isInputNode = node.category === "input";
+
+                  // Determine if this specific button should be disabled
+                  let isDisabled = false;
+                  let disabledReason = node.description;
+
+                  if (isInputNode) {
+                    // For input nodes: disable if the OTHER input node exists
+                    if (node.type === "getPageText" && hasGetSelection) {
+                      isDisabled = true;
+                      disabledReason = "Remove 'Get Selected Text' to use this";
+                    } else if (
+                      node.type === "getSelection" &&
+                      hasGetPageText
+                    ) {
+                      isDisabled = true;
+                      disabledReason = "Remove 'Get Page Text' to use this";
+                    }
+                  } else {
+                    // For non-input nodes: disable if no input node exists
+                    if (!hasInputNode) {
+                      isDisabled = true;
+                      disabledReason =
+                        "Add an input node first (Get Page Text or Get Selected Text)";
+                    }
+                  }
+
+                  return (
+                    <button
+                      key={node.type}
+                      onClick={() => addNode(node.type)}
+                      disabled={isDisabled}
+                      className={`sketch-border sketch-button-hover transition-all ${
+                        isDisabled
+                          ? "opacity-60 cursor-not-allowed"
+                          : "cursor-pointer"
+                      }`}
+                      style={
+                        {
+                          "--sketch-color": isDisabled
+                            ? "#CCCCCC"
+                            : categoryColor.border,
+                        } as React.CSSProperties
+                      }
+                      title={isDisabled ? disabledReason : node.description}
+                    >
+                      <div className="sketch-border-inner">
+                        <div
+                          className="sketch-border-content py-1.5 px-3 flex items-center gap-1.5"
+                          style={{
+                            backgroundColor: isDisabled
+                              ? "#F5F5F5"
+                              : categoryColor.bg,
+                            color: isDisabled
+                              ? "#CCCCCC"
+                              : categoryColor.border,
+                          }}
+                        >
+                          <Plus size={16} strokeWidth={2.5} />
+                          <span className="sketch-text font-bold text-[14px]">
+                            {node.label}
+                          </span>
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
-            </button>
+            </div>
           );
         })}
       </div>

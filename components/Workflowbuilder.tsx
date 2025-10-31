@@ -276,6 +276,7 @@ export const WorkflowBuilder = () => {
           top: 0,
           left: 0,
           zIndex: 999999,
+          "--pastel-bg": "#FAFAFA",
           "--sketch-color": "#000000",
         } as React.CSSProperties
       }

@@ -64,7 +64,7 @@ export const BaseNode = ({ data, selected }: NodeProps) => {
               </div>
             </div>
 
-            <div className="px-4 py-3 text-base font-semibold">
+            <div className="px-4 py-3 text-base font-semibold sketch-info-text">
               {isRunning
                 ? "✨ Running..."
                 : data.status === "done"
