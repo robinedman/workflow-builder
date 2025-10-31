@@ -3,34 +3,6 @@
 /* Import simple readable font */
 @import url('https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&display=swap');
 
-/* MUCH BETTER Color Palette - Soft, Neutral, Professional */
-:root {
-  /* Cream/beige background like real paper */
-  --pastel-bg: #F5F5F0;
-  
-  /* Node backgrounds - very subtle colors */
-  --pastel-pink: #FFF5F7;
-  --pastel-blue: #F0F8FF;
-  --pastel-purple: #F9F5FF;
-  --pastel-mint: #F0FFF8;
-  --pastel-peach: #FFF8F0;
-  --pastel-yellow: #FFFEF0;
-  --pastel-lavender: #F8F7FF;
-  --pastel-coral: #FFF7F5;
-  --pastel-sage: #F5FFF5;
-  
-  /* Border colors - darker but not garish */
-  --border-pink: #D87093;
-  --border-blue: #5B9BD5;
-  --border-purple: #8B7EC8;
-  --border-mint: #52B788;
-  --border-peach: #E09F7D;
-  --border-yellow: #D4A574;
-  --border-lavender: #9F91B8;
-  --border-coral: #E57373;
-  --border-sage: #73A874;
-}
-
 /* Handwriting font */
 .sketch-text,
 .sketch-node,
@@ -133,20 +105,6 @@
   animation: scribble-straight 0.3s ease-in-out infinite !important;
 }
 
-/* Node header styles */
-.sketch-node-header {
-  padding: 11px 15px;
-  font-weight: 700;
-  font-size: 18px;
-  letter-spacing: 0.2px;
-}
-
-.sketch-node-body {
-  padding: 12px 15px;
-  font-size: 16px;
-  font-weight: 500;
-}
-
 /* Connection handles - simple circles with rough edges */
 .react-flow__handle {
   width: 14px !important;
@@ -216,22 +174,7 @@
     /* Selection highlight */
     0 0 0 5px rgba(91, 155, 213, 0.15),
     4px 4px 10px rgba(0, 0, 0, 0.12);
-}
-
-.sketch-input {
-  background: transparent;
-  border: none !important;
-  outline: none !important;
-  box-shadow: none !important;
-  appearance: none !important;
-  -webkit-appearance: none !important;
-  -moz-appearance: none !important; 
-}
-.sketch-input:focus {
-  border: none !important;
-  outline: none !important;
-  box-shadow: none !important;
-}
+} 
 .sketch-toolbar {
   padding: 18px;
   transition: all 0.2s ease;

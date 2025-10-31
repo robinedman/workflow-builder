@@ -14,46 +14,19 @@ type NodeProps = {
   };
 };
 
-// Map to neutral, professional colors
-const getSketchColors = (color: string) => {
-  if (color.includes("blue")) {
-    return { bg: "var(--pastel-blue)", border: "#5B9BD5", text: "#3A5A7A" };
-  } else if (color.includes("purple")) {
-    return { bg: "var(--pastel-purple)", border: "#8B7EC8", text: "#5A4E8A" };
-  } else if (color.includes("emerald") || color.includes("green")) {
-    return { bg: "var(--pastel-mint)", border: "#52B788", text: "#3A7A5F" };
-  } else if (color.includes("pink")) {
-    return { bg: "var(--pastel-pink)", border: "#D87093", text: "#A5536D" };
-  } else if (color.includes("orange")) {
-    return { bg: "var(--pastel-peach)", border: "#E09F7D", text: "#A9705A" };
-  } else if (color.includes("yellow")) {
-    return { bg: "var(--pastel-yellow)", border: "#D4A574", text: "#9A7850" };
-  }
-  return { bg: "var(--pastel-lavender)", border: "#9F91B8", text: "#6E6282" };
-};
-
 export const BaseNode = ({ data }: NodeProps) => {
-  const colors = getSketchColors(data.color);
   const isRunning = data.status === "running";
 
   return (
     <div
       style={{
         width: 240,
-        backgroundColor: colors.bg,
-        color: colors.border,
       }}
-      className={`sketch-node sketch-border sketch-text overflow-hidden ${
+      className={`sketch-node sketch-border sketch-text ${
         isRunning ? "sketch-node-running" : ""
       }`}
     >
-      <div
-        className="sketch-node-header flex items-center justify-between gap-2"
-        style={{
-          backgroundColor: colors.border,
-          color: "white",
-        }}
-      >
+      <div className="px-4 py-3 font-bold text-lg tracking-tight flex items-center justify-between gap-2">
         <div className="flex items-center gap-2.5">
           {isRunning ? (
             <Loader2 size={20} className="animate-spin flex-shrink-0" />
@@ -73,29 +46,15 @@ export const BaseNode = ({ data }: NodeProps) => {
           </button>
         )}
       </div>
-      <div
-        className="sketch-node-body"
-        style={{
-          color: colors.text,
-          backgroundColor: "rgba(255, 255, 255, 0.7)",
-        }}
-      >
+      <div className="px-4 py-3 text-base font-medium">
         {isRunning
           ? "✨ Running..."
           : data.status === "done"
           ? "✓ Done!"
           : "Ready"}
       </div>
-      <Handle
-        type="target"
-        position={Position.Top}
-        style={{ borderColor: colors.border }}
-      />
-      <Handle
-        type="source"
-        position={Position.Bottom}
-        style={{ borderColor: colors.border }}
-      />
+      <Handle type="target" position={Position.Top} />
+      <Handle type="source" position={Position.Bottom} />
     </div>
   );
 };
