@@ -109,7 +109,7 @@ export const TextOutputNode = ({ data, selected }: NodeProps) => {
 
             {/* Output section with white background */}
             <div className="px-4 py-3 sketch-info-text text-sm font-medium whitespace-pre-wrap max-h-56 overflow-auto bg-white" style={{ color: "#2C2C2C" }}>
-              {data.output || "No output yet"}
+              {data.output || <span className="font-bold">No output yet</span>}
             </div>
           </div>
         </div>

@@ -118,7 +118,7 @@ export const BaseNode = ({ data, selected }: NodeProps) => {
                 ? "✨ Running..."
                 : data.status === "done"
                 ? "✓ Done!"
-                : <span className="font-semibold">✓ Ready</span>}
+                : <span className="font-bold">✓ Ready</span>}
             </div>
           </div>
         </div>

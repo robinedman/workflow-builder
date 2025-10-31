@@ -235,7 +235,7 @@ export const SummarizeNode = ({ data, selected }: NodeProps) => {
                   ? "✨ Summarizing..."
                   : data.status === "done"
                   ? "✓ Done!"
-                  : <span className="font-semibold">✓ Ready</span>}
+                  : <span className="font-bold">✓ Ready</span>}
               </div>
             </div>
           </div>
