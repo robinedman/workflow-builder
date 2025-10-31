@@ -7,6 +7,7 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { useCallback, useEffect, useState, useMemo } from "react";
+import { X } from "lucide-react";
 import { allNodes, nodeRegistry } from "@/nodes";
 import { Toolbar } from "./Toolbar";
 import { executeWorkflow, type Workflow } from "@/utils/workflowEngine";
@@ -84,12 +85,14 @@ export const WorkflowBuilder = () => {
           setNodes(restoredNodes);
           // Restore edge colors based on source node colors
           const restoredEdges = (workflow.edges || []).map((edge: any) => {
-            const sourceNode = restoredNodes.find((n: any) => n.id === edge.source);
+            const sourceNode = restoredNodes.find(
+              (n: any) => n.id === edge.source
+            );
             const nodeDef = sourceNode ? nodeRegistry[sourceNode.type] : null;
             const categoryColor = nodeDef
               ? getCategoryColor(nodeDef.category)
               : { border: "#000000" };
-            
+
             return {
               ...edge,
               style: {
@@ -139,12 +142,12 @@ export const WorkflowBuilder = () => {
         const categoryColor = nodeDef
           ? getCategoryColor(nodeDef.category)
           : { border: "#000000" };
-        
+
         // Check if the source node already has an outgoing edge
         const hasExistingOutgoingEdge = snapshot.some(
           (edge) => edge.source === params.source
         );
-        
+
         if (hasExistingOutgoingEdge) {
           // Remove the old edge and add the new one
           const filteredEdges = snapshot.filter(
@@ -162,7 +165,7 @@ export const WorkflowBuilder = () => {
           };
           return addEdge(newEdge, filteredEdges);
         }
-        
+
         const newEdge = {
           ...params,
           style: {
@@ -383,10 +386,10 @@ export const WorkflowBuilder = () => {
         const categoryColor = sourceNodeDef
           ? getCategoryColor(sourceNodeDef.category)
           : { border: "#000000" };
-        
+
         // Remove any existing outgoing edge from the source node
         const filteredEdges = es.filter((edge) => edge.source !== sourceNodeId);
-        
+
         // Add the new edge with the source node's color
         return [
           ...filteredEdges,
@@ -635,7 +638,21 @@ export const WorkflowBuilder = () => {
           className="fixed inset-0 z-1000001 flex items-center justify-center"
           style={{ backgroundColor: "rgba(0,0,0,0.25)" }}
         >
-          <div className="sketch-modal sketch-border w-[600px] max-h-[80vh]">
+          <div className="sketch-modal sketch-border w-[600px] max-h-[80vh] relative">
+            {/* Close button - top right corner */}
+            <button
+              onClick={() => setInspected(null)}
+              className="absolute -top-3 -right-3 flex items-center justify-center hover:scale-110 transition-all cursor-pointer w-7 h-7 rounded-full z-20 shadow-md"
+              style={{
+                backgroundColor: "#FFE5E5",
+                color: "#E57373",
+                border: "3px solid #E57373",
+                filter: "url(#rough-border)",
+              }}
+              title="Close"
+            >
+              <X size={14} strokeWidth={2.5} />
+            </button>
             <div className="sketch-border-inner">
               <div
                 className="sketch-border-content overflow-hidden"
@@ -645,39 +662,18 @@ export const WorkflowBuilder = () => {
                   padding: "20px",
                 }}
               >
-                <div className="flex justify-between items-center mb-3">
+                <div className="mb-3">
                   <h2
                     className="font-bold text-lg sketch-text"
                     style={{ color: "#444" }}
                   >
                     Node {inspected.id} Output
                   </h2>
-                  <div
-                    className="sketch-border"
-                    style={
-                      {
-                        "--sketch-color": "#E57373",
-                      } as React.CSSProperties
-                    }
-                  >
-                    <div className="sketch-border-inner">
-                      <button
-                        onClick={() => setInspected(null)}
-                        className="sketch-border-content sketch-button text-lg px-3 py-1 font-bold hover:scale-110 transition-transform"
-                        style={{
-                          backgroundColor: "#FFE5E5",
-                          color: "#E57373",
-                        }}
-                      >
-                        ×
-                      </button>
-                    </div>
-                  </div>
                 </div>
                 <div className="sketch-modal-content overflow-auto max-h-[calc(80vh-100px)]">
                   <pre
-                    className="text-sm whitespace-pre-wrap sketch-text"
-                    style={{ color: "#333" }}
+                    className="text-sm whitespace-pre-wrap font-sans"
+                    style={{ color: "#333", lineHeight: "1.6" }}
                   >
                     {inspected.text}
                   </pre>
