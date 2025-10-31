@@ -52,13 +52,9 @@ export const SketchDropdown = ({
   };
 
   const handleScroll = (e: React.WheelEvent<HTMLDivElement>) => {
-    // Always prevent default and stop propagation to prevent ReactFlow's panOnScroll
-    e.preventDefault();
-    e.stopPropagation();
-    
     const container = scrollContainerRef.current;
     if (!container) return;
-    
+
     // Manually handle the scroll
     container.scrollTop += e.deltaY;
   };
@@ -90,15 +86,19 @@ export const SketchDropdown = ({
         <div className="absolute top-full mt-2 z-50 min-w-full">
           <div className="sketch-border">
             <div className="sketch-border-inner">
-              <div className="sketch-border-content bg-white" style={{ overflow: 'hidden' }}>
-                <div 
+              <div
+                className="sketch-border-content bg-white"
+                style={{ overflow: "hidden" }}
+              >
+                <div
                   ref={scrollContainerRef}
-                  style={{ 
-                    maxHeight: '300px',
-                    overflowY: 'scroll',
-                    overflowX: 'hidden',
-                    overscrollBehavior: 'contain',
-                    WebkitOverflowScrolling: 'touch'
+                  className="nowheel"
+                  style={{
+                    maxHeight: "300px",
+                    overflowY: "auto",
+                    overflowX: "hidden",
+                    overscrollBehavior: "contain",
+                    WebkitOverflowScrolling: "touch",
                   }}
                   onWheel={handleScroll}
                   onTouchMove={(e) => e.stopPropagation()}
@@ -127,4 +127,3 @@ export const SketchDropdown = ({
     </div>
   );
 };
-
