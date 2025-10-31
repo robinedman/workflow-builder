@@ -1,5 +1,5 @@
 import { Handle, Position } from "@xyflow/react";
-import { Eye, Languages, Loader2 } from "lucide-react";
+import { Eye, Languages, Loader2, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { SketchDropdown } from "../SketchDropdown";
 
@@ -12,7 +12,9 @@ type NodeProps = {
     output?: string;
     status?: "idle" | "running" | "done";
     onInspect?: (id: string, output?: string) => void;
+    onDelete?: (id: string) => void;
   };
+  selected?: boolean;
 };
 
 const allLanguages = [
@@ -58,7 +60,7 @@ const allLanguages = [
   { value: "et", label: "Estonian" },
 ];
 
-export const TranslateNode = ({ data }: NodeProps) => {
+export const TranslateNode = ({ data, selected }: NodeProps) => {
   const [modelStatus, setModelStatus] = useState<
     "checking" | "downloadable" | "downloading" | "ready"
   >("checking");
@@ -164,7 +166,7 @@ export const TranslateNode = ({ data }: NodeProps) => {
       style={{ width: 250 }}
       className={`sketch-node sketch-text ${
         isRunning ? "sketch-node-running" : ""
-      }`}
+      } ${selected ? "sketch-node-selected" : ""}`}
     >
       <div className="sketch-border">
         <div className="sketch-border-inner">
@@ -178,14 +180,29 @@ export const TranslateNode = ({ data }: NodeProps) => {
                 )}
                 <span className="text-[20px] leading-tight">Translate</span>
               </div>
-              {data.output && (
-                <button
-                  onClick={() => data.onInspect?.(data.id, data.output)}
-                  className="hover:scale-125 transition-transform opacity-90 hover:opacity-100 shrink-0"
-                >
-                  <Eye size={18} />
-                </button>
-              )}
+              <div className="flex items-center gap-1.5">
+                {data.output && (
+                  <button
+                    onClick={() => data.onInspect?.(data.id, data.output)}
+                    className="hover:scale-125 transition-transform opacity-90 hover:opacity-100 shrink-0"
+                    title="Inspect output"
+                  >
+                    <Eye size={18} />
+                  </button>
+                )}
+                {selected && data.onDelete && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      data.onDelete?.(data.id);
+                    }}
+                    className="hover:scale-125 transition-transform shrink-0 text-red-500 hover:text-red-600"
+                    title="Delete node (or press Delete/Backspace)"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                )}
+              </div>
             </div>
 
             <div className="px-4 py-3 space-y-3 text-base font-medium">

@@ -10,6 +10,7 @@ type NodeProps = {
     icon: React.ReactNode;
     output?: string;
     status?: "idle" | "running" | "done";
+    category?: "input" | "processing" | "output";
     onInspect?: (id: string, output?: string) => void;
     onDelete?: (id: string) => void;
   };

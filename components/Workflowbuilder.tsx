@@ -157,6 +157,7 @@ export const WorkflowBuilder = () => {
           color: nodeDef.color,
           icon: resolveIcon(nodeDef.icon),
           status: "idle",
+          category: nodeDef.category,
           ...nodeDef.defaultConfig, // Apply default config
           onInspect: (id: string, text?: string) =>
             setInspected({ id, text: text || "" }),
