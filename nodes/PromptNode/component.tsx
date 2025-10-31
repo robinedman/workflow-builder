@@ -1,5 +1,5 @@
 import { Handle, Position } from "@xyflow/react";
-import { Eye, Loader2, MessageSquare, Trash2 } from "lucide-react";
+import { Eye, Loader2, MessageSquare, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { NodeComponentProps } from "../types";
 
@@ -56,10 +56,29 @@ export const PromptNodeComponent = ({ data, selected }: NodeComponentProps) => {
 
   return (
     <div
-      className={`sketch-node w-[300px] ${
+      className={`sketch-node relative w-[300px] ${
         isRunning ? "sketch-node-running" : ""
       } ${selected ? "sketch-node-selected" : ""}`}
     >
+      {/* Delete button - top right corner */}
+      {selected && data.onDelete && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            data.onDelete?.(data.id);
+          }}
+          className="absolute -top-3 -right-3 flex items-center justify-center hover:scale-110 transition-all cursor-pointer w-7 h-7 rounded-full z-20 shadow-md"
+          style={{
+            backgroundColor: categoryColor.bg,
+            color: categoryColor.border,
+            border: `3px solid ${categoryColor.border}`,
+            filter: "url(#rough-border)",
+          }}
+          title="Delete node (or press Delete/Backspace)"
+        >
+          <X size={14} strokeWidth={2.5} />
+        </button>
+      )}
       <div
         className="sketch-border"
         style={
@@ -96,18 +115,6 @@ export const PromptNodeComponent = ({ data, selected }: NodeComponentProps) => {
                     title="Inspect output"
                   >
                     <Eye size={18} style={{ color: categoryColor.border }} />
-                  </button>
-                )}
-                {selected && data.onDelete && (
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      data.onDelete?.(data.id);
-                    }}
-                    className="hover:scale-125 transition-transform shrink-0 text-red-500 hover:text-red-600"
-                    title="Delete node (or press Delete/Backspace)"
-                  >
-                    <Trash2 size={18} />
                   </button>
                 )}
               </div>
