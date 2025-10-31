@@ -31,7 +31,7 @@ export const PromptNodeComponent = ({ data }: NodeComponentProps) => {
 
   return (
     <div
-      className={`sketch-node sketch-border overflow-hidden w-[300px] ${
+      className={`sketch-node sketch-border w-[300px] ${
         isRunning ? "sketch-node-running" : ""
       }`}
     >

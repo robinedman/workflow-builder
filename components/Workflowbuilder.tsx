@@ -283,8 +283,8 @@ export const WorkflowBuilder = () => {
           minZoom={1}
           defaultEdgeOptions={{
             style: {
-              stroke: "#8B7EC8",
-              strokeWidth: 3.5,
+              stroke: "#000000",
+              strokeWidth: 1,
               strokeLinecap: "round",
               strokeLinejoin: "round",
             },
