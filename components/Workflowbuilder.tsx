@@ -93,28 +93,25 @@ export const WorkflowBuilder = () => {
       setEdges((snapshot) => applyEdgeChanges(changes, snapshot)),
     []
   );
-  const onConnect = useCallback(
-    (params: any) => {
-      // Prevent multiple outgoing connections from the same source node
-      setEdges((snapshot) => {
-        // Check if the source node already has an outgoing edge
-        const hasExistingOutgoingEdge = snapshot.some(
-          (edge) => edge.source === params.source
+  const onConnect = useCallback((params: any) => {
+    // Prevent multiple outgoing connections from the same source node
+    setEdges((snapshot) => {
+      // Check if the source node already has an outgoing edge
+      const hasExistingOutgoingEdge = snapshot.some(
+        (edge) => edge.source === params.source
+      );
+
+      if (hasExistingOutgoingEdge) {
+        // Remove the old edge and add the new one
+        const filteredEdges = snapshot.filter(
+          (edge) => edge.source !== params.source
         );
-        
-        if (hasExistingOutgoingEdge) {
-          // Remove the old edge and add the new one
-          const filteredEdges = snapshot.filter(
-            (edge) => edge.source !== params.source
-          );
-          return addEdge(params, filteredEdges);
-        }
-        
-        return addEdge(params, snapshot);
-      });
-    },
-    []
-  );
+        return addEdge(params, filteredEdges);
+      }
+
+      return addEdge(params, snapshot);
+    });
+  }, []);
 
   const getSourceTabId = (): number | null => {
     const params = new URLSearchParams(window.location.search);
@@ -224,14 +221,6 @@ export const WorkflowBuilder = () => {
     }
   };
 
-  const deleteNode = useCallback((nodeId: string) => {
-    setNodes((ns) => ns.filter((n) => n.id !== nodeId));
-    setEdges((es) =>
-      es.filter((e) => e.source !== nodeId && e.target !== nodeId)
-    );
-    setSelectedNodes((selected) => selected.filter((id) => id !== nodeId));
-  }, []);
-
   const addNode = (type: string) => {
     const nodeDef = nodeRegistry[type];
     if (!nodeDef) return;
@@ -250,7 +239,7 @@ export const WorkflowBuilder = () => {
       const availableSourceNodes = nodes.filter((n) => {
         const nDef = nodeRegistry[n.type];
         if (!nDef || nDef.category === "output") return false;
-        
+
         // Check if this node already has an outgoing edge
         const hasOutgoingEdge = edges.some((edge) => edge.source === n.id);
         return !hasOutgoingEdge;
@@ -324,7 +313,7 @@ export const WorkflowBuilder = () => {
       setEdges((es) => {
         // Remove any existing outgoing edge from the source node
         const filteredEdges = es.filter((edge) => edge.source !== sourceNodeId);
-        
+
         // Add the new edge
         return [
           ...filteredEdges,
