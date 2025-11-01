@@ -49,7 +49,7 @@ export const BaseNode = ({ data, selected }: NodeProps) => {
     <div
       style={{ width: 240 }}
       className={`sketch-node relative ${
-        isRunning ? "sketch-node-running" : ""
+        isRunning ? "sketch-node-running-flow" : ""
       } ${selected ? "sketch-node-selected" : ""}`}
     >
       {/* Delete button - top right corner */}
@@ -143,26 +143,26 @@ export const BaseNode = ({ data, selected }: NodeProps) => {
 
       {/* Input nodes only have source (bottom) handle */}
       {data.category !== "input" && (
-        <Handle
-          type="target"
+        <Handle 
+          type="target" 
           position={Position.Top}
           style={
             {
-              borderColor: categoryColor.border,
-              "--handle-color": categoryColor.border,
+            borderColor: categoryColor.border,
+            "--handle-color": categoryColor.border,
             } as React.CSSProperties
           }
         />
       )}
       {/* Output nodes only have target (top) handle */}
       {data.category !== "output" && (
-        <Handle
-          type="source"
+        <Handle 
+          type="source" 
           position={Position.Bottom}
           style={
             {
-              borderColor: categoryColor.border,
-              "--handle-color": categoryColor.border,
+            borderColor: categoryColor.border,
+            "--handle-color": categoryColor.border,
             } as React.CSSProperties
           }
         />

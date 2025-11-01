@@ -156,7 +156,13 @@
   75% { transform: translateX(-0.5px) translateY(-1px); }
 }
 
+/* For popup - animate the element directly */
 .sketch-node-running {
+  animation: scribble-straight 0.3s ease-in-out infinite !important;
+}
+
+/* For workflow builder - animate the inner border element */
+.sketch-node-running-flow .sketch-border {
   animation: scribble-straight 0.3s ease-in-out infinite !important;
 }
 

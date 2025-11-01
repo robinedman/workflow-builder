@@ -93,7 +93,7 @@ export const SummarizeNode = ({ data, selected }: NodeProps) => {
     <div
       style={{ width: 250 }}
       className={`sketch-node relative ${
-        isRunning ? "sketch-node-running" : ""
+        isRunning ? "sketch-node-running-flow" : ""
       } ${selected ? "sketch-node-selected" : ""}`}
     >
       {/* Delete button - top right corner */}

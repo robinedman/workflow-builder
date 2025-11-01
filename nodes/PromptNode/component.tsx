@@ -57,7 +57,7 @@ export const PromptNodeComponent = ({ data, selected }: NodeComponentProps) => {
   return (
     <div
       className={`sketch-node relative w-[300px] ${
-        isRunning ? "sketch-node-running" : ""
+        isRunning ? "sketch-node-running-flow" : ""
       } ${selected ? "sketch-node-selected" : ""}`}
     >
       {/* Delete button - top right corner */}
