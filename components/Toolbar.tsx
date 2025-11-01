@@ -1,4 +1,4 @@
-import { Check, Loader2, Play, Plus, Save, X, Zap } from "lucide-react";
+import { Check, Loader2, Play, Plus, Save, X } from "lucide-react";
 import { allNodes } from "@/nodes";
 
 // Color definitions matching the popup app
@@ -75,9 +75,12 @@ export const Toolbar = ({
     <div className="absolute top-4 left-4 z-[1000000] sketch-toolbar bg-white p-3 rounded-sm shadow-sm space-y-2">
       {/* Branding Header */}
       <div className="flex items-center gap-2 mb-2 pb-2 border-b border-gray-200">
-        <div className="flex items-center justify-center w-6 h-6">
-          <Zap size={20} strokeWidth={2.5} className="text-purple-600" />
-        </div>
+        <img 
+          src="/logo.png" 
+          alt="Flosheet AI" 
+          className="w-6 h-6 object-contain shrink-0"
+          style={{ marginTop: '-4px' }}
+        />
         <h1 className="text-base font-bold sketch-text text-gray-800">
           Flosheet AI
         </h1>

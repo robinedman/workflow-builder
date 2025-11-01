@@ -7,7 +7,6 @@ import {
   CheckCircle,
   XCircle,
   Loader2,
-  Zap,
   X,
   Pencil,
 } from "lucide-react";
@@ -176,9 +175,12 @@ function App() {
       <div className="px-5 py-4 bg-white text-gray-800">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <div className="flex items-center justify-center w-7 h-7">
-              <Zap size={24} strokeWidth={2.5} className="text-purple-600" />
-            </div>
+            <img
+              src="/logo.png"
+              alt="Flosheet AI"
+              className="w-7 h-7 object-contain shrink-0"
+              style={{ marginTop: "-5px" }}
+            />
             <h1 className="text-lg font-bold sketch-text text-gray-800">
               Flosheet AI
             </h1>
@@ -218,10 +220,10 @@ function App() {
           <div className="flex items-center justify-center h-full">
             <div className="text-center space-y-4 max-w-xs sketch-text">
               <div className="flex items-center justify-center mx-auto w-20 h-20">
-                <Zap
-                  size={60}
-                  strokeWidth={2}
-                  className="opacity-30 text-gray-800"
+                <img
+                  src="/logo.png"
+                  alt="Flosheet AI"
+                  className="w-16 h-16 object-contain opacity-30"
                 />
               </div>
               <div>
