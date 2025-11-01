@@ -55,12 +55,14 @@ export const Toolbar = ({
 
   // Check if there's a processing node
   const hasProcessingNode = allNodes.some(
-    (node) => node.category === "processing" && existingNodeTypes.includes(node.type)
+    (node) =>
+      node.category === "processing" && existingNodeTypes.includes(node.type)
   );
 
   // Check if there's an output node
   const hasOutputNode = allNodes.some(
-    (node) => node.category === "output" && existingNodeTypes.includes(node.type)
+    (node) =>
+      node.category === "output" && existingNodeTypes.includes(node.type)
   );
 
   // Check which input nodes exist
@@ -75,11 +77,11 @@ export const Toolbar = ({
     <div className="absolute top-4 left-4 z-[1000000] sketch-toolbar bg-white p-3 rounded-sm shadow-sm space-y-2">
       {/* Branding Header */}
       <div className="flex items-center gap-2 mb-2 pb-2 border-b border-gray-200">
-        <img 
-          src="/logo.png" 
-          alt="Flosheet AI" 
+        <img
+          src="/logo.png"
+          alt="Flosheet AI"
           className="w-6 h-6 object-contain shrink-0"
-          style={{ marginTop: '-4px' }}
+          style={{ marginTop: "-4px" }}
         />
         <h1 className="text-base font-bold sketch-text text-gray-800">
           Flosheet AI
@@ -105,13 +107,14 @@ export const Toolbar = ({
           className="sketch-border sketch-button-hover"
           style={
             {
-              "--sketch-color": !canRun || isSaving
-                ? "#CCCCCC"
-                : saveStatus === "success"
-                ? colors.sage.border
-                : saveStatus === "error"
-                ? colors.peach.border
-                : "#2C2C2C",
+              "--sketch-color":
+                !canRun || isSaving
+                  ? "#CCCCCC"
+                  : saveStatus === "success"
+                  ? colors.sage.border
+                  : saveStatus === "error"
+                  ? colors.peach.border
+                  : "#2C2C2C",
             } as React.CSSProperties
           }
         >
@@ -175,10 +178,7 @@ export const Toolbar = ({
           className="sketch-border sketch-button-hover"
           style={
             {
-              "--sketch-color":
-                isRunning || !canRun
-                  ? "#CCCCCC"
-                  : "#2C2C2C",
+              "--sketch-color": isRunning || !canRun ? "#CCCCCC" : "#2C2C2C",
             } as React.CSSProperties
           }
         >
@@ -188,10 +188,8 @@ export const Toolbar = ({
               disabled={isRunning || !canRun}
               className="sketch-border-content py-1.5 px-3 flex items-center gap-1.5 disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
               style={{
-                backgroundColor:
-                  isRunning || !canRun ? "#F5F5F5" : "#FFFFFF",
-                color:
-                  isRunning || !canRun ? "#CCCCCC" : "#2C2C2C",
+                backgroundColor: isRunning || !canRun ? "#F5F5F5" : "#FFFFFF",
+                color: isRunning || !canRun ? "#CCCCCC" : "#2C2C2C",
               }}
               title={
                 isRunning
@@ -220,7 +218,7 @@ export const Toolbar = ({
           const categoryNodes = allNodes.filter(
             (node) => node.category === category
           );
-          
+
           if (categoryNodes.length === 0) return null;
 
           const categoryColor = getCategoryColor(category);
