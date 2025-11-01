@@ -59,7 +59,6 @@ See ARCHITECTURE.md
 - **React + TypeScript + Tailwind CSS** — UI and logic  
 - **React Flow** — Visual flosheet editor  
 - **Lucide React** — Icons  
-- **WebExt Bridge** — Communication between extension components  
 - **@mozilla/readability** — Extracts readable article text  
 
 ---
@@ -81,4 +80,8 @@ npm run build
 ```
 
 Outputs the packed extension to `.output/`.
+
+### Pre-built unpacked extension
+
+You will find a pre-built unpacked extension in the `build-unpacked` folder.
 
