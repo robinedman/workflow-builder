@@ -179,7 +179,7 @@
   transition: all 0.2s ease;
   filter: url(#rough-border);
   z-index: 10;
-  position: relative;
+  position: absolute !important;
 }
 
 /* Remove any default ReactFlow handle styles that might add black borders */

@@ -1,4 +1,4 @@
-import{c as u,r as d,g as E,j as e,P as y,X as S,d as W,L as z,a as I,e as A,R as B,b as D}from"./workflowEngine-COE-Vt9W.js";const R=globalThis.browser?.runtime?.id?globalThis.browser:globalThis.chrome,x=R;/**
+import{c as u,r as d,g as E,j as e,P as y,X as S,d as W,L as z,a as I,e as A,R as B,b as D}from"./workflowEngine-c2npe68S.js";const R=globalThis.browser?.runtime?.id?globalThis.browser:globalThis.chrome,x=R;/**
  * @license lucide-react v0.548.0 - ISC
  *
  * This source code is licensed under the ISC license.
