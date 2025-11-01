@@ -2,7 +2,6 @@ import type { NodeExecutor } from "../types";
 import { marked } from "marked";
 
 // Helper function to create and display modal
-// This function gets injected into the page, so it must be self-contained
 function createModal(htmlContent: string, workflowName?: string) {
   // Remove any existing workflow modals
   document
@@ -26,12 +25,12 @@ function createModal(htmlContent: string, workflowName?: string) {
     padding: 20px;
   `;
 
-  // Create modal container
+  // Create modal container - clean and simple
   const modal = document.createElement("div");
   modal.className = "workflow-page-modal";
   modal.style.cssText = `
     background: white;
-    border-radius: 12px;
+    border-radius: 8px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     z-index: 999999;
     max-width: 700px;
@@ -40,45 +39,48 @@ function createModal(htmlContent: string, workflowName?: string) {
     display: flex;
     flex-direction: column;
     position: relative;
+    overflow: hidden;
   `;
 
-  // Create header
+  // Create header with sage green background
   const header = document.createElement("div");
   header.style.cssText = `
     padding: 20px 24px;
-    border-bottom: 2px solid #e5e7eb;
+    background-color: #E8F5E9;
     display: flex;
     justify-content: space-between;
     align-items: center;
   `;
 
   const title = document.createElement("h2");
-  title.textContent = workflowName ? `${workflowName} - Result` : "Workflow Output";
+  title.textContent = workflowName
+    ? `${workflowName} - Result`
+    : "Workflow Output";
   title.style.cssText = `
     margin: 0;
-    font-size: 20px;
-    font-weight: 700;
-    color: #1f2937;
-    font-family: 'Kalam', cursive, -apple-system, sans-serif;
+    font-size: 19px;
+    font-weight: 600;
+    color: #66BB6A;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   `;
 
-  // Create close button
+  // Create close button (green, matching output node style)
   const closeButton = document.createElement("button");
   closeButton.innerHTML = "×";
   closeButton.style.cssText = `
-    background: #fee;
-    color: #e57373;
-    border: 3px solid #e57373;
+    background: #E8F5E9;
+    color: #66BB6A;
+    border: 2px solid #66BB6A;
     border-radius: 50%;
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
+    font-size: 22px;
     font-weight: bold;
     cursor: pointer;
-    transition: transform 0.2s;
+    transition: all 0.2s;
     padding: 0;
     line-height: 1;
   `;
@@ -97,23 +99,23 @@ function createModal(htmlContent: string, workflowName?: string) {
   content.className = "workflow-markdown-content";
   content.innerHTML = htmlContent;
   content.style.cssText = `
-    padding: 24px;
+    padding: 20px;
     overflow-y: auto;
     flex: 1;
     word-wrap: break-word;
+    background: white;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.6;
+    color: #2C2C2C;
   `;
-  
-  // Inject markdown styles (needed for content script context)
-  if (!document.querySelector('.workflow-markdown-styles')) {
+
+  // Inject minimal markdown styles
+  if (!document.querySelector(".workflow-markdown-styles")) {
     const style = document.createElement("style");
-    style.className = 'workflow-markdown-styles';
+    style.className = "workflow-markdown-styles";
     style.textContent = `
-      .workflow-markdown-content {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        font-size: 15px;
-        line-height: 1.6;
-        color: #374151;
-      }
       .workflow-markdown-content h1,
       .workflow-markdown-content h2,
       .workflow-markdown-content h3,
@@ -127,6 +129,7 @@ function createModal(htmlContent: string, workflowName?: string) {
       .workflow-markdown-content h1 { font-size: 2em; border-bottom: 1px solid #e5e7eb; padding-bottom: 8px; }
       .workflow-markdown-content h2 { font-size: 1.5em; border-bottom: 1px solid #e5e7eb; padding-bottom: 6px; }
       .workflow-markdown-content h3 { font-size: 1.25em; }
+      .workflow-markdown-content h4 { font-size: 1em; }
       .workflow-markdown-content h1:first-child,
       .workflow-markdown-content h2:first-child,
       .workflow-markdown-content h3:first-child { margin-top: 0; }
@@ -165,9 +168,17 @@ function createModal(htmlContent: string, workflowName?: string) {
       .workflow-markdown-content a { color: #3b82f6; text-decoration: none; }
       .workflow-markdown-content a:hover { text-decoration: underline; }
       .workflow-markdown-content hr { border: none; border-top: 1px solid #e5e7eb; margin: 24px 0; }
-      .workflow-markdown-content table { border-collapse: collapse; width: 100%; margin-bottom: 16px; }
+      .workflow-markdown-content table { 
+        border-collapse: collapse; 
+        width: 100%; 
+        margin-bottom: 16px; 
+      }
       .workflow-markdown-content th,
-      .workflow-markdown-content td { border: 1px solid #e5e7eb; padding: 8px 12px; text-align: left; }
+      .workflow-markdown-content td { 
+        border: 1px solid #e5e7eb; 
+        padding: 8px 12px; 
+        text-align: left;
+      }
       .workflow-markdown-content th { background: #f9fafb; font-weight: 600; }
       .workflow-markdown-content img { max-width: 100%; height: auto; border-radius: 6px; }
       .workflow-markdown-content strong { font-weight: 600; }
@@ -188,7 +199,7 @@ function createModal(htmlContent: string, workflowName?: string) {
   };
 
   closeButton.onclick = closeModal;
-  
+
   overlay.onclick = (e) => {
     if (e.target === overlay) {
       closeModal();
@@ -205,7 +216,13 @@ function createModal(htmlContent: string, workflowName?: string) {
   document.addEventListener("keydown", handleEscape);
 }
 
-export const executor: NodeExecutor = async (_node, input, tabId, pageContext, workflowName) => {
+export const executor: NodeExecutor = async (
+  _node,
+  input,
+  tabId,
+  pageContext,
+  workflowName
+) => {
   if (!input) {
     throw new Error("No input to display in modal");
   }
@@ -227,11 +244,13 @@ export const executor: NodeExecutor = async (_node, input, tabId, pageContext, w
     }
 
     // Otherwise, use chrome.scripting API (background context)
+    // @ts-expect-error - chrome is a global in extension context
     if (!chrome.scripting) {
-      throw new Error('Cannot display modal in this context');
+      throw new Error("Cannot display modal in this context");
     }
 
     // Inject modal with the parsed HTML
+    // @ts-expect-error - chrome is a global in extension context
     await chrome.scripting.executeScript({
       target: { tabId },
       func: createModal,
@@ -244,4 +263,3 @@ export const executor: NodeExecutor = async (_node, input, tabId, pageContext, w
     throw new Error("Failed to display modal on page");
   }
 };
-
