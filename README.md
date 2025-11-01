@@ -2,8 +2,24 @@
 
 **Flosheet AI** is a Chrome extension that lets you create and run **AI-powered flosheets** directly in your browser.
 
-You can visually connect nodes like “Get Page Text”, “Summarize”, and “Translate” — then run them on any open webpage.  
-Everything runs locally using **Chrome’s built-in AI models**, with no cloud services or API keys required.
+You can visually connect nodes like "Get Page Text", "Summarize", and "Translate" — then run them on any open webpage.  
+Everything runs locally using **Chrome's built-in AI models**, with no cloud services or API keys required.
+
+---
+
+## 🚀 Quick Start (Try It Now)
+
+**Prerequisites:** Chrome 138+ with Chrome's Built-in AI APIs enabled. Join the [Chrome Built-in AI Early Preview Program](https://developer.chrome.com/docs/ai/early-preview).
+
+### Install in 3 Steps:
+
+1. **Download/Clone** this repository
+2. **Open** `chrome://extensions` in Chrome and enable **Developer mode**
+3. **Load unpacked** → Select the `build-unpacked` folder from this repository
+
+That's it! Click the Flosheet AI icon in your Chrome toolbar to start building visual AI workflows.
+
+**[View Live Demo](https://robinedman.github.io/workflow-builder/)** | **[GitHub Repository](https://github.com/robinedman/workflow-extension)**
 
 ---
 
@@ -76,12 +92,15 @@ See ARCHITECTURE.md
 ### Build for production
 
 ```bash
+npm install
 npm run build
 ```
 
-Outputs the packed extension to `.output/`.
+The built extension will be in the `.output/` folder. For development:
 
-### Pre-built unpacked extension
+```bash
+npm run dev
+```
 
-You will find a pre-built unpacked extension in the `build-unpacked` folder.
+Then load from `.output/` folder in Chrome's developer mode.
 
