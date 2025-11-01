@@ -1,4 +1,4 @@
-import { Check, Loader2, Play, Plus, Save, X } from "lucide-react";
+import { Check, Loader2, Play, Plus, Save, X, Zap } from "lucide-react";
 import { allNodes } from "@/nodes";
 
 // Color definitions matching the popup app
@@ -73,6 +73,16 @@ export const Toolbar = ({
 
   return (
     <div className="absolute top-4 left-4 z-[1000000] sketch-toolbar bg-white p-3 rounded-sm shadow-sm space-y-2">
+      {/* Branding Header */}
+      <div className="flex items-center gap-2 mb-2 pb-2 border-b border-gray-200">
+        <div className="flex items-center justify-center w-6 h-6">
+          <Zap size={20} strokeWidth={2.5} className="text-purple-600" />
+        </div>
+        <h1 className="text-base font-bold sketch-text text-gray-800">
+          Flosheet AI
+        </h1>
+      </div>
+
       <div className="flex items-center gap-2 flex-wrap">
         <div className="sketch-border">
           <div className="sketch-border-inner">
@@ -80,7 +90,7 @@ export const Toolbar = ({
               type="text"
               value={workflowName}
               onChange={(e) => onNameChange(e.target.value)}
-              placeholder="Workflow name..."
+              placeholder="Flosheet name..."
               className="py-1.5 px-3 sketch-input w-full bg-transparent border-0 outline-none focus:outline-none focus:ring-0 focus:border-transparent appearance-none sketch-text font-bold text-[14px]"
               style={{ minWidth: "180px" }}
             />
@@ -129,10 +139,10 @@ export const Toolbar = ({
                   : isSaving
                   ? "Saving..."
                   : saveStatus === "success"
-                  ? "Workflow saved!"
+                  ? "Flosheet saved!"
                   : saveStatus === "error"
                   ? "Failed to save"
-                  : "Save workflow"
+                  : "Save flosheet"
               }
             >
               {isSaving ? (
@@ -182,10 +192,10 @@ export const Toolbar = ({
               }}
               title={
                 isRunning
-                  ? "Workflow running..."
+                  ? "Flosheet running..."
                   : !canRun
                   ? "Connect all nodes and add an output node"
-                  : "Run workflow"
+                  : "Run flosheet"
               }
             >
               {isRunning ? (

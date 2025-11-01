@@ -55,7 +55,7 @@ function createModal(htmlContent: string, workflowName?: string) {
   const title = document.createElement("h2");
   title.textContent = workflowName
     ? `${workflowName} - Result`
-    : "Workflow Output";
+    : "Flosheet Output";
   title.style.cssText = `
     margin: 0;
     font-size: 19px;

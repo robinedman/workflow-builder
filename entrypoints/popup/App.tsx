@@ -176,10 +176,12 @@ function App() {
       <div className="px-5 py-4 bg-white text-gray-800">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <div className="flex items-center justify-center w-8 h-8">
-              <Zap size={28} strokeWidth={2.5} />
+            <div className="flex items-center justify-center w-7 h-7">
+              <Zap size={24} strokeWidth={2.5} className="text-purple-600" />
             </div>
-            <h1 className="text-xl font-bold sketch-text">Workflows</h1>
+            <h1 className="text-lg font-bold sketch-text text-gray-800">
+              Flosheet AI
+            </h1>
           </div>
           <div className="sketch-node">
             <div
@@ -224,10 +226,10 @@ function App() {
               </div>
               <div>
                 <p className="font-bold mb-1 text-[17px] text-gray-800">
-                  No workflows yet
+                  No flosheets yet
                 </p>
                 <p className="mb-4 sketch-info-text text-[15px] text-gray-600 opacity-80">
-                  Create your first workflow to get started
+                  Create your first flosheet to get started
                 </p>
                 <div className="sketch-node inline-block">
                   <div
@@ -252,7 +254,7 @@ function App() {
                           className="inline-flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed px-3 py-2 font-bold sketch-text cursor-pointer text-[15px]"
                         >
                           <Plus size={16} strokeWidth={2.5} />
-                          <span>Create workflow</span>
+                          <span>Create flosheet</span>
                         </button>
                       </div>
                     </div>
@@ -316,7 +318,7 @@ function App() {
                     border: `3px solid ${borderColor}`,
                     filter: "url(#rough-border)",
                   }}
-                  title="Delete workflow"
+                  title="Delete flosheet"
                 >
                   <X size={14} strokeWidth={2.5} />
                 </button>

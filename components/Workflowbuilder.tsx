@@ -30,7 +30,7 @@ export const WorkflowBuilder = () => {
     id: string;
     text: string;
   } | null>(null);
-  const [workflowName, setWorkflowName] = useState("Untitled Workflow");
+  const [workflowName, setWorkflowName] = useState("Untitled Flosheet");
   const [workflowId, setWorkflowId] = useState(() => `wf_${Date.now()}`);
 
   // Helper function to get category color (same as in BaseNode)
@@ -196,7 +196,7 @@ export const WorkflowBuilder = () => {
     if (!sourceTabId) {
       console.error("No source tab ID in URL");
       alert(
-        "No source tab available. Please reopen the workflow builder from the extension popup."
+        "No source tab available. Please reopen the flosheet builder from the extension popup."
       );
       return;
     }

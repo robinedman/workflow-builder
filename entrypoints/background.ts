@@ -111,7 +111,7 @@ async function updateContextMenus() {
     // Create parent menu item
     browser.contextMenus.create({
       id: "workflows-parent",
-      title: "Run Workflow",
+      title: "Flosheet",
       contexts: ["selection"],
     });
     console.log("[Context Menu] Created parent menu");

@@ -8,6 +8,8 @@ export default defineConfig({
     plugins: [tailwindcss()],
   }),
   manifest: {
+    name: "Flosheet AI",
+    description: "Visual AI flosheet automation in your browser",
     permissions: ["tabs", "scripting", "activeTab", "storage", "contextMenus"],
     host_permissions: ["<all_urls>"],
     trial_tokens: [

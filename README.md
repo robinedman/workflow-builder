@@ -1,11 +1,6 @@
-Perfect — here’s the revised **README.md** with your requested changes applied:
+# 🧩 Flosheet AI — Visual AI Automation in Your Browser
 
----
-
-````markdown
-# 🧩 Workflow Builder — Visual AI Automation in Your Browser
-
-**Workflow Builder** is a Chrome extension that lets you create and run **AI-powered workflows** directly in your browser.
+**Flosheet AI** is a Chrome extension that lets you create and run **AI-powered flosheets** directly in your browser.
 
 You can visually connect nodes like “Get Page Text”, “Summarize”, and “Translate” — then run them on any open webpage.  
 Everything runs locally using **Chrome’s built-in AI models**, with no cloud services or API keys required.
@@ -14,7 +9,7 @@ Everything runs locally using **Chrome’s built-in AI models**, with no cloud s
 
 ## 🚀 Overview
 
-Workflow Builder combines a **React-based flow editor** with **Chrome’s new on-device AI APIs**, letting you automate web content quickly and visually.
+Flosheet AI combines a **React-based flow editor** with **Chrome's new on-device AI APIs**, letting you automate web content quickly and visually.
 
 You can:
 - Extract readable text from a page  
@@ -28,7 +23,7 @@ The goal is to make AI-powered browser automation simple, transparent, and priva
 
 ## 🧠 Built-in AI APIs Used
 
-Workflow Builder uses Chrome’s **on-device Web AI APIs** (introduced in Chrome 138+) to perform all AI operations locally.
+Flosheet AI uses Chrome's **on-device Web AI APIs** (introduced in Chrome 138+) to perform all AI operations locally.
 
 | API | Purpose | Used in |
 |-----|----------|---------|
@@ -54,7 +49,7 @@ See ARCHITECTURE.md
 | **Summarize** | Uses Chrome’s `Summarizer` API to produce summaries with selectable type and length |
 | **Translate** | Uses Chrome’s `Translator` API to translate text locally with model download progress UI |
 | **Prompt** *(coming soon)* | Will use the `Prompt` API for freeform text generation |
-| **Output** | Displays the final output of the workflow |
+| **Output** | Displays the final output of the flosheet |
 
 ---
 
@@ -62,7 +57,7 @@ See ARCHITECTURE.md
 
 - **WXT** — Modern framework for browser extensions  
 - **React + TypeScript + Tailwind CSS** — UI and logic  
-- **React Flow** — Visual workflow editor  
+- **React Flow** — Visual flosheet editor  
 - **Lucide React** — Icons  
 - **WebExt Bridge** — Communication between extension components  
 - **@mozilla/readability** — Extracts readable article text  
