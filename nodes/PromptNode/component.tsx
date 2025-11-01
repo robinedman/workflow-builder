@@ -192,15 +192,6 @@ export const PromptNodeComponent = ({ data, selected }: NodeComponentProps) => {
                   ✅ Model ready
                 </div>
               )}
-
-              {isRunning && (
-                <div
-                  className="animate-pulse sketch-info-text text-sm font-bold"
-                  style={{ color: "#5B9BD5" }}
-                >
-                  ⚡ Processing with Gemini Nano...
-                </div>
-              )}
             </div>
           </div>
         </div>
