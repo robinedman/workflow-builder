@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flosheet AI - Chrome Extension</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #2C2C2C;
+            background: #FAFAFA;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .tagline {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+        
+        h2 {
+            font-size: 24px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #66BB6A;
+            padding-bottom: 8px;
+        }
+        
+        h3 {
+            font-size: 18px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        ol {
+            margin-left: 20px;
+            margin-top: 15px;
+        }
+        
+        li {
+            margin-bottom: 12px;
+        }
+        
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+        }
+        
+        .warning {
+            background: #FFF3CD;
+            border-left: 4px solid #FFC107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .section {
+            margin-top: 30px;
+        }
+        
+        ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧩 Flosheet AI</h1>
+        <p class="tagline">Visual AI Workflow Automation for Chrome</p>
+
+        <div class="warning">
+            <strong>Prerequisites:</strong> Chrome 138+ with Chrome's Built-in AI APIs enabled. 
+            Join the <a href="https://developer.chrome.com/docs/ai/early-preview" target="_blank">Chrome Built-in AI Early Preview Program</a>.
+        </div>
+
+        <div class="section">
+            <h2>Installation</h2>
+            <p><strong>Download:</strong> <a href="https://github.com/robinedman/workflow-extension">GitHub Repository</a> (clone or download ZIP)</p>
+            <ol>
+                <li>Extract/clone the repository and locate the <code>build-unpacked</code> folder</li>
+                <li>Open <code>chrome://extensions</code> in Chrome</li>
+                <li>Enable <strong>Developer mode</strong> (top-right toggle)</li>
+                <li>Click <strong>Load unpacked</strong></li>
+                <li>Select the <code>build-unpacked</code> folder</li>
+            </ol>
+        </div>
+
+        <div class="section">
+            <h2>What It Does</h2>
+            <p>Flosheet AI is a visual workflow builder for Chrome's built-in AI APIs. Users drag and connect nodes to create custom AI workflows (summarize, translate, etc.) that run entirely client-side.</p>
+            
+            <h3>Key Features</h3>
+            <ul>
+                <li>Visual node-based workflow editor (no coding required)</li>
+                <li>Plugin architecture - each node is extensible</li>
+                <li>Client-side execution using Chrome's Summarizer, Translator, and Prompt APIs</li>
+                <li>Context menu integration for quick access</li>
+                <li>Privacy-first: all processing happens locally</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>APIs Used</h2>
+            <ul>
+                <li><strong>Summarizer API</strong> - Extract insights from web content</li>
+                <li><strong>Translator API</strong> - Multilingual translation capabilities</li>
+                <li><strong>Prompt API</strong> - Custom text generation with Gemini Nano</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Use Cases</h2>
+            <ul>
+                <li><strong>Power users:</strong> Visual automation without coding</li>
+                <li><strong>Developers:</strong> Rapid prototyping for AI extension ideas</li>
+                <li><strong>Content creators:</strong> Multilingual content processing workflows</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Technical Details</h2>
+            <p><strong>Stack:</strong> React + TypeScript, React Flow, Chrome Extension APIs</p>
+            <p><strong>Architecture:</strong> Plugin-based node system, context-aware execution, headless mode support</p>
+            <p><strong>Repository:</strong> <a href="https://github.com/robinedman/workflow-extension">github.com/robinedman/workflow-extension</a></p>
+        </div>
+    </div>
+</body>
+</html>
